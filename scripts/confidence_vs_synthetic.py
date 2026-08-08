@@ -64,12 +64,19 @@ def main() -> None:
     p.add_argument("--speakers", type=int, default=4)
     p.add_argument("--utterances", type=int, default=3)
     p.add_argument("--threads", type=int, default=16)
+    p.add_argument("--seed", type=int, default=1234,
+                   help="seed each synthesis. Chatterbox samples at "
+                        "temperature 0.8, so unseeded runs are not "
+                        "reproducible: two identical runs of this study gave "
+                        "AUROC 0.591 and 0.553. Pass -1 to sample freely and "
+                        "measure the spread instead")
     p.add_argument("--policy", default="clean",
                    help="speechlens bundled reliability policy, or '' to skip")
     args = p.parse_args()
 
     print(f"study=confidence_vs_synthetic  hardware={hardware_label()}  "
           f"backend={args.backend}  asr={args.asr_model}  "
+          f"seed={args.seed}  "
           f"date={date.today().isoformat()}")
     print(f"cmd: python {shlex.join(sys.argv)}\n")
 
@@ -100,7 +107,8 @@ def main() -> None:
     for spk, utts in speakers.items():
         ref_audio, ref_sr, _ = utts[0]
         for ho_audio, ho_sr, text in utts[1:]:
-            wav, sr, _report = clone(backend, text, ref_audio, ref_sr)
+            wav, sr, _report = clone(backend, text, ref_audio, ref_sr,
+                                       seed=None if args.seed < 0 else args.seed)
 
             real = lens.analyze((ho_audio, ho_sr), language="en", cfg=cfg)
             synth = lens.analyze((wav, sr), language="en", cfg=cfg)

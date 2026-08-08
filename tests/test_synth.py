@@ -20,11 +20,12 @@ class FakeBackend:
         self.calls = []
         self.threads = None
 
-    def synthesize(self, text, reference_path):
+    def synthesize(self, text, reference_path, seed=None):
         import soundfile as sf
         ref, sr = sf.read(reference_path, dtype="float32")
         self.calls.append({"text": text, "ref_len": len(ref), "ref_sr": sr,
-                           "ref_peak": float(np.max(np.abs(ref)))})
+                           "ref_peak": float(np.max(np.abs(ref))),
+                           "seed": seed})
         t = np.arange(int(1.0 * self.sample_rate)) / self.sample_rate
         return (0.2 * np.sin(2 * np.pi * 220 * t)).astype(np.float32), self.sample_rate
 
@@ -109,3 +110,47 @@ def test_importing_synth_does_not_import_torch():
     out = subprocess.run([sys.executable, "-c", code], capture_output=True,
                          text=True)
     assert out.stdout.strip() == "False", out.stderr
+
+
+# --- reproducibility --------------------------------------------------------
+
+class SeedAwareBackend(FakeBackend):
+    """Records the seed it was handed, and varies output when unseeded."""
+    def __init__(self):
+        super().__init__()
+        self.seeds = []
+        self._n = 0
+
+    def synthesize(self, text, reference_path, seed=None):
+        self.seeds.append(seed)
+        self._n += 1
+        import numpy as np
+        # Unseeded output changes between calls, like a sampling TTS model.
+        f = 220.0 if seed is not None else 220.0 + self._n
+        t = np.arange(int(1.0 * self.sample_rate)) / self.sample_rate
+        return (0.2 * np.sin(2 * np.pi * f * t)).astype(np.float32), self.sample_rate
+
+
+def test_seed_is_passed_through_to_the_backend():
+    # Chatterbox samples at temperature 0.8, so an unseeded run is not
+    # reproducible. Two identical evaluation runs differed enough to flip the
+    # sign of the effect being measured.
+    b = SeedAwareBackend()
+    clone(b, "hello", _speech(5.0), 16000, seed=1234)
+    assert b.seeds == [1234]
+
+
+def test_no_seed_means_none_not_a_silent_default():
+    # A silent default seed would make runs look reproducible while hiding the
+    # model's true spread.
+    b = SeedAwareBackend()
+    clone(b, "hello", _speech(5.0), 16000)
+    assert b.seeds == [None]
+
+
+def test_same_seed_reproduces_the_same_audio():
+    b = SeedAwareBackend()
+    a1, _sr, _ = clone(b, "hello", _speech(5.0), 16000, seed=7)
+    a2, _sr2, _ = clone(b, "hello", _speech(5.0), 16000, seed=7)
+    import numpy as np
+    assert np.array_equal(a1, a2)

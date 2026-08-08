@@ -75,11 +75,18 @@ def main() -> None:
     p.add_argument("--utterances", type=int, default=3,
                    help="held-out utterances per speaker")
     p.add_argument("--threads", type=int, default=16)
+    p.add_argument("--seed", type=int, default=1234,
+                   help="seed each synthesis. Chatterbox samples at "
+                        "temperature 0.8, so unseeded runs are not "
+                        "reproducible: two identical runs of this study gave "
+                        "AUROC 0.591 and 0.553. Pass -1 to sample freely and "
+                        "measure the spread instead")
     p.add_argument("--out-dir", default=None, help="keep the synthesized wavs")
     args = p.parse_args()
 
     print(f"study=eval_zeroshot  hardware={hardware_label()}  "
           f"backend={args.backend}  asr={args.asr_model}  "
+          f"seed={args.seed}  "
           f"date={date.today().isoformat()}")
     print(f"cmd: python {shlex.join(sys.argv)}\n")
 
@@ -124,7 +131,8 @@ def main() -> None:
               f"{len(held)} held-out")
 
         for j, (ho_audio, ho_sr, text) in enumerate(held):
-            wav, sr, report = clone(backend, text, ref_audio, ref_sr)
+            wav, sr, report = clone(backend, text, ref_audio, ref_sr,
+                                        seed=None if args.seed < 0 else args.seed)
             if report["warnings"]:
                 print(f"  ref warnings: {report['warnings']}")
             if out_dir:

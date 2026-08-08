@@ -27,8 +27,8 @@ class Backend(Protocol):
     # model's tokenizer, not of the audio.
     align_ms: Optional[float]
 
-    def synthesize(self, text: str, reference_path: str
-                   ) -> Tuple[np.ndarray, int]: ...
+    def synthesize(self, text: str, reference_path: str,
+                   seed: Optional[int] = None) -> Tuple[np.ndarray, int]: ...
 
     def set_threads(self, n: int) -> None: ...
 
@@ -57,8 +57,24 @@ class ChatterboxBackend:
         self.align_ms = 40.0
         self._device = device
 
-    def synthesize(self, text: str, reference_path: str
-                   ) -> Tuple[np.ndarray, int]:
+    def synthesize(self, text: str, reference_path: str,
+                   seed: Optional[int] = None) -> Tuple[np.ndarray, int]:
+        """Synthesize, optionally seeded for reproducibility.
+
+        Chatterbox samples at ``temperature=0.8`` by default, so the same text
+        and reference produce different audio every call. That was measured, not
+        assumed: two identical evaluation runs gave AUROC 0.591 and 0.553 with
+        the mean difference changing sign — an effect entirely inside sampling
+        noise, which would have been reported as a finding.
+
+        Seeding does not make the model deterministic in any deep sense; it
+        makes a *run* reproducible, which is what a recorded number needs. Where
+        the quantity of interest is the model's spread, run several seeds and
+        report the range instead.
+        """
+        if seed is not None:
+            import torch
+            torch.manual_seed(seed)
         wav = self._model.generate(text, audio_prompt_path=reference_path)
         arr = wav.detach().cpu().numpy() if hasattr(wav, "detach") else np.asarray(wav)
         return arr.astype(np.float32).ravel(), self.sample_rate
@@ -85,7 +101,8 @@ def load_backend(name: str, device: str = "cpu") -> Backend:
 
 
 def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
-          out_path: Optional[str] = None) -> Tuple[np.ndarray, int, dict]:
+          out_path: Optional[str] = None,
+          seed: Optional[int] = None) -> Tuple[np.ndarray, int, dict]:
     """Synthesize ``text`` in the voice of ``reference``.
 
     The reference goes through ``reference.prepare`` first — trimmed, resampled,
@@ -105,7 +122,7 @@ def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
     import tempfile
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
         sf.write(tmp.name, ref_audio, ref_sr)
-        wav, out_sr = backend.synthesize(text, tmp.name)
+        wav, out_sr = backend.synthesize(text, tmp.name, seed=seed)
 
     if out_path:
         sf.write(out_path, wav, out_sr)
