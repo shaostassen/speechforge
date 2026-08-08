@@ -152,3 +152,33 @@ def test_no_policy_means_no_calibrated_result():
 
 def test_no_correct_words_means_no_calibrated_result():
     assert calibrated_contrast([_s(0.9, correct=False)], _FakePolicy()) is None
+
+
+# --- distribution shape -----------------------------------------------------
+
+@needs_speechlens
+def test_percentiles_are_reported_for_both_conditions():
+    samples = ([_s(0.5 + i / 100, synthetic=False) for i in range(20)]
+               + [_s(0.6 + i / 100, synthetic=True) for i in range(20)])
+    out = confidence_contrast(samples)
+    for q in (1, 5, 10, 25, 50):
+        assert f"p{q}_real" in out and f"p{q}_synth" in out
+    assert out["p50_real"] < out["p50_synth"]
+
+
+@needs_speechlens
+def test_percentiles_expose_a_tail_difference_the_mean_hides():
+    # The situation actually measured: near-identical means, different tails.
+    # Without percentiles an AUROC away from 0.5 alongside a zero mean delta is
+    # unexplainable.
+    real = [_s(0.99, synthetic=False)] * 18 + [_s(0.30, synthetic=False)] * 2
+    synth = [_s(0.92, synthetic=True)] * 20
+    out = confidence_contrast(real + synth)
+    assert abs(out["delta"]) < 0.03           # centres nearly agree
+    assert out["p5_real"] < out["p5_synth"] - 0.2   # tails do not
+
+
+@needs_speechlens
+def test_percentiles_are_nan_when_a_side_is_empty():
+    out = confidence_contrast([_s(0.9, synthetic=False)])
+    assert math.isnan(out["p5_synth"])

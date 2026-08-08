@@ -22,7 +22,7 @@ The extraction here is pure and testable; the model work lives in scripts/.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Sequence
+from typing import Dict, List, Optional, Sequence, Tuple
 
 
 @dataclass
@@ -93,17 +93,37 @@ def confidence_contrast(samples: Sequence[WordSample]) -> Dict[str, float]:
     correct = correct_only(samples)
     real = [s.confidence for s in correct if not s.synthetic]
     synth = [s.confidence for s in correct if s.synthetic]
+
+    def pct(xs: List[float], q: float) -> float:
+        s = sorted(xs)
+        if not s:
+            return float("nan")
+        i = min(len(s) - 1, max(0, int(round(q / 100.0 * (len(s) - 1)))))
+        return s[i]
+
     if not real or not synth:
-        return {"n_real": float(len(real)), "n_synth": float(len(synth)),
-                "auroc_real_higher": float("nan"),
-                "mean_real": float("nan"), "mean_synth": float("nan"),
-                "delta": float("nan")}
+        # Same keys as the full path. A caller building a table should not have
+        # to branch on whether a condition happened to be one-sided.
+        out = {"n_real": float(len(real)), "n_synth": float(len(synth)),
+               "auroc_real_higher": float("nan"),
+               "mean_real": float("nan"), "mean_synth": float("nan"),
+               "delta": float("nan")}
+        for q in (1, 5, 10, 25, 50):
+            out[f"p{q}_real"] = pct(real, q)
+            out[f"p{q}_synth"] = pct(synth, q)
+        return out
 
     scores = real + synth
     is_real = [True] * len(real) + [False] * len(synth)
     mean_real = sum(real) / len(real)
     mean_synth = sum(synth) / len(synth)
-    return {
+
+    # Percentiles, because the mean and the AUROC can disagree and only the
+    # shape explains why. Measured here: means differed by 0.0015 while AUROC
+    # was 0.591 — that combination means the distributions differ in their
+    # tails, not their centre, and without the low percentiles there is no way
+    # to tell which tail.
+    out = {
         "n_real": float(len(real)),
         "n_synth": float(len(synth)),
         "auroc_real_higher": auroc(scores, is_real),
@@ -111,6 +131,10 @@ def confidence_contrast(samples: Sequence[WordSample]) -> Dict[str, float]:
         "mean_synth": mean_synth,
         "delta": mean_real - mean_synth,
     }
+    for q in (1, 5, 10, 25, 50):
+        out[f"p{q}_real"] = pct(real, q)
+        out[f"p{q}_synth"] = pct(synth, q)
+    return out
 
 
 def calibrated_contrast(samples: Sequence[WordSample],

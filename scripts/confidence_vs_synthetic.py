@@ -121,19 +121,43 @@ def main() -> None:
           f"synthetic={out['mean_synth']:.4f}  delta={out['delta']:+.4f}")
     print(f"AUROC (real above synthetic) = {out['auroc_real_higher']:.3f}")
 
+    print("\nconfidence percentiles (the low tail is where they differ)")
+    print(f"{'':>6} {'p1':>8} {'p5':>8} {'p10':>8} {'p25':>8} {'p50':>8}")
+    for kind in ("real", "synth"):
+        row = "  ".join(f"{out[f'p{q}_{kind}']:>6.3f}" for q in (1, 5, 10, 25, 50))
+        print(f"{kind:>6}   {row}")
+
     a = out["auroc_real_higher"]
     if a != a:
-        verdict = "undetermined — one side had no correct words"
-    elif abs(a - 0.5) < 0.06:
-        verdict = ("confidence carries essentially NO provenance information; "
-                   "it is measuring acoustic-lexical fit, not realness")
-    elif a > 0.5:
-        verdict = ("ASR is more confident on REAL speech; WER-based "
-                   "intelligibility is conservative for synthesis")
+        print("\nreading: undetermined — one side had no correct words")
     else:
-        verdict = ("ASR is more confident on SYNTHETIC speech; WER-based "
-                   "intelligibility FLATTERS synthesis by this much")
-    print(f"\nreading: {verdict}")
+        # Deliberately not a single verdict. The ranking statistic and the
+        # threshold statistic answer different questions and can point opposite
+        # ways: a distribution can rank higher overall while still having more
+        # mass below a fixed threshold. An earlier version of this script
+        # asserted one conclusion from AUROC alone and contradicted its own
+        # accept-rate output.
+        print("\nreading:")
+        if abs(a - 0.5) < 0.06:
+            print("  ranking  — confidence carries essentially no provenance "
+                  "information")
+        elif a > 0.5:
+            print("  ranking  — real words tend to score above synthetic ones")
+        else:
+            print("  ranking  — synthetic words tend to score above real ones")
+        print(f"  centre   — means differ by {out['delta']:+.4f}"
+              f"{'  (negligible)' if abs(out['delta']) < 0.01 else ''}")
+        lo_r, lo_s = out["p5_real"], out["p5_synth"]
+        if abs(lo_r - lo_s) > 0.02:
+            which = "real" if lo_r < lo_s else "synthetic"
+            print(f"  tail     — {which} speech has the heavier low tail "
+                  f"(p5 {lo_r:.3f} vs {lo_s:.3f})")
+        else:
+            print(f"  tail     — low tails are comparable "
+                  f"(p5 {lo_r:.3f} vs {lo_s:.3f})")
+        print("\n  These can disagree, and if they do the tail explains it: a "
+              "threshold\n  gate cares only about mass below the threshold, "
+              "AUROC about the whole order.")
 
     cal = calibrated_contrast(samples, policy)
     if cal:
