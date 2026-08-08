@@ -87,7 +87,7 @@ def trim_silence(y: np.ndarray, sr: int) -> Tuple[np.ndarray, float, float]:
 
 
 def prepare(y: np.ndarray, sr: int, target_sr: Optional[int] = None,
-            target_s: float = TARGET_S
+            target_s: float = TARGET_S, align_ms: Optional[float] = None
             ) -> Tuple[np.ndarray, int, ReferenceReport]:
     """Clean a reference clip and report what happened.
 
@@ -126,6 +126,18 @@ def prepare(y: np.ndarray, sr: int, target_sr: Optional[int] = None,
     if duration < MIN_S:
         warnings.append(f"only {duration:.1f}s of speech after trimming; "
                         f"under {MIN_S:.0f}s the voice is under-determined")
+
+    if align_ms:
+        # Trim to a whole number of the model's frames. Chatterbox tokenizes the
+        # reference at 40 ms and asserts mel_len == 2 * token_len; a ragged
+        # length makes it warn and silently truncate the token sequence to fit
+        # (models/s3gen/s3gen.py). Aligning here means the prompt is already
+        # consistent, so nothing gets dropped and the warning stops firing on
+        # every single call — noise that would otherwise train you to ignore it.
+        frame = max(1, int(round(align_ms * sr / 1000.0)))
+        keep = (len(y) // frame) * frame
+        if keep >= frame:
+            y = y[:keep]
 
     peak = float(np.max(np.abs(y)))
     if peak >= 0.999:

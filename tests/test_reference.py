@@ -142,3 +142,36 @@ def test_report_is_json_ready():
     _out, _sr, rep = prepare(_speech(5.0), SR)
     assert isinstance(rep, ReferenceReport)
     json.dumps(rep.to_dict())
+
+
+# --- frame alignment --------------------------------------------------------
+
+def test_align_ms_trims_to_a_whole_number_of_frames():
+    # Chatterbox tokenizes the reference at 40 ms and truncates internally if
+    # the length is ragged; aligning here avoids that entirely.
+    y = _speech(5.0)                      # 80000 samples at 16 kHz
+    out, sr, _rep = prepare(y, SR, align_ms=40.0)
+    frame = int(0.040 * sr)
+    assert len(out) % frame == 0
+
+
+def test_align_ms_removes_less_than_one_frame():
+    y = _speech(5.0)
+    plain, sr, _ = prepare(y, SR)
+    aligned, _sr, _ = prepare(y, SR, align_ms=40.0)
+    frame = int(0.040 * sr)
+    assert 0 <= len(plain) - len(aligned) < frame
+
+
+def test_align_ms_none_leaves_length_untouched():
+    y = _speech(5.0)
+    a, _sr, _ = prepare(y, SR)
+    b, _sr2, _ = prepare(y, SR, align_ms=None)
+    assert len(a) == len(b)
+
+
+def test_align_ms_does_not_empty_a_short_clip():
+    # A clip shorter than one frame must survive rather than becoming silence.
+    y = _speech(0.01)
+    out, _sr, _rep = prepare(y, SR, align_ms=40.0)
+    assert len(out) > 0

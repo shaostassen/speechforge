@@ -22,6 +22,10 @@ class Backend(Protocol):
     """What a synthesis backend has to provide."""
 
     sample_rate: int
+    # Frame size the model tokenizes the reference at, in ms, or None. Declared
+    # by the backend rather than assumed by the caller: it is a property of the
+    # model's tokenizer, not of the audio.
+    align_ms: Optional[float]
 
     def synthesize(self, text: str, reference_path: str
                    ) -> Tuple[np.ndarray, int]: ...
@@ -49,6 +53,8 @@ class ChatterboxBackend:
         from chatterbox.tts import ChatterboxTTS
         self._model = ChatterboxTTS.from_pretrained(device=device)
         self.sample_rate = int(getattr(self._model, "sr", 24000))
+        # S3 tokenizes the reference at 25 Hz, i.e. 40 ms per token.
+        self.align_ms = 40.0
         self._device = device
 
     def synthesize(self, text: str, reference_path: str
@@ -89,8 +95,9 @@ def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
     """
     import soundfile as sf
 
-    ref_audio, ref_sr, report = prepare(reference, sr,
-                                        target_sr=backend.sample_rate)
+    ref_audio, ref_sr, report = prepare(
+        reference, sr, target_sr=backend.sample_rate,
+        align_ms=getattr(backend, "align_ms", None))
     if len(ref_audio) == 0:
         raise ValueError(f"unusable reference: {report.warnings}")
 
