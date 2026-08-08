@@ -224,3 +224,44 @@ def whisper_transcriber(model_size: str = "large-v3", device: str = "auto",
         return lens.analyze((audio, sr), language=language, cfg=cfg).text
 
     return transcribe
+
+
+def ctc_transcriber(model_name: str = "facebook/hubert-large-ls960-ft",
+                    device: str = "cpu"):
+    """A second, architecturally different ASR — HuBERT + CTC.
+
+    Why bother, when Whisper is the field standard: scoring TTS with Whisper
+    when Whisper is also the model everyone tunes against measures partly your
+    own tail. A synthetic voice that happens to suit Whisper's priors scores well
+    without being more intelligible to anything else.
+
+    HuBERT-CTC is a genuinely different bet — encoder-only, frame-synchronous,
+    no autoregressive language model on top. It has no internal LM to paper over
+    unclear articulation, so it is *harsher* and its absolute WER runs higher.
+    That is the point: agreement between the two is evidence, and disagreement
+    localizes the problem. Read the pair, never either alone.
+    """
+    import torch
+    from transformers import HubertForCTC, Wav2Vec2Processor
+
+    processor = Wav2Vec2Processor.from_pretrained(model_name)
+    model = HubertForCTC.from_pretrained(model_name)
+    model.eval()
+    model.to(device)
+    target_sr = 16000
+
+    def transcribe(audio: np.ndarray, sr: int) -> str:
+        y = np.asarray(audio, dtype=np.float32).ravel()
+        if sr != target_sr:
+            from speechforge.reference import resample
+            y = resample(y, sr, target_sr)
+        inputs = processor(y, sampling_rate=target_sr, return_tensors="pt")
+        inputs = {k: v.to(device) for k, v in inputs.items()}
+        with torch.no_grad():
+            logits = model(**inputs).logits
+        ids = torch.argmax(logits, dim=-1)
+        # Uppercase, unpunctuated output — speechlens.normalize_text folds that
+        # against Whisper's cased, punctuated text, so WER stays comparable.
+        return processor.batch_decode(ids)[0]
+
+    return transcribe

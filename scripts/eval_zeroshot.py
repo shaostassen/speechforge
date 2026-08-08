@@ -32,9 +32,10 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
+from speechforge import corpora  # noqa: E402
 from speechforge.evaluate import (EvalTable, SystemScores,  # noqa: E402
-                                  score_intelligibility, sim_o,
-                                  whisper_transcriber)
+                                  ctc_transcriber, score_intelligibility,
+                                  sim_o, whisper_transcriber)
 from speechforge.synth import clone, load_backend  # noqa: E402
 
 
@@ -57,42 +58,17 @@ def hardware_label() -> str:
     return f"{cpu or platform.machine()} ({platform.system()})"
 
 
-def load_speakers(n_speakers: int, per_speaker: int):
-    """LibriSpeech utterances grouped by speaker.
-
-    Needs several utterances per speaker: one to clone from and the rest held
-    out. Speakers with too few are skipped rather than reused, since reusing the
-    reference as a held-out clip is the SIM-r mistake the harness guards against.
-    """
-    import soundfile as sf
-    from datasets import Audio, load_dataset
-
-    ds = load_dataset("hf-internal-testing/librispeech_asr_dummy", "clean",
-                      split="validation")
-    ds = ds.cast_column("audio", Audio(decode=False))
-
-    by_speaker = defaultdict(list)
-    for i in range(len(ds)):
-        row = ds[i]
-        a = row["audio"]
-        raw = a["bytes"] if a.get("bytes") else Path(a["path"]).read_bytes()
-        y, sr = sf.read(io.BytesIO(raw), dtype="float32")
-        by_speaker[row.get("speaker_id", row.get("id", "?"))].append(
-            (y, int(sr), row["text"].strip()))
-
-    out = {}
-    for spk, utts in by_speaker.items():
-        if len(utts) >= per_speaker + 1:
-            out[spk] = utts[: per_speaker + 1]
-        if len(out) >= n_speakers:
-            break
-    return out
-
-
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--backend", default="chatterbox")
+    p.add_argument("--corpus", default="edacc",
+                   choices=["edacc", "librispeech_dummy"],
+                   help="librispeech_dummy is a smoke test: it has one speaker "
+                        "with multiple utterances, so no cross-speaker floor")
+    p.add_argument("--second-asr", action="store_true",
+                   help="also score with HuBERT-CTC. Scoring TTS only with "
+                        "Whisper measures partly Whisper's own tail")
     p.add_argument("--asr-model", default="small",
                    help="large-v3 for publishable numbers; small to iterate")
     p.add_argument("--speakers", type=int, default=2)
@@ -107,11 +83,10 @@ def main() -> None:
           f"date={date.today().isoformat()}")
     print(f"cmd: python {shlex.join(sys.argv)}\n")
 
-    speakers = load_speakers(args.speakers, args.utterances)
-    if not speakers:
-        sys.exit("no speaker had enough utterances for a held-out split")
-    print(f"speakers: {list(speakers)}  "
-          f"({args.utterances} held-out utterances each)\n")
+    speakers = corpora.load(args.corpus, args.speakers, args.utterances)
+    print(f"corpus={args.corpus}  speakers={len(speakers)}  "
+          f"{args.utterances} held-out utterances each")
+    print(f"speaker ids: {list(speakers)}\n")
 
     backend = load_backend(args.backend, device="cpu")
     backend.set_threads(args.threads)
@@ -127,6 +102,13 @@ def main() -> None:
 
     transcribe = whisper_transcriber(model_size=args.asr_model, device="cpu",
                                      compute_type="int8")
+    transcribe2 = None
+    if args.second_asr:
+        try:
+            transcribe2 = ctc_transcriber()
+            print("second ASR: facebook/hubert-large-ls960-ft (CTC)")
+        except Exception as exc:
+            print(f"second ASR unavailable ({exc}); WER-2 will be blank")
     print()
 
     synth_pairs, real_pairs = [], []
@@ -165,17 +147,21 @@ def main() -> None:
                                            ho_audio, ho_sr))
 
     print("\nscoring...")
-    table = EvalTable(corpus="librispeech dummy (held-out)",
+    table = EvalTable(corpus=f"{args.corpus} (held-out)",
                       hardware=hardware_label())
     table.set_ground_truth(SystemScores(
         name="ground truth",
         wer=score_intelligibility(transcribe, real_pairs),
+        wer_second=(score_intelligibility(transcribe2, real_pairs)
+                    if transcribe2 else None),
         sim_o=float(np.nanmean(real_sims)) if real_sims else None,
         n_utterances=len(real_pairs),
         notes="real recordings, scored identically"))
     table.add(SystemScores(
         name=args.backend,
         wer=score_intelligibility(transcribe, synth_pairs),
+        wer_second=(score_intelligibility(transcribe2, synth_pairs)
+                    if transcribe2 else None),
         sim_o=float(np.nanmean(synth_sims)) if synth_sims else None,
         n_utterances=len(synth_pairs)))
 
