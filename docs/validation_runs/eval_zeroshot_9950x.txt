@@ -1,0 +1,28 @@
+study=eval_zeroshot  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)  backend=chatterbox  asr=small  date=2026-08-08
+cmd: python repo/scripts/eval_zeroshot.py --backend chatterbox --asr-model small --speakers 2 --utterances 3 --threads 16
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+speakers: [1272]  (3 held-out utterances each)
+loaded PerthNet (Implicit) at step 250,000
+backend: chatterbox default, t3 backbone 532M  sr=24000
+speaker encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+speaker 1272: cloning from 5.9s, 3 held-out
+`sdpa` attention does not support `output_attentions=True`. Please set your attention to `eager` if you want any of these features.
+  ref warnings: ['trimmed 0.43s of trailing near-silence']
+  ref warnings: ['trimmed 0.43s of trailing near-silence']
+  ref warnings: ['trimmed 0.43s of trailing near-silence']
+scoring...
+corpus=librispeech dummy (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth     3   0.044       —   0.979      —   <- read every row against this
+            chatterbox     3   0.103       —   0.927      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o human ceiling is roughly 0.69-0.76; above that, suspect the measurement.
+speakers=6  utterances=[3, 3, 3, 3, 3, 2]
+encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+SAME speaker  n=  16  mean=0.890  min=0.764  max=0.987
+DIFF speaker  n= 120  mean=0.676  min=0.222  max=0.921
+usable range (same - diff) = 0.214
+different-speaker pairs scoring above the LOWEST same-speaker pair: 34%
+VERDICT: usable — the classes separate

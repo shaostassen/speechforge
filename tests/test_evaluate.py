@@ -183,6 +183,29 @@ def test_missing_metrics_render_as_dashes_not_zeros():
     assert "0.000" not in out
 
 
+def test_sim_above_ground_truth_is_flagged():
+    # A clone matching the speaker better than their own other recordings do
+    # means the comparison is wrong — almost always SIM-r against the reference.
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, sim_o=0.90,
+                                    n_utterances=10))
+    t.add(SystemScores("too-good", wer=0.03, sim_o=0.95, n_utterances=10))
+    assert "SIM above ground truth" in t.render()
+
+
+def test_sim_below_ground_truth_is_not_flagged():
+    # The published 0.69-0.76 ceiling must NOT be used as a threshold: with this
+    # encoder legitimate same-speaker scores run 0.89-0.98, so warning on 0.73
+    # would fire on every real run and become noise.
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, sim_o=0.979,
+                                    n_utterances=10))
+    t.add(SystemScores("legit", wer=0.03, sim_o=0.927, n_utterances=10))
+    out = t.render()
+    assert "SIM above ground truth" not in out
+    assert "encoder-specific" in out
+
+
 def test_mos_is_labelled_as_non_ranking():
     t = EvalTable()
     t.set_ground_truth(SystemScores("ground truth", wer=0.02, mos=4.1,

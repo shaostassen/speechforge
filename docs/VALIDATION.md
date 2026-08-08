@@ -65,7 +65,87 @@ thread — plausibly ~10× faster than what is measured here — and it is the o
 alternative if real-time local synthesis becomes a requirement. See
 [`LICENSES.md`](LICENSES.md) for why it is not yet adopted.
 
-**Follow-ups**
+---
+
+# Run — 2026-08-08 — first scored clone, and what the SIM number is worth
+
+| field | value |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, no GPU |
+| synthesis | `chatterbox` default (532M), reference 5.9 s LibriSpeech |
+| ASR | `speechlens` / faster-whisper **small**, int8 (iteration setting, not `large-v3`) |
+| speaker encoder | `microsoft/wavlm-base-plus-sv` @ 16 kHz |
+| protocol | 1 speaker, 3 held-out utterances; synthesize each held-out text, score against that text and that recording |
+
+```
+                system     n     WER   SIM-o
+          ground truth     3   0.044   0.979   <- read every row against this
+            chatterbox     3   0.103   0.927
+```
+
+WER 0.103 against a human 0.044 — synthesis is about 2.3× worse, and safely
+**above** the human line, so the number is readable as intelligibility. (With
+`small` rather than `large-v3`; not comparable to published figures yet.)
+
+The reference pipeline earned its place immediately: it reported
+`trimmed 0.43s of trailing near-silence` on the very first real clip. For a
+continuation-style model that region would have become the onset of the
+generated speech.
+
+## The similarity number needed a floor before it meant anything
+
+SIM-o 0.927 looks superb against the 0.69–0.76 ceiling that zero-shot TTS papers
+report — and would have been badly over-read. Ground truth on the same audio and
+encoder is **0.979**, so the whole scale is shifted, not the clone.
+
+The deciding measurement is the different-speaker floor, which the LibriSpeech
+dummy split cannot provide — it contains exactly one speaker with more than one
+utterance. Measured instead on 6 EdAcc speakers:
+
+| | n | mean | min | max |
+|---|---|---|---|---|
+| same speaker | 16 | **0.890** | 0.764 | 0.987 |
+| different speaker | 120 | **0.676** | 0.222 | 0.921 |
+
+Usable range 0.214 — **the classes do separate**, so the encoder works. Two
+caveats that travel with every number it produces:
+
+- **34% of different-speaker pairs score above the lowest same-speaker pair.**
+  Reliable in aggregate, noisy per utterance. Do not read a single SIM score as
+  a verdict on a single clone.
+- **The published 0.69–0.76 ceiling does not apply to this encoder.** Papers use
+  a WavLM-large checkpoint fine-tuned for verification, distributed as a bare
+  state dict with no licence statement — deliberately not a dependency here. The
+  cost of that choice is exactly this: absolute SIM values are not comparable to
+  published ones, only to our own ground-truth row.
+
+## A gate that would have cried wolf
+
+The first version of `EvalTable` warned "SIM above 0.73 — suspect the
+measurement", taken from the published ceiling. With this encoder, legitimate
+same-speaker scores run 0.89–0.98, so that warning would have fired on **every
+valid run** and become noise to scroll past.
+
+That is the same failure as the ASR project's `low_confidence = 0.55`, which sat
+below the model's floor and could never fire — the mirror image, and equally
+useless. A warning that always fires carries no information.
+
+Fixed: the check now compares against the **measured ground-truth row**, and
+flags only the case that is genuinely wrong — a clone scoring *above* the
+speaker's own other recordings, which almost always means SIM-r against the
+reference clip. The published range survives as a footnote for reading papers,
+not as a threshold.
+
+## Follow-ups from this run
+
+- **The dummy corpus cannot support this protocol.** One speaker with multiple
+  utterances means no cross-speaker floor and n=3. Real LibriSpeech test-clean,
+  or EdAcc, is needed for any number worth publishing.
+- Re-run with `large-v3` for comparability, and add the second non-Whisper ASR.
+- Predicted MOS is still unwired; the column renders as `—`, which is correct
+  until it is measured.
+
+**Earlier follow-ups**
 - Ask Resemble AI how Nano/Turbo are meant to be loaded; re-measure if an entrypoint
   appears. If Nano hits ~0.4 RTF as its parameter count suggests it might, it becomes
   the primary backend.

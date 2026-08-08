@@ -32,9 +32,18 @@ from typing import Dict, List, Optional, Sequence
 
 import numpy as np
 
-# Published reference points, for orientation only — never used as thresholds.
-# Sources are recorded in docs/VALIDATION.md alongside whatever we measure.
-HUMAN_SIM_CEILING = (0.69, 0.76)
+# Published zero-shot TTS papers report a same-speaker similarity ceiling around
+# 0.69-0.76. That figure is ENCODER-SPECIFIC and does not transfer: measured with
+# `microsoft/wavlm-base-plus-sv`, same-speaker similarity runs 0.89 mean (studio
+# audio reaches 0.98) and the different-speaker floor is 0.68.
+#
+# So this constant is orientation for reading papers, never a threshold. An
+# earlier version used it to warn "above 0.73, suspect the measurement", which
+# would have fired on every legitimate run with this encoder — a gate that
+# always fires is as useless as one that never does. The comparison that
+# actually holds is against the ground-truth row, measured with the same
+# encoder on the same audio.
+PUBLISHED_SIM_CEILING = (0.69, 0.76)
 
 
 class GroundTruthMissing(RuntimeError):
@@ -100,21 +109,36 @@ class EvalTable:
             return (f"{s.name:>22} {s.n_utterances:>5} {n(s.wer)} "
                     f"{n(s.wer_second)} {n(s.sim_o)} {mos}")
 
-        lines.append(fmt(self.ground_truth) + "   <- read every row against this")
+        gt = self.ground_truth
+        lines.append(fmt(gt) + "   <- read every row against this")
         for r in self.rows:
+            flags = []
+            if (r.wer is not None and gt.wer is not None and r.wer < gt.wer):
+                flags.append("WER below human: not an intelligibility win")
+            # Compared against the measured ground truth, not a published
+            # constant: the ceiling depends on the encoder and the recording
+            # conditions, so only the same-encoder same-audio number is a
+            # meaningful bound. A clone matching a speaker better than their
+            # own other recordings do means the comparison is wrong.
+            if (r.sim_o is not None and gt.sim_o is not None
+                    and r.sim_o > gt.sim_o):
+                flags.append("SIM above ground truth: check it is a held-out "
+                             "clip, not the reference")
             line = fmt(r)
-            if (r.wer is not None and self.ground_truth.wer is not None
-                    and r.wer < self.ground_truth.wer):
-                line += "   (WER below human: not an intelligibility win)"
+            if flags:
+                line += "   (" + "; ".join(flags) + ")"
             lines.append(line)
 
         lines.append("")
         lines.append("* MOS is a predicted proxy, reported as a sanity check "
                      "only — it correlates")
         lines.append("  poorly at system level and cannot rank systems.")
-        lines.append(f"  SIM-o human ceiling is roughly "
-                     f"{HUMAN_SIM_CEILING[0]:.2f}-{HUMAN_SIM_CEILING[1]:.2f}; "
-                     f"above that, suspect the measurement.")
+        if gt.sim_o is not None:
+            lines.append(f"  SIM-o is encoder-specific. The ceiling here is the "
+                         f"ground-truth row ({gt.sim_o:.3f}), not the "
+                         f"{PUBLISHED_SIM_CEILING[0]:.2f}-"
+                         f"{PUBLISHED_SIM_CEILING[1]:.2f} seen in papers, which "
+                         f"used a different encoder.")
         return "\n".join(lines)
 
 
