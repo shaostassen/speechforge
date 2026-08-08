@@ -59,7 +59,7 @@ def main() -> None:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--backend", default="chatterbox")
     p.add_argument("--corpus", default="edacc",
-                   choices=["edacc", "librispeech_dummy"])
+                   choices=["edacc", "librispeech", "librispeech_dummy"])
     p.add_argument("--asr-model", default="large-v3")
     p.add_argument("--speakers", type=int, default=4)
     p.add_argument("--utterances", type=int, default=3)

@@ -19,7 +19,7 @@ from __future__ import annotations
 import io
 from collections import defaultdict
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
@@ -106,7 +106,73 @@ def _select(by_spk: SpeakerSet, n_speakers: int, per_speaker: int) -> SpeakerSet
     return out
 
 
-CORPORA = {"edacc": load_edacc, "librispeech_dummy": load_librispeech_dummy}
+LIBRISPEECH_URL = "https://www.openslr.org/resources/12/test-clean.tar.gz"
+
+
+def load_librispeech_test_clean(n_speakers: int, per_speaker: int,
+                                root: Optional[str] = None) -> SpeakerSet:
+    """Real LibriSpeech test-clean — 40 speakers, the standard benchmark.
+
+    Downloaded and parsed directly from OpenSLR rather than through
+    `datasets`: the HF loaders for LibriSpeech are script-based and script
+    datasets are no longer supported, so the hub path is a dead end. The
+    archive is ~346 MB and the on-disk layout is trivial to walk:
+
+        test-clean/<speaker>/<chapter>/<speaker>-<chapter>-<utt>.flac
+        test-clean/<speaker>/<chapter>/<speaker>-<chapter>.trans.txt
+
+    Speaker identity comes from the directory structure, so the held-out split
+    is exact — no guessing from metadata, and no risk of the one-speaker
+    problem that makes the dummy split unusable for this protocol.
+    """
+    import soundfile as sf
+
+    base = Path(root or Path.home() / ".cache" / "speechforge")
+    base.mkdir(parents=True, exist_ok=True)
+    extracted = base / "LibriSpeech" / "test-clean"
+
+    if not extracted.is_dir():
+        import tarfile
+        import urllib.request
+        archive = base / "test-clean.tar.gz"
+        if not archive.is_file():
+            print(f"downloading LibriSpeech test-clean (~346 MB) to {archive}")
+            urllib.request.urlretrieve(LIBRISPEECH_URL, archive)
+        print(f"extracting to {base}")
+        with tarfile.open(archive) as tf:
+            tf.extractall(base)
+
+    by_spk: SpeakerSet = defaultdict(list)
+    for spk_dir in sorted(extracted.iterdir()):
+        if not spk_dir.is_dir():
+            continue
+        for chapter in sorted(spk_dir.iterdir()):
+            trans = next(chapter.glob("*.trans.txt"), None)
+            if trans is None:
+                continue
+            texts = {}
+            for line in trans.read_text().splitlines():
+                uid, _, text = line.partition(" ")
+                texts[uid] = text.strip()
+            for flac in sorted(chapter.glob("*.flac")):
+                text = texts.get(flac.stem)
+                if not text or len(text.split()) < MIN_WORDS:
+                    continue
+                if len(by_spk[spk_dir.name]) >= per_speaker + 1:
+                    break
+                y, sr = sf.read(str(flac), dtype="float32")
+                if len(y) / sr < MIN_S:
+                    continue
+                by_spk[spk_dir.name].append((y.astype(np.float32), int(sr), text))
+        if sum(1 for v in by_spk.values()
+               if len(v) >= per_speaker + 1) >= n_speakers:
+            break
+    return _select(by_spk, n_speakers, per_speaker)
+
+
+CORPORA = {"edacc": load_edacc,
+           "librispeech": load_librispeech_test_clean,
+           "librispeech_dummy": load_librispeech_dummy}
 
 
 def load(name: str, n_speakers: int, per_speaker: int) -> SpeakerSet:

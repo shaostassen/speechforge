@@ -63,7 +63,7 @@ def main() -> None:
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--backend", default="chatterbox")
     p.add_argument("--corpus", default="edacc",
-                   choices=["edacc", "librispeech_dummy"],
+                   choices=["edacc", "librispeech", "librispeech_dummy"],
                    help="librispeech_dummy is a smoke test: it has one speaker "
                         "with multiple utterances, so no cross-speaker floor")
     p.add_argument("--second-asr", action="store_true",
