@@ -1,0 +1,202 @@
+"""Scoring synthesized speech, with the traps built into the API.
+
+Three axes, and each has a way of flattering a system that this module tries to
+make structurally hard:
+
+**Intelligibility — WER of an ASR system on the synthesized audio.** The trap:
+modern zero-shot TTS scores *better* ASR-WER than real human speech, because it
+produces cleaner, more canonical articulation than a person does. A published
+case has a system at 1.47% against 1.62% for ground truth. So a low WER is not
+evidence of good synthesis past the human line — below it the metric has stopped
+measuring intelligibility and started measuring "how ASR-friendly is this".
+Hence `EvalTable` refuses to render without a ground-truth row.
+
+**Speaker similarity — cosine distance between speaker embeddings.** Two traps.
+Compare against the *reference clip itself* and you measure how well the model
+copied a specific recording, which inflates the number; the honest comparison is
+a held-out utterance from the same speaker (SIM-o, not SIM-r). And the ceiling is
+not 1.0 — real human speech from the same speaker scores about 0.69-0.76 against
+itself on these metrics, so 0.65 is near parity and 0.9 means you mismeasured.
+
+**Naturalness — predicted MOS.** Reported, and explicitly not used for ranking:
+UTMOS-style predictors correlate poorly at the system level and saturate on good
+audio. It is a smoke alarm, not a judge.
+
+Import-light: ASR and torch are pulled in lazily inside the scorers, so a run
+that only needs the table maths does not need either.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Dict, List, Optional, Sequence
+
+import numpy as np
+
+# Published reference points, for orientation only — never used as thresholds.
+# Sources are recorded in docs/VALIDATION.md alongside whatever we measure.
+HUMAN_SIM_CEILING = (0.69, 0.76)
+
+
+class GroundTruthMissing(RuntimeError):
+    """Raised when a table would render without its ground-truth row."""
+
+
+@dataclass
+class SystemScores:
+    name: str
+    wer: Optional[float] = None
+    wer_second: Optional[float] = None     # a non-Whisper ASR, see below
+    sim_o: Optional[float] = None
+    mos: Optional[float] = None
+    n_utterances: int = 0
+    notes: str = ""
+
+    def to_dict(self) -> dict:
+        return {"name": self.name, "wer": self.wer,
+                "wer_second": self.wer_second, "sim_o": self.sim_o,
+                "mos": self.mos, "n_utterances": self.n_utterances,
+                "notes": self.notes}
+
+
+@dataclass
+class EvalTable:
+    """Results for several systems, plus the ground truth they are read against.
+
+    The ground-truth row is mandatory. It is the only thing that makes any of
+    the other numbers interpretable, and it is the row people omit — so
+    `render()` raises rather than quietly producing a table that reads as
+    stronger than the evidence supports.
+    """
+    rows: List[SystemScores] = field(default_factory=list)
+    ground_truth: Optional[SystemScores] = None
+    corpus: str = ""
+    hardware: str = ""
+
+    def add(self, scores: SystemScores) -> None:
+        self.rows.append(scores)
+
+    def set_ground_truth(self, scores: SystemScores) -> None:
+        self.ground_truth = scores
+
+    def render(self) -> str:
+        if self.ground_truth is None:
+            raise GroundTruthMissing(
+                "no ground-truth row: synthesized speech can score better "
+                "ASR-WER than real human speech, so a WER without the human "
+                "row beside it cannot be read as intelligibility. Score the "
+                "real recordings and call set_ground_truth().")
+
+        head = (f"{'system':>22} {'n':>5} {'WER':>7} {'WER-2':>7} "
+                f"{'SIM-o':>7} {'MOS*':>6}")
+        lines = []
+        if self.corpus or self.hardware:
+            lines.append(f"corpus={self.corpus}  hardware={self.hardware}")
+        lines += [head, "-" * len(head)]
+
+        def fmt(s: SystemScores) -> str:
+            def n(v, p=3):
+                return f"{v:>7.{p}f}" if v is not None else f"{'—':>7}"
+            mos = f"{s.mos:>6.2f}" if s.mos is not None else f"{'—':>6}"
+            return (f"{s.name:>22} {s.n_utterances:>5} {n(s.wer)} "
+                    f"{n(s.wer_second)} {n(s.sim_o)} {mos}")
+
+        lines.append(fmt(self.ground_truth) + "   <- read every row against this")
+        for r in self.rows:
+            line = fmt(r)
+            if (r.wer is not None and self.ground_truth.wer is not None
+                    and r.wer < self.ground_truth.wer):
+                line += "   (WER below human: not an intelligibility win)"
+            lines.append(line)
+
+        lines.append("")
+        lines.append("* MOS is a predicted proxy, reported as a sanity check "
+                     "only — it correlates")
+        lines.append("  poorly at system level and cannot rank systems.")
+        lines.append(f"  SIM-o human ceiling is roughly "
+                     f"{HUMAN_SIM_CEILING[0]:.2f}-{HUMAN_SIM_CEILING[1]:.2f}; "
+                     f"above that, suspect the measurement.")
+        return "\n".join(lines)
+
+
+def cosine(a: Sequence[float], b: Sequence[float]) -> float:
+    """Cosine similarity, guarding the degenerate cases.
+
+    Returns nan for a zero vector rather than 0.0: a zero embedding means the
+    encoder failed, and 0.0 would read as "completely different voices", which
+    is a measurement passing itself off as a result.
+    """
+    x = np.asarray(a, dtype=np.float64).ravel()
+    y = np.asarray(b, dtype=np.float64).ravel()
+    if x.shape != y.shape:
+        raise ValueError(f"embedding shape mismatch: {x.shape} vs {y.shape}")
+    nx, ny = np.linalg.norm(x), np.linalg.norm(y)
+    if nx == 0.0 or ny == 0.0:
+        return float("nan")
+    return float(np.dot(x, y) / (nx * ny))
+
+
+def sim_o(embed, synth_audio, synth_sr, held_out_audio, held_out_sr,
+          reference_audio: Optional[np.ndarray] = None) -> float:
+    """Speaker similarity against a **held-out** utterance, not the reference.
+
+    ``embed`` is any callable ``(audio, sr) -> vector``.
+
+    Passing ``reference_audio`` opts into a guard: if the held-out clip is
+    actually the reference clip, this raises. Comparing a clone to the very clip
+    it was conditioned on is SIM-r, it inflates the score, and it is an easy
+    mistake to make when both live in the same variable.
+    """
+    if reference_audio is not None:
+        ho = np.asarray(held_out_audio).ravel()
+        ref = np.asarray(reference_audio).ravel()
+        if ho.shape == ref.shape and np.allclose(ho, ref):
+            raise ValueError(
+                "held-out clip is the reference clip: that measures how well "
+                "the model copied one recording (SIM-r), not whether it "
+                "captured the speaker (SIM-o). Use a different utterance.")
+    return cosine(embed(synth_audio, synth_sr),
+                  embed(held_out_audio, held_out_sr))
+
+
+def score_intelligibility(transcribe, pairs: Sequence[tuple]) -> float:
+    """Corpus WER over ``(audio, sr, reference_text)`` triples.
+
+    ``transcribe`` is ``(audio, sr) -> str``. WER is computed on the
+    concatenation rather than averaged per utterance, which is the convention
+    the ASR project already uses and what published TTS numbers report — a
+    per-utterance mean over-weights short utterances.
+    """
+    from speechlens.metrics import wer
+
+    refs, hyps = [], []
+    for audio, sr, ref in pairs:
+        refs.append(ref)
+        hyps.append(transcribe(audio, sr))
+    if not refs:
+        return float("nan")
+    return wer(" ".join(refs), " ".join(hyps))
+
+
+def whisper_transcriber(model_size: str = "large-v3", device: str = "auto",
+                        compute_type: str = "auto", language: str = "en"):
+    """A ``(audio, sr) -> str`` backed by speechlens.
+
+    This is the field-standard intelligibility evaluator — F5-TTS's own
+    evaluation uses the same faster-whisper large-v3 stack — so numbers from it
+    are comparable to published ones.
+
+    Caveat worth stating in any write-up: scoring TTS with Whisper when Whisper
+    is also the ASR everyone tunes against measures partly your own tail. Report
+    a second, architecturally different ASR alongside it (`wer_second`).
+    """
+    from speechlens.asr import RobustnessConfig
+    from speechlens.pipeline import SpeechLens
+
+    lens = SpeechLens(model_size=model_size, device=device,
+                      compute_type=compute_type)
+    cfg = RobustnessConfig()
+
+    def transcribe(audio: np.ndarray, sr: int) -> str:
+        return lens.analyze((audio, sr), language=language, cfg=cfg).text
+
+    return transcribe

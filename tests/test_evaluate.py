@@ -1,0 +1,197 @@
+"""The evaluation harness, including the guards that stop it flattering a system.
+
+Fakes stand in for the ASR and the speaker encoder, so this runs offline with no
+weights. What is being tested is mostly *refusals* — the table declining to
+render without ground truth, and SIM declining to compare a clone against the
+clip it was conditioned on. Those are the load-bearing parts.
+"""
+import math
+
+import numpy as np
+import pytest
+
+from speechforge.evaluate import (EvalTable, GroundTruthMissing, SystemScores,
+                                  cosine, score_intelligibility, sim_o)
+
+
+# --- cosine -----------------------------------------------------------------
+
+def test_identical_vectors_are_one():
+    v = [0.1, 0.4, -0.2, 0.9]
+    assert cosine(v, v) == pytest.approx(1.0)
+
+
+def test_opposite_vectors_are_minus_one():
+    assert cosine([1.0, 0.0], [-1.0, 0.0]) == pytest.approx(-1.0)
+
+
+def test_orthogonal_vectors_are_zero():
+    assert cosine([1.0, 0.0], [0.0, 1.0]) == pytest.approx(0.0)
+
+
+def test_scale_invariant():
+    a, b = [1.0, 2.0, 3.0], [2.0, 4.0, 6.0]
+    assert cosine(a, b) == pytest.approx(1.0)
+
+
+def test_zero_vector_is_nan_not_zero():
+    # A zero embedding means the encoder failed. Returning 0.0 would read as
+    # "completely different speakers" — a broken measurement posing as a result.
+    assert math.isnan(cosine([0.0, 0.0], [1.0, 1.0]))
+
+
+def test_shape_mismatch_raises():
+    with pytest.raises(ValueError, match="shape mismatch"):
+        cosine([1.0, 2.0], [1.0, 2.0, 3.0])
+
+
+# --- SIM-o guard ------------------------------------------------------------
+
+def _embed_by_frequency(audio, sr):
+    """Fake encoder: embeds the dominant frequency, so 'same speaker' is testable."""
+    spec = np.abs(np.fft.rfft(np.asarray(audio, dtype=np.float64)))
+    hz = float(np.fft.rfftfreq(len(audio), 1 / sr)[int(np.argmax(spec))])
+    return np.array([hz, hz ** 0.5, 1.0])
+
+
+def _tone(hz, seconds=1.0, sr=16000):
+    t = np.arange(int(seconds * sr)) / sr
+    return (0.4 * np.sin(2 * np.pi * hz * t)).astype(np.float32)
+
+
+def test_sim_o_high_for_the_same_voice():
+    synth, held = _tone(200.0), _tone(200.0, seconds=1.5)
+    assert sim_o(_embed_by_frequency, synth, 16000, held, 16000) > 0.99
+
+
+def test_sim_o_lower_for_a_different_voice():
+    synth, held = _tone(200.0), _tone(600.0, seconds=1.5)
+    same = sim_o(_embed_by_frequency, synth, 16000, _tone(200.0, 1.5), 16000)
+    diff = sim_o(_embed_by_frequency, synth, 16000, held, 16000)
+    assert diff < same
+
+
+def test_comparing_against_the_reference_clip_raises():
+    # SIM-r inflation: measuring how well the model copied one specific
+    # recording rather than whether it captured the speaker.
+    ref = _tone(200.0, seconds=1.2)
+    with pytest.raises(ValueError, match="SIM-r"):
+        sim_o(_embed_by_frequency, _tone(200.0), 16000, ref, 16000,
+              reference_audio=ref)
+
+
+def test_held_out_clip_that_merely_resembles_the_reference_is_allowed():
+    # The guard must key on being the *same* array, not on sounding similar,
+    # or it would reject every legitimate same-speaker comparison.
+    ref = _tone(200.0, seconds=1.2)
+    held = _tone(200.0, seconds=1.4)
+    assert sim_o(_embed_by_frequency, _tone(200.0), 16000, held, 16000,
+                 reference_audio=ref) > 0.99
+
+
+# --- intelligibility --------------------------------------------------------
+# WER comes from speechlens rather than being reimplemented here, so only these
+# three need the `eval` extra. A module-level importorskip would skip the whole
+# file, including the cosine and table tests that need nothing — so the marker
+# is applied per test.
+try:
+    import speechlens.metrics  # noqa: F401
+    HAVE_SPEECHLENS = True
+except ImportError:
+    HAVE_SPEECHLENS = False
+
+needs_speechlens = pytest.mark.skipif(
+    not HAVE_SPEECHLENS, reason="needs the [eval] extra (speechlens)")
+
+
+@needs_speechlens
+def test_perfect_transcription_gives_zero_wer():
+    pairs = [(_tone(200.0), 16000, "hello world"),
+             (_tone(300.0), 16000, "the quick brown fox")]
+
+    # Keyed on call order, not on audio length: both tones are 1 s at 16 kHz,
+    # so an earlier version of this fake keyed on len(audio), matched both, and
+    # returned the same text twice.
+    texts = iter([p[2] for p in pairs])
+    score = score_intelligibility(lambda a, s: next(texts), pairs)
+    assert score == pytest.approx(0.0)
+
+
+@needs_speechlens
+def test_wer_is_computed_on_the_concatenation():
+    # Per-utterance averaging over-weights short utterances; published TTS
+    # numbers use the corpus-level figure.
+    pairs = [(_tone(200.0), 16000, "one"),
+             (_tone(200.0), 16000, "two three four five six seven eight")]
+    # Miss the single-word utterance entirely, get the long one right.
+    def transcribe(a, s):
+        transcribe.n += 1
+        return "" if transcribe.n == 1 else "two three four five six seven eight"
+    transcribe.n = 0
+    score = score_intelligibility(transcribe, pairs)
+    assert score == pytest.approx(1 / 8)      # 1 error out of 8 reference words
+
+
+@needs_speechlens
+def test_empty_input_is_nan():
+    assert math.isnan(score_intelligibility(lambda a, s: "", []))
+
+
+# --- the table --------------------------------------------------------------
+
+def test_render_without_ground_truth_raises():
+    t = EvalTable()
+    t.add(SystemScores("some-model", wer=0.03, sim_o=0.66, n_utterances=100))
+    with pytest.raises(GroundTruthMissing, match="ground-truth"):
+        t.render()
+
+
+def test_ground_truth_row_is_marked_in_the_output():
+    t = EvalTable(corpus="librispeech", hardware="9950X")
+    t.set_ground_truth(SystemScores("ground truth", wer=0.021, sim_o=0.69,
+                                    n_utterances=100))
+    t.add(SystemScores("chatterbox", wer=0.034, sim_o=0.66, n_utterances=100))
+    out = t.render()
+    assert "read every row against this" in out
+    assert "ground truth" in out and "chatterbox" in out
+    assert "librispeech" in out and "9950X" in out
+
+
+def test_wer_below_human_is_called_out():
+    # The trap this whole module exists to prevent.
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.021, n_utterances=50))
+    t.add(SystemScores("suspiciously-good", wer=0.014, n_utterances=50))
+    out = t.render()
+    assert "not an intelligibility win" in out
+
+
+def test_wer_above_human_is_not_flagged():
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.021, n_utterances=50))
+    t.add(SystemScores("normal", wer=0.034, n_utterances=50))
+    assert "not an intelligibility win" not in t.render()
+
+
+def test_missing_metrics_render_as_dashes_not_zeros():
+    # A missing measurement must not look like a measured zero.
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.021, n_utterances=10))
+    t.add(SystemScores("partial", wer=0.03, n_utterances=10))   # no sim, no mos
+    out = t.render()
+    assert "—" in out
+    assert "0.000" not in out
+
+
+def test_mos_is_labelled_as_non_ranking():
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, mos=4.1,
+                                    n_utterances=10))
+    t.add(SystemScores("m", wer=0.03, mos=4.3, n_utterances=10))
+    out = t.render()
+    assert "cannot rank" in out
+
+
+def test_scores_are_json_ready():
+    import json
+    json.dumps(SystemScores("x", wer=0.03, sim_o=0.66).to_dict())

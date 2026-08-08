@@ -1,0 +1,8 @@
+study=bench_synth  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux x86_64)  backend=chatterbox  date=2026-08-08
+cmd: python repo/scripts/bench_synth.py --backend chatterbox --ref /tmp/ref.wav --threads 16
+load=6.0s  output_sr=24000  params=chatterbox default, t3 backbone 532M
+ threads  sent  audio_s  wall_s    RTF  x realtime
+      16     0     3.40    6.48  1.907        0.52
+      16     1     4.32    7.93  1.835        0.54
+      16     2     6.52   11.48  1.761        0.57
+RTF < 1.0 is faster than realtime. Thread count is swept because it is not
