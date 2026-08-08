@@ -136,7 +136,97 @@ speaker's own other recordings, which almost always means SIM-r against the
 reference clip. The published range survives as a footnote for reading papers,
 not as a threshold.
 
-## Follow-ups from this run
+---
+
+# Run — 2026-08-08 — the real protocol: 4 speakers, two ASRs
+
+| field | value |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, no GPU |
+| corpus | **EdAcc**, 4 speakers from 2 conversations (`C08-A/B`, `C10-A/B`) |
+| sample | 12 held-out utterances (3 per speaker), references 3.9–5.3 s |
+| synthesis | `chatterbox` default (532M) |
+| ASR 1 | faster-whisper **`large-v3`** int8, via speechlens |
+| ASR 2 | **`facebook/hubert-large-ls960-ft`** (CTC) — different architecture on purpose |
+| encoder | `microsoft/wavlm-base-plus-sv` |
+| raw log | [`validation_runs/eval_edacc_9950x.txt`](validation_runs/eval_edacc_9950x.txt) |
+
+```
+                system     n     WER   WER-2   SIM-o
+          ground truth    12   0.130   0.259   0.894   <- read every row against this
+            chatterbox    12   0.346   0.383   0.844
+```
+
+## The second ASR changes the conclusion, which is why it exists
+
+The two evaluators **disagree sharply on real speech and agree on synthetic**:
+
+| | Whisper `large-v3` | HuBERT-CTC | ratio |
+|---|---|---|---|
+| ground truth | 0.130 | **0.259** | HuBERT 2.0× harsher |
+| chatterbox | 0.346 | 0.383 | HuBERT 1.1× harsher |
+| **synthesis ÷ real** | **2.7×** | **1.5×** | — |
+
+Read the bottom row. **"Synthesis is 2.7× worse than real speech" and "synthesis is
+1.5× worse" are both true, and which one you report is decided entirely by your
+choice of ASR.** Had this run used Whisper alone — the field-standard choice — it
+would have produced the 2.7× figure with no indication that the number was that
+soft.
+
+The mechanism is legible. HuBERT-CTC is frame-synchronous with no autoregressive
+language model, so it has nothing to paper over the disfluencies, accents and
+crosstalk of spontaneous EdAcc speech: WER 0.259 on *real recordings*. Whisper's
+internal LM repairs much of that, reaching 0.130. Synthetic speech is cleaner and
+more canonical, so there is far less for an LM to repair — and the two ASRs
+converge (0.346 vs 0.383, 11% apart).
+
+Which is to say: **the apparent gap between synthetic and real speech is partly an
+artefact of how much the evaluator's language model flatters real speech.** This
+is the ASR-family-alignment confound, measured rather than cited.
+
+## Speaker similarity is consistent across two very different corpora
+
+| corpus | ground truth | chatterbox | gap |
+|---|---|---|---|
+| LibriSpeech (studio, read) | 0.979 | 0.927 | 0.052 |
+| EdAcc (spontaneous, accented) | 0.894 | 0.844 | 0.050 |
+
+The **absolute** values move a long way between corpora — recording conditions
+inflate within-corpus similarity — but the **gap is the same to within 0.002**.
+Expressed against the encoder's measured range (different-speaker floor 0.676,
+same-speaker mean 0.890), the clone lands about **79% of the way from "different
+speaker" to "same speaker"** on EdAcc, and ~83% on LibriSpeech. Consistent.
+
+Two independent checks came out right, which is the main reason to believe the
+similarity column at all:
+
+- The EdAcc ground-truth row (**0.894**) reproduces the same-speaker mean measured
+  separately on 6 EdAcc speakers (**0.890**) — different utterances, same answer.
+- Cloning from spontaneous conversational references (3.9–5.3 s, disfluent,
+  possible crosstalk) cost only ~0.05 similarity versus studio read speech. Harder
+  references degrade the clone far less than expected.
+
+## The absolute WER is high, for a predicted reason
+
+Ground-truth WER of 0.130 under Whisper is poor for "real human speech", and it is
+not a measurement error. EdAcc transcribes disfluencies verbatim; **4.6% of its
+reference words are fillers** (`uh` 102, `um` 68 in a 100-utterance sample,
+measured before this run) and Whisper performs implicit disfluency removal, so
+every one becomes a deletion. Spontaneous accented conversation accounts for the
+rest. Both rows pay the same penalty, so the comparison holds — but these absolute
+numbers are **not** comparable to LibriSpeech or to published figures.
+
+## Caveats that still bound this result
+
+- **n = 12, 4 speakers, 2 conversations.** Enough to demonstrate the harness and
+  see a consistent SIM gap; not enough for a claim about Chatterbox.
+- Both ASRs, the encoder, and the corpus are English.
+- Predicted MOS remains unwired — the column renders `—`, which is correct.
+- This run predates the reference frame-alignment fix, so its syntheses each
+  triggered Chatterbox's internal token-truncation path. Effect is sub-frame
+  (<40 ms of the prompt) and not expected to matter, but a re-run would be cleaner.
+
+## Follow-ups from the first run
 
 - **The dummy corpus cannot support this protocol.** One speaker with multiple
   utterances means no cross-speaker floor and n=3. Real LibriSpeech test-clean,
