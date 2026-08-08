@@ -11,10 +11,59 @@ in every table.
 
 ## Status
 
-Early. What exists: the reference-audio pipeline, the backend-agnostic synthesis layer,
-the CPU throughput benchmark, and a licence audit. What doesn't yet: the evaluation
-triad and the studies. See [`docs/VALIDATION.md`](docs/VALIDATION.md) for measured
-results and [`docs/LICENSES.md`](docs/LICENSES.md) for why these models and not others.
+Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
+and two studies have results. 81 tests pass offline with no weights and no network.
+
+What is deliberately *not* claimed: that Chatterbox is good. The samples so far are 12
+utterances across 4 speakers — enough to demonstrate the harness and to catch three of
+my own measurement errors, not enough to rank a model. Everything measured is in
+[`docs/VALIDATION.md`](docs/VALIDATION.md) with raw logs; model licences and exclusions
+are in [`docs/LICENSES.md`](docs/LICENSES.md).
+
+## What has been measured
+
+**Cloning works, scored against the right baseline.** On EdAcc — spontaneous, accented,
+real recording conditions — cloning from a ~4 s conversational reference:
+
+| | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
+|---|---|---|---|
+| ground truth | 0.130 | 0.259 | 0.894 |
+| chatterbox | 0.346 | 0.383 | 0.844 |
+
+**The second ASR changes the headline.** Synthesis is 2.7× worse than real speech under
+Whisper and 1.5× worse under HuBERT-CTC. Both are true; which you report is decided by
+your choice of evaluator. HuBERT has no language model to repair the disfluencies of
+real spontaneous speech, so it scores *real* audio far harder; synthetic speech is
+cleaner, leaving less to repair, and the two converge. Reporting one ASR alone hides
+that entirely — which is why the harness reports two.
+
+**Speaker similarity is consistent where the absolutes are not.** The clone-to-real gap
+is 0.050 on EdAcc and 0.052 on LibriSpeech, while the absolute values differ by 0.085
+because recording conditions inflate within-corpus similarity. Expressed against the
+encoder's measured range, the clone lands ~80% of the way from "different speaker" to
+"same speaker" on both.
+
+**ASR confidence does not detect synthetic speech.** Holding the transcribed word
+*correct* — so accuracy can't explain the result — real and synthetic confidence
+distributions are the same shape at every percentile, and the mean difference changed
+sign between two identical runs. Whisper's per-word confidence measures acoustic-lexical
+fit, not provenance. It is not a free deepfake detector, and it does not meaningfully
+bias WER-based evaluation either.
+
+## Three measurement errors this harness caught in its own results
+
+Kept here because they are the reason to trust anything above.
+
+- **A vendor RTF claim was wrong by ~6×.** Chatterbox-Nano is advertised at 3× faster
+  than realtime on 8 CPU cores; the installable checkpoint measured **2× slower** than
+  realtime, and Nano turns out not to be loadable from the released package at all.
+- **A published similarity ceiling did not transfer.** Papers report ~0.69–0.76; this
+  encoder puts legitimate same-speaker pairs at 0.89–0.98. A warning built on the
+  published figure would have fired on every valid run.
+- **Nothing was reproducible.** Chatterbox samples at `temperature=0.8`, so two
+  identical study runs gave AUROC 0.591 and 0.553 with the mean difference flipping
+  sign. Synthesis is now seeded by default; pass `--seed -1` when the spread is the
+  quantity you actually want.
 
 ## Why the licences get their own document
 
