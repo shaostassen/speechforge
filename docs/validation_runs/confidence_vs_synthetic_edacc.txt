@@ -1,0 +1,28 @@
+  EDACC-C08-A: 153 labelled words so far
+  EDACC-C08-B: 307 labelled words so far
+  EDACC-C10-B: 581 labelled words so far
+  EDACC-C10-A: 671 labelled words so far
+========================================================================
+CONFIDENCE ON CORRECTLY-TRANSCRIBED WORDS — real vs synthetic
+========================================================================
+correct words     real=288  synthetic=294
+mean confidence   real=0.9489  synthetic=0.9475  delta=+0.0014
+AUROC (real above synthetic) = 0.597
+confidence percentiles (the low tail is where they differ)
+             p1       p5      p10      p25      p50
+  real    0.294   0.667   0.833   0.986   0.999
+ synth    0.377   0.664   0.797   0.977   0.997
+reading:
+  ranking  — real words tend to score above synthetic ones
+  centre   — means differ by +0.0014  (negligible)
+  tail     — low tails are comparable (p5 0.667 vs 0.664)
+  These can disagree, and if they do the tail explains it: a threshold
+  gate cares only about mass below the threshold, AUROC about the whole order.
+with the 'clean' policy (fitted on real speech):
+  accepted real      89.9%
+  accepted synthetic 89.1%
+  gap -0.8% — a reliability gate tuned on real audio behaves
+       less permissively on synthetic audio
+Caveat: correctness is judged against the reference text, so a clone that
+says the right words in an odd way counts as correct. That is deliberate —
+the question is about confidence, not naturalness.

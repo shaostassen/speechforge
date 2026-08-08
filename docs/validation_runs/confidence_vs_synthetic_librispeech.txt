@@ -1,0 +1,32 @@
+  1284: 1081 labelled words so far
+  1320: 1303 labelled words so far
+  1580: 1484 labelled words so far
+  1995: 1607 labelled words so far
+  2094: 1856 labelled words so far
+  2300: 2210 labelled words so far
+  237: 2455 labelled words so far
+  260: 2607 labelled words so far
+========================================================================
+CONFIDENCE ON CORRECTLY-TRANSCRIBED WORDS — real vs synthetic
+========================================================================
+correct words     real=1251  synthetic=1161
+mean confidence   real=0.9723  synthetic=0.9546  delta=+0.0177
+AUROC (real above synthetic) = 0.607
+confidence percentiles (the low tail is where they differ)
+             p1       p5      p10      p25      p50
+  real    0.452   0.827   0.969   0.993   0.997
+ synth    0.380   0.715   0.870   0.982   0.995
+reading:
+  ranking  — real words tend to score above synthetic ones
+  centre   — means differ by +0.0177
+  tail     — synthetic speech has the heavier low tail (p5 0.827 vs 0.715)
+  These can disagree, and if they do the tail explains it: a threshold
+  gate cares only about mass below the threshold, AUROC about the whole order.
+with the 'clean' policy (fitted on real speech):
+  accepted real      94.9%
+  accepted synthetic 91.6%
+  gap -3.2% — a reliability gate tuned on real audio behaves
+       less permissively on synthetic audio
+Caveat: correctness is judged against the reference text, so a clone that
+says the right words in an odd way counts as correct. That is deliberate —
+the question is about confidence, not naturalness.

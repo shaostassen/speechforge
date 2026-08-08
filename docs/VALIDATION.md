@@ -226,6 +226,88 @@ numbers are **not** comparable to LibriSpeech or to published figures.
   triggered Chatterbox's internal token-truncation path. Effect is sub-frame
   (<40 ms of the prompt) and not expected to matter, but a re-run would be cleaner.
 
+---
+
+# Study — 2026-08-08 — does ASR confidence react to synthetic speech?
+
+The question: when the ASR transcribes a word **correctly**, is it as confident
+about a cloned voice as a real one? Restricting to correct words is what makes it
+sharp — otherwise any difference is a restatement of "synthesis has higher WER".
+
+Setup: for each held-out utterance there are two recordings of the *same text*,
+real and cloned, so text, speaker and ASR are fixed and only provenance varies.
+`large-v3` int8 with word timestamps; per-word probability is the signal.
+Script: [`scripts/confidence_vs_synthetic.py`](../scripts/confidence_vs_synthetic.py).
+
+## The answer depends on the corpus, and that is the finding
+
+| | EdAcc, 4 spk, 12 utts | **LibriSpeech, 12 spk, 60 utts** |
+|---|---|---|
+| correct words (real / synth) | 288 / 294 | **1251 / 1161** |
+| mean confidence, real | 0.9489 | **0.9723** |
+| mean confidence, synthetic | 0.9475 | **0.9546** |
+| **mean delta** | **+0.0014** | **+0.0177** |
+| AUROC (real above synth) | 0.597 | 0.607 |
+| p5 real / synth | 0.667 / 0.691 | **0.827 / 0.715** |
+| accept-rate gap | **+1.2%** | **−3.2%** |
+
+**On clean read speech the effect is clear.** Real words are transcribed with
+higher confidence than cloned ones (0.972 vs 0.955), synthetic speech carries the
+heavier low tail (p5 0.715 vs 0.827), and a reliability gate fitted on real audio
+**rejects synthetic words more often** — 91.6% accepted against 94.9%.
+
+**On spontaneous accented speech the effect vanishes.** Not because synthesis
+improved, but because *real* speech got worse: EdAcc's real confidence is 0.949
+against LibriSpeech's 0.972, while synthetic sits at ~0.95 in both. Disfluencies,
+accents and conversational recording conditions drag real audio down to meet the
+synthetic level, and the accept-rate gap even changes sign.
+
+So the honest statement is: **ASR confidence separates real from synthetic speech
+only to the extent that the real speech is clean.** The absolute confidence of
+synthetic speech is remarkably stable across corpora (0.9475 / 0.9546); it is the
+real-speech baseline that moves.
+
+Two consequences that matter for the rest of this repo:
+
+- **Confidence is not a usable synthetic-speech detector.** AUROC ~0.60 on the
+  favourable corpus, and no separation at all on the harder one. Whisper's
+  per-word confidence measures acoustic-lexical fit, and canonical synthetic
+  articulation happens to score close to clean human articulation.
+- **The reliability gate is mildly conservative toward synthesis, not
+  permissive.** That is the reassuring direction: a gate tuned on real speech
+  will flag synthetic output slightly *more*, so it does not wave cloned audio
+  through.
+
+## What the earlier, smaller run got wrong
+
+The first EdAcc run reported "no measurable effect" and I was one step from
+generalizing it. Two changes overturned that: **5× the sample** (60 utterances,
+12 speakers rather than 12 and 4) and **a different corpus**. The EdAcc reading
+was not wrong *about EdAcc* — it was wrong as a general claim, and only the
+scale-up revealed which.
+
+It also exposed a methodological hole worth stating plainly: the earlier 585
+words came from **12 utterances**, so treating them as 585 independent samples
+would have badly overstated the evidence. Clustering is why a 0.59 AUROC on that
+sample meant much less than it looked like.
+
+## Reproducibility, and a bug it caught
+
+Chatterbox samples at `temperature=0.8`, so identical settings produce different
+audio. Measured before the fix — same corpus, same speakers, same flags:
+
+| run | AUROC | mean delta |
+|---|---|---|
+| 1 (unseeded) | 0.591 | +0.0015 |
+| 2 (unseeded) | 0.553 | **−0.0007** (sign flipped) |
+| 3 (seeded 1234) | 0.597 | +0.0014 |
+
+**The mean difference changed sign between two identical runs.** The effect I was
+about to report was inside sampling noise. Synthesis is now seeded by default
+(`--seed 1234`; `-1` to sample freely when the spread is the quantity of
+interest), which also means the EdAcc numbers recorded above this section are
+single unseeded samples and should be treated as such.
+
 ## Follow-ups from the first run
 
 - **The dummy corpus cannot support this protocol.** One speaker with multiple
