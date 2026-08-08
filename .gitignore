@@ -1,0 +1,35 @@
+# environments
+.venv/
+venv/
+
+# python caches / build artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
+# notebooks
+.ipynb_checkpoints/
+
+# model weights and caches — never commit these
+*.safetensors
+*.ckpt
+*.pt
+*.bin
+*.onnx
+models/
+.cache/
+
+# generated and reference audio. Synthesized speech is an output, and reference
+# recordings are voice biometrics — neither belongs in git.
+*.wav
+*.flac
+*.mp3
+*.m4a
+audio/
+out/
+
+# os / editor
+.DS_Store

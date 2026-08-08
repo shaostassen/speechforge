@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "speechforge"
+version = "0.1.0"
+description = "Zero-shot voice cloning with an honest evaluation harness"
+requires-python = ">=3.10"
+
+# The core install is deliberately light: audio handling, metrics, and the
+# evaluation maths only. Synthesis backends each drag in torch and a different
+# pinned transformers, so they are optional extras — you should be able to
+# score a directory of wav files without installing a TTS stack at all.
+dependencies = [
+    "numpy>=1.24",
+    "scipy>=1.10",
+    "soundfile>=0.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+# Evaluation. speechlens supplies the ASR (faster-whisper), WER, and all of the
+# confidence/calibration machinery already validated in the other project.
+eval = [
+    "speechlens @ git+https://github.com/shaostassen/voice_detection_using_machine_learning.git",
+]
+
+# Synthesis backends. Chatterbox pins torch==2.6.0 exactly; install with
+#   --index-url https://download.pytorch.org/whl/cpu
+# on a machine without a GPU, or pip pulls ~2.5 GB of unusable CUDA wheels.
+chatterbox = ["chatterbox-tts>=0.1.7"]
+
+# Speaker similarity and predicted MOS both need torch.
+similarity = ["torch>=2.0", "torchaudio>=2.0", "transformers>=4.40"]
+
+[tool.setuptools.packages.find]
+include = ["speechforge*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
