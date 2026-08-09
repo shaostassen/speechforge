@@ -271,12 +271,56 @@ domain, it was 2× harsher than Whisper (0.259 vs 0.130). So their close agreeme
 here (0.112 vs 0.110) is partly domain match rather than corroboration — the
 second-ASR check is strongest exactly where the corpora are unfamiliar to both.
 
+## Cross-corpus comparison, both seeded at n=60
+
+EdAcc re-run at the same scale and seed (12 speakers, 5 held-out each; scan
+budget raised to 9000 rows, which reaches 6 conversations):
+
+```
+corpus=edacc (held-out)
+                system     n     WER   WER-2   SIM-o
+          ground truth    60   0.149   0.281   0.922
+            chatterbox    60   0.369   0.427   0.862
+```
+
+| | LibriSpeech | EdAcc |
+|---|---|---|
+| ground-truth WER (Whisper / HuBERT) | 0.021 / 0.016 | 0.149 / 0.281 |
+| chatterbox WER | 0.112 / 0.110 | 0.369 / 0.427 |
+| **synthesis ÷ real, Whisper** | **5.3×** | **2.5×** |
+| **synthesis ÷ real, HuBERT** | **6.9×** | **1.5×** |
+| SIM-o, ground truth → clone | 0.964 → 0.951 | 0.922 → 0.862 |
+| **SIM-o gap** | **0.013** | **0.060** |
+
+**The two-ASR divergence is confirmed at scale, and its direction flips with
+domain.** On LibriSpeech, HuBERT scores ground truth *better* than Whisper
+(0.016 vs 0.021) because `hubert-large-ls960-ft` is trained on LibriSpeech — it
+is in-domain, so their agreement is not corroboration. On EdAcc it is 1.9×
+harsher (0.281 vs 0.149), having no language model to repair spontaneous
+accented speech. The second evaluator earns its place only out of domain, which
+is the opposite of where its agreement first looked reassuring.
+
+**Cloning is meaningfully worse from conversational references.** The
+clone-to-ground-truth similarity gap is **0.060 on EdAcc against 0.013 on
+LibriSpeech** — 4.6× larger. I previously wrote that harder references "degrade
+the clone far less than expected", from an n=12 gap of 0.050 read against an
+n=3 LibriSpeech gap of 0.052. Both small samples were unreliable, and at n=60
+the conclusion inverts: a disfluent 4-second conversational reference costs
+substantially more speaker similarity than a clean studio one. Corrected in the
+README.
+
+**What did survive scaling:** the synthesis-to-real WER ratio on EdAcc, 2.7×/1.5×
+at n=12 and 2.5×/1.5× at n=60.
+
 ## Still bounded
 
-- n=60, 12 speakers, one corpus, one backend, English.
-- Predicted MOS remains unwired; the column renders `—`.
-- The EdAcc numbers recorded above were unseeded single samples and have not been
-  re-run at this scale.
+- Two corpora, one backend, English, n=60 each.
+- Predicted MOS is now wired (`--mos`) but was not enabled for these runs, so
+  the column renders `—`.
+- **Decode settings were Chatterbox defaults**, including `temperature=0.8`.
+  Whether the 5–7× WER ratio on LibriSpeech is partly sampling entropy rather
+  than model capability is being measured separately — see the temperature
+  sweep below.
 
 ---
 

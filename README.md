@@ -37,11 +37,13 @@ real spontaneous speech, so it scores *real* audio far harder; synthetic speech 
 cleaner, leaving less to repair, and the two converge. Reporting one ASR alone hides
 that entirely — which is why the harness reports two.
 
-**Speaker similarity is close, and my earlier reading of it was a small-sample
-artefact.** At n=60 on LibriSpeech the clone-to-real gap is **0.013** (0.951 vs 0.964).
-I previously recorded a "consistent ~0.05 gap across corpora" from runs of n=3 and
-n=12 — scaling up refuted it. Absolute SIM values are encoder-specific and inflated by
-matched recording conditions, so only the ground-truth row in the same run bounds them.
+**Speaker similarity depends heavily on the reference, and my earlier reading was a
+small-sample artefact.** At n=60 the clone-to-real gap is **0.013 on LibriSpeech** and
+**0.060 on EdAcc** — 4.6× larger from disfluent conversational references. I previously
+recorded a "consistent ~0.05 gap across corpora" and concluded harder references
+"degrade the clone far less than expected", both from runs of n=3 and n=12. At n=60 the
+conclusion inverts. Absolute SIM values are encoder-specific and inflated by matched
+recording conditions, so only the ground-truth row in the same run bounds them.
 
 **On LibriSpeech, WER at scale (n=60):**
 
