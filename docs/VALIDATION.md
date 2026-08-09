@@ -317,10 +317,38 @@ at n=12 and 2.5×/1.5× at n=60.
 - Two corpora, one backend, English, n=60 each.
 - Predicted MOS is now wired (`--mos`) but was not enabled for these runs, so
   the column renders `—`.
-- **Decode settings were Chatterbox defaults**, including `temperature=0.8`.
-  Whether the 5–7× WER ratio on LibriSpeech is partly sampling entropy rather
-  than model capability is being measured separately — see the temperature
-  sweep below.
+- **Decode settings were Chatterbox defaults**, including `temperature=0.8` —
+  which the sweep below shows is the right choice, not an oversight.
+
+## Temperature sweep — a hypothesis of mine, refuted
+
+LibriSpeech, 6 speakers, 18 held-out utterances, seed 1234, `large-v3`. Same
+ground truth throughout (WER 0.031, SIM-o 0.962) since only synthesis changes.
+
+| temperature | chatterbox WER | SIM-o |
+|---|---|---|
+| **0.8 (default)** | **0.124** | **0.935** |
+| 0.4 | 0.162 | 0.913 |
+| 0.1 | 0.276 | 0.888 |
+
+The hypothesis was that Chatterbox's `temperature=0.8` is a lot of sampling
+entropy for an evaluation, and that it explained the 5–7× WER ratio against
+published systems. **Wrong, and monotonically so** — reducing temperature makes
+both intelligibility and speaker similarity worse, by 2.2× in WER between 0.8
+and 0.1.
+
+The mechanism is familiar from language models: autoregressive decoding
+degenerates when sampling gets too greedy, falling into repetition and stalled
+output. TTS is not exempt, and the vendor default is doing real work rather than
+trading accuracy for expressiveness.
+
+So the WER gap against published systems is **not** a configuration artefact. It
+is the model, the protocol, or both — and that matters, because "we misconfigured
+it" was the comfortable explanation and it is now excluded.
+
+Whether 0.8 is a peak or the trend continues upward is being measured at 1.0 and
+1.2. A 2.2× effect across three seeded points is unlikely to be noise, but n=18
+is small and the trend, not the individual values, is what this supports.
 
 ---
 

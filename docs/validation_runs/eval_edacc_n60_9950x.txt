@@ -1,0 +1,20 @@
+speaker EDACC-C08-B: cloning from 3.9s, 5 held-out
+speaker EDACC-C10-B: cloning from 4.0s, 5 held-out
+speaker EDACC-C10-A: cloning from 9.9s, 5 held-out
+speaker EDACC-C02-A: cloning from 15.0s, 5 held-out
+speaker EDACC-C02-B: cloning from 3.2s, 5 held-out
+speaker EDACC-C19-A: cloning from 14.5s, 5 held-out
+speaker EDACC-C19-B: cloning from 21.4s, 5 held-out
+speaker EDACC-C20-A: cloning from 6.1s, 5 held-out
+speaker EDACC-C20-B: cloning from 5.4s, 5 held-out
+speaker EDACC-C21-B: cloning from 13.1s, 5 held-out
+speaker EDACC-C21-A: cloning from 9.0s, 5 held-out
+scoring...
+corpus=edacc (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.149   0.281   0.922      —   <- read every row against this
+            chatterbox    60   0.369   0.427   0.862      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.922), not the 0.69-0.76 seen in papers, which used a different encoder.

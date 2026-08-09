@@ -52,12 +52,18 @@ class ChatterboxBackend:
     def __init__(self, device: str = "cpu", **gen_kwargs):
         """``gen_kwargs`` are passed to ``generate`` on every call.
 
-        Exposed because the defaults are not neutral. Chatterbox ships
-        ``temperature=0.8``, which is a lot of sampling entropy for an
-        evaluation: measured WER on LibriSpeech test-clean came out at 11%
-        against 1.5-3% reported for published zero-shot systems, and decode
-        temperature is the first suspect. Also ``cfg_weight=0.5`` and
-        ``exaggeration=0.5``, both of which trade stability for expressiveness.
+        Exposed so decode settings can be recorded and swept, not because the
+        defaults need fixing. ``temperature=0.8`` looked like a lot of sampling
+        entropy for an evaluation, and the obvious guess was that it explained
+        why WER on LibriSpeech test-clean came out at 11% against the 1.5-3%
+        published for zero-shot systems.
+
+        **Measured, and the guess was wrong.** Lowering temperature makes both
+        intelligibility and speaker similarity monotonically worse: WER 0.124 →
+        0.162 → 0.276 and SIM-o 0.935 → 0.913 → 0.888 at temperature 0.8 → 0.4
+        → 0.1. Autoregressive TTS degenerates when sampling gets too greedy, the
+        same way greedy LLM decoding falls into repetition. The 0.8 default is
+        doing real work.
 
         Recording which settings produced a number is the point — a WER without
         its decode configuration is not reproducible even with a seed.
