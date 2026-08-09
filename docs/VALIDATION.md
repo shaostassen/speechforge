@@ -320,6 +320,51 @@ at n=12 and 2.5×/1.5× at n=60.
 - **Decode settings were Chatterbox defaults**, including `temperature=0.8` —
   which the sweep below shows is the right choice, not an oversight.
 
+## Where the WER gap comes from — decomposing the aggregate
+
+A corpus WER of 0.112 cannot distinguish "a few utterances fail catastrophically"
+from "everything is uniformly mediocre", and those have different causes. Same
+seeded run, LibriSpeech n=60, per-utterance detail recorded
+([`validation_runs/per_utterance_librispeech.json`](validation_runs/per_utterance_librispeech.json)).
+
+| tercile | words | synthesis WER | real WER |
+|---|---|---|---|
+| short | 5–14 | **0.145** | 0.019 |
+| mid | 14–26 | 0.133 | 0.024 |
+| long | 26–48 | **0.094** | 0.021 |
+
+- `corr(words, synthesis WER)` = **−0.149** — longer text is if anything *easier*
+- `corr(words, real WER)` = +0.004 — real speech is flat across length, so this is
+  not utterance difficulty
+- `corr(real WER, synthesis WER)` = +0.319 — only mildly shared
+
+**The long-text hypothesis is refuted.** I expected chunking or length limits to
+concentrate the errors in long utterances; the long tercile is the *best* of the
+three. Much of the short-utterance penalty is a denominator artefact — one error
+in a 6-word reference is WER 0.167, the same error in a 48-word reference is
+0.021 — which is also why the per-utterance mean here (0.124) sits above the
+corpus-level figure (0.112): averaging per utterance over-weights short ones,
+exactly the reason `score_intelligibility` concatenates instead.
+
+**The errors are broad, not concentrated.** Three utterances of 60 exceed WER 0.5
+and account for 24% of the total error mass — real catastrophic failures, the
+autoregressive instability the literature warns about — but the remaining 76% is
+spread across the corpus.
+
+**So the 5–7× gap is the model, not the protocol.** Two candidate explanations
+have now been excluded by measurement rather than argument: decode temperature
+(the sweep below) and text length (here). A broad, length-independent elevation
+in WER is what a genuinely weaker intelligibility profile looks like, and it is
+consistent with Chatterbox being built for expressive on-device synthesis rather
+than benchmark WER — it does not appear in the Seed-TTS comparison tables at all.
+
+**One protocol variable remains untested:** references longer than 10 s are
+truncated by `reference.prepare`, and several LibriSpeech references hit that cap
+(`truncated 12.4s to 10.0s`). That cap came from CosyVoice and dots.tts
+documentation and was applied to Chatterbox without checking it holds there —
+unlike the two hypotheses above, it is *my* decision rather than a vendor
+default, so it deserves its own test.
+
 ## Temperature sweep — a hypothesis of mine, refuted
 
 LibriSpeech, 6 speakers, 18 held-out utterances, seed 1234, `large-v3`. Same
