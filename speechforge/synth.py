@@ -58,12 +58,13 @@ class ChatterboxBackend:
         why WER on LibriSpeech test-clean came out at 11% against the 1.5-3%
         published for zero-shot systems.
 
-        **Measured, and the guess was wrong.** Lowering temperature makes both
-        intelligibility and speaker similarity monotonically worse: WER 0.124 →
-        0.162 → 0.276 and SIM-o 0.935 → 0.913 → 0.888 at temperature 0.8 → 0.4
-        → 0.1. Autoregressive TTS degenerates when sampling gets too greedy, the
-        same way greedy LLM decoding falls into repetition. The 0.8 default is
-        doing real work.
+        **Measured, and the guess was wrong.** Below 0.8 both intelligibility and
+        speaker similarity degrade sharply — WER 0.124 → 0.162 → 0.276 at
+        temperature 0.8 → 0.4 → 0.1 — because autoregressive decoding degenerates
+        when sampling gets too greedy, the same way greedy LLM decoding falls into
+        repetition. Above 0.8 the curve plateaus (0.124 / 0.106 / 0.119 at
+        0.8 / 1.0 / 1.2), so the default sits at the knee. No temperature closes
+        the gap to published systems, which was the point of asking.
 
         Recording which settings produced a number is the point — a WER without
         its decode configuration is not reproducible even with a seed.

@@ -327,28 +327,34 @@ ground truth throughout (WER 0.031, SIM-o 0.962) since only synthesis changes.
 
 | temperature | chatterbox WER | SIM-o |
 |---|---|---|
-| **0.8 (default)** | **0.124** | **0.935** |
-| 0.4 | 0.162 | 0.913 |
 | 0.1 | 0.276 | 0.888 |
+| 0.4 | 0.162 | 0.913 |
+| **0.8 (default)** | 0.124 | **0.935** |
+| 1.0 | **0.106** | 0.930 |
+| 1.2 | 0.119 | 0.934 |
 
-The hypothesis was that Chatterbox's `temperature=0.8` is a lot of sampling
-entropy for an evaluation, and that it explained the 5–7× WER ratio against
-published systems. **Wrong, and monotonically so** — reducing temperature makes
-both intelligibility and speaker similarity worse, by 2.2× in WER between 0.8
-and 0.1.
+The hypothesis was that `temperature=0.8` is a lot of sampling entropy for an
+evaluation, and that it explained the 5–7× WER ratio against published systems.
+**Wrong, and in the opposite direction.**
 
-The mechanism is familiar from language models: autoregressive decoding
-degenerates when sampling gets too greedy, falling into repetition and stalled
-output. TTS is not exempt, and the vendor default is doing real work rather than
-trading accuracy for expressiveness.
+**Below 0.8, degradation is sharp and monotone** — WER 0.124 → 0.162 → 0.276 and
+SIM-o 0.935 → 0.913 → 0.888 as temperature falls. A 2.2× WER effect across
+seeded runs, which is far too large to be n=18 noise. The mechanism is familiar
+from language models: autoregressive decoding degenerates when sampling gets too
+greedy, falling into repetition and stalled output. TTS is not exempt.
 
-So the WER gap against published systems is **not** a configuration artefact. It
-is the model, the protocol, or both — and that matters, because "we misconfigured
-it" was the comfortable explanation and it is now excluded.
+**Above 0.8 it plateaus.** WER 0.124 / 0.106 / 0.119 at 0.8 / 1.0 / 1.2 is
+non-monotone and spans 0.018 — at n=18 that does not support picking a winner,
+so **the shallow minimum at 1.0 is not a recommendation.** SIM-o likewise flattens
+around 0.93. The defensible statement is that the default sits at the knee of the
+curve, with everything above it equivalent within this sample's resolution.
 
-Whether 0.8 is a peak or the trend continues upward is being measured at 1.0 and
-1.2. A 2.2× effect across three seeded points is unlikely to be noise, but n=18
-is small and the trend, not the individual values, is what this supports.
+**The gap to published systems survives the whole sweep.** The best WER anywhere
+on the curve is 0.106, still 3.5–7× the 1.5–3% published for zero-shot systems on
+this corpus. So it is not a configuration artefact — it is the model, the
+protocol, or both. That matters because "we misconfigured it" was the comfortable
+explanation, and it is now excluded across the full range rather than at one
+point.
 
 ---
 
