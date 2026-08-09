@@ -228,6 +228,58 @@ numbers are **not** comparable to LibriSpeech or to published figures.
 
 ---
 
+# Run — 2026-08-09 — scored eval at scale, seeded, and calibrated against the literature
+
+| field | value |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, no GPU |
+| corpus | **real LibriSpeech test-clean** — 12 speakers, 60 held-out utterances |
+| synthesis | `chatterbox` default (532M), **seed 1234** (reproducible) |
+| ASR 1 / 2 | faster-whisper `large-v3` int8 / `hubert-large-ls960-ft` (CTC) |
+| raw log | [`validation_runs/eval_librispeech_9950x.txt`](validation_runs/eval_librispeech_9950x.txt) |
+
+```
+                system     n     WER   WER-2   SIM-o
+          ground truth    60   0.021   0.016   0.964   <- read every row against this
+            chatterbox    60   0.112   0.110   0.951
+```
+
+## The harness is calibrated against published work
+
+**Ground-truth WER of 0.021 reproduces the ~2.1% that LibriSpeech test-clean papers
+report** (Seed-TTS test-en GT 2.14%; LibriSpeech-PC test-clean 1.87–2.23%). That is
+the check that matters: it says this harness measures the same quantity the
+literature does, so its other rows can be read against published numbers rather
+than only against each other.
+
+Against that baseline, **Chatterbox at 0.112 is well behind published zero-shot
+systems**, which report 1.5–3% WER on this corpus. The protocol differs — cloning
+from one held-out reference instead of a fixed ~3 s prompt, CPU int8 ASR — but a
+4–7× gap is too large to attribute to that.
+
+## Two corrections this run forced
+
+**The "consistent ~0.05 similarity gap across corpora" was a small-sample
+artefact.** Recorded earlier from runs of n=3 (LibriSpeech dummy, gap 0.052) and
+n=12 (EdAcc, gap 0.050). At n=60 the LibriSpeech gap is **0.013**. Two tiny
+samples agreeing is not consistency, and I wrote it up as though it were.
+
+**The two ASRs are not independent on LibriSpeech.** `hubert-large-ls960-ft` is
+trained on LibriSpeech 960 h, so evaluating LibriSpeech with it is in-domain: it
+scores ground truth at 0.016, *better* than Whisper's 0.021. On EdAcc, out of
+domain, it was 2× harsher than Whisper (0.259 vs 0.130). So their close agreement
+here (0.112 vs 0.110) is partly domain match rather than corroboration — the
+second-ASR check is strongest exactly where the corpora are unfamiliar to both.
+
+## Still bounded
+
+- n=60, 12 speakers, one corpus, one backend, English.
+- Predicted MOS remains unwired; the column renders `—`.
+- The EdAcc numbers recorded above were unseeded single samples and have not been
+  re-run at this scale.
+
+---
+
 # Study — 2026-08-08 — does ASR confidence react to synthetic speech?
 
 The question: when the ASR transcribes a word **correctly**, is it as confident

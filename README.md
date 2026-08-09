@@ -37,11 +37,29 @@ real spontaneous speech, so it scores *real* audio far harder; synthetic speech 
 cleaner, leaving less to repair, and the two converge. Reporting one ASR alone hides
 that entirely — which is why the harness reports two.
 
-**Speaker similarity is consistent where the absolutes are not.** The clone-to-real gap
-is 0.050 on EdAcc and 0.052 on LibriSpeech, while the absolute values differ by 0.085
-because recording conditions inflate within-corpus similarity. Expressed against the
-encoder's measured range, the clone lands ~80% of the way from "different speaker" to
-"same speaker" on both.
+**Speaker similarity is close, and my earlier reading of it was a small-sample
+artefact.** At n=60 on LibriSpeech the clone-to-real gap is **0.013** (0.951 vs 0.964).
+I previously recorded a "consistent ~0.05 gap across corpora" from runs of n=3 and
+n=12 — scaling up refuted it. Absolute SIM values are encoder-specific and inflated by
+matched recording conditions, so only the ground-truth row in the same run bounds them.
+
+**On LibriSpeech, WER at scale (n=60):**
+
+| | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
+|---|---|---|---|
+| ground truth | **0.021** | 0.016 | 0.964 |
+| chatterbox | 0.112 | 0.110 | 0.951 |
+
+The ground-truth 2.1% reproduces the published LibriSpeech test-clean figure, which is
+the check that says the harness is measuring the same thing the literature does.
+Against that, Chatterbox at 11% is well behind published zero-shot systems, which
+report 1.5–3% on this corpus — a gap large enough not to be protocol noise, though the
+protocol does differ (cloning from one held-out reference rather than a fixed 3 s prompt).
+
+⚠️ **The two ASRs are not independent on this corpus.** `hubert-large-ls960-ft` is
+trained on LibriSpeech, so their agreement here (0.021 vs 0.016) partly reflects domain
+match, not corroboration. On EdAcc, where HuBERT is out of domain, they diverged sharply
+(0.130 vs 0.259). Read the pair with that in mind.
 
 **ASR confidence does not detect synthetic speech.** Holding the transcribed word
 *correct* — so accuracy can't explain the result — real and synthetic confidence

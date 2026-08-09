@@ -1,0 +1,22 @@
+second ASR: facebook/hubert-large-ls960-ft (CTC)
+speaker 1089: cloning from 10.4s, 5 held-out
+speaker 1188: cloning from 10.7s, 5 held-out
+speaker 121: cloning from 8.5s, 5 held-out
+speaker 1221: cloning from 12.4s, 5 held-out
+speaker 1284: cloning from 8.1s, 5 held-out
+speaker 1320: cloning from 13.5s, 5 held-out
+speaker 1580: cloning from 8.9s, 5 held-out
+speaker 1995: cloning from 9.5s, 5 held-out
+speaker 2094: cloning from 22.6s, 5 held-out
+speaker 2300: cloning from 5.1s, 5 held-out
+speaker 237: cloning from 13.3s, 5 held-out
+speaker 260: cloning from 7.0s, 5 held-out
+scoring...
+corpus=librispeech (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.021   0.016   0.964      —   <- read every row against this
+            chatterbox    60   0.112   0.110   0.951      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.
