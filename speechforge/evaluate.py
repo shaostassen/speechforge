@@ -226,6 +226,54 @@ def whisper_transcriber(model_size: str = "large-v3", device: str = "auto",
     return transcribe
 
 
+def mos_predictor(device: str = "cpu"):
+    """Predicted MOS via UTMOS (SpeechMOS), as a smoke alarm — not a judge.
+
+    Reported because naturalness is the one axis WER and speaker similarity say
+    nothing about, and human listening tests are not available here. But the
+    literature is clear that predicted MOS correlates poorly with human judgement
+    *at the system level* and saturates on good audio, so it cannot rank systems.
+    It is useful for one thing: catching output that is broken in a way WER does
+    not see — buzzing, truncation, wrong speaking rate.
+
+    Returns a callable ``(audio, sr) -> float`` or raises, so a caller can treat
+    unavailability as a blank column rather than a failure. Loaded through
+    torch.hub, which needs network on first use.
+    """
+    import torch
+
+    predictor = torch.hub.load("tarepan/SpeechMOS:v1.2.0", "utmos22_strong",
+                               trust_repo=True)
+    predictor.eval()
+    predictor.to(device)
+    target_sr = 16000
+
+    def predict(audio: np.ndarray, sr: int) -> float:
+        y = np.asarray(audio, dtype=np.float32).ravel()
+        if sr != target_sr:
+            from speechforge.reference import resample
+            y = resample(y, sr, target_sr)
+        with torch.no_grad():
+            score = predictor(torch.from_numpy(y).unsqueeze(0).to(device),
+                              target_sr)
+        return float(score.item())
+
+    return predict
+
+
+def score_naturalness(predict, clips: Sequence[tuple]) -> float:
+    """Mean predicted MOS over ``(audio, sr)`` pairs.
+
+    A mean, deliberately: per-clip predicted MOS is noisier than the differences
+    anyone cares about, and reporting a spread would imply a precision the
+    predictor does not have.
+    """
+    scores = [predict(a, sr) for a, sr in clips]
+    if not scores:
+        return float("nan")
+    return sum(scores) / len(scores)
+
+
 def ctc_transcriber(model_name: str = "facebook/hubert-large-ls960-ft",
                     device: str = "cpu"):
     """A second, architecturally different ASR — HuBERT + CTC.

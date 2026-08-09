@@ -218,3 +218,29 @@ def test_mos_is_labelled_as_non_ranking():
 def test_scores_are_json_ready():
     import json
     json.dumps(SystemScores("x", wer=0.03, sim_o=0.66).to_dict())
+
+
+# --- naturalness ------------------------------------------------------------
+
+def test_score_naturalness_averages_the_clips():
+    from speechforge.evaluate import score_naturalness
+    clips = [(_tone(200.0), 16000), (_tone(300.0), 16000)]
+    scores = iter([4.0, 3.0])
+    assert score_naturalness(lambda a, s: next(scores), clips) == pytest.approx(3.5)
+
+
+def test_score_naturalness_is_nan_with_no_clips():
+    from speechforge.evaluate import score_naturalness
+    assert math.isnan(score_naturalness(lambda a, s: 4.0, []))
+
+
+def test_mos_column_still_renders_when_unavailable():
+    # The predictor needs torch and a hub download. An unavailable predictor has
+    # to leave a blank column, never a zero — a 0.0 MOS would read as "terrible
+    # audio" rather than "not measured".
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, mos=None,
+                                    n_utterances=10))
+    t.add(SystemScores("m", wer=0.03, mos=None, n_utterances=10))
+    out = t.render()
+    assert "—" in out and "0.00" not in out

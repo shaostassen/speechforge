@@ -34,7 +34,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from speechforge import corpora  # noqa: E402
 from speechforge.evaluate import (EvalTable, SystemScores,  # noqa: E402
-                                  ctc_transcriber, score_intelligibility,
+                                  ctc_transcriber, mos_predictor,
+                                  score_intelligibility, score_naturalness,
                                   sim_o, whisper_transcriber)
 from speechforge.synth import clone, load_backend  # noqa: E402
 
@@ -66,6 +67,10 @@ def main() -> None:
                    choices=["edacc", "librispeech", "librispeech_dummy"],
                    help="librispeech_dummy is a smoke test: it has one speaker "
                         "with multiple utterances, so no cross-speaker floor")
+    p.add_argument("--mos", action="store_true",
+                   help="also predict MOS (UTMOS). A smoke alarm for broken "
+                        "audio, not a ranking signal \u2014 it correlates poorly "
+                        "at system level and saturates on good audio")
     p.add_argument("--second-asr", action="store_true",
                    help="also score with HuBERT-CTC. Scoring TTS only with "
                         "Whisper measures partly Whisper's own tail")
@@ -115,6 +120,14 @@ def main() -> None:
 
     transcribe = whisper_transcriber(model_size=args.asr_model, device="cpu",
                                      compute_type="int8")
+    predict_mos = None
+    if args.mos:
+        try:
+            predict_mos = mos_predictor()
+            print("naturalness: UTMOS (SpeechMOS) — sanity check only")
+        except Exception as exc:
+            print(f"MOS predictor unavailable ({exc}); MOS will be blank")
+
     transcribe2 = None
     if args.second_asr:
         try:
@@ -169,6 +182,8 @@ def main() -> None:
         wer_second=(score_intelligibility(transcribe2, real_pairs)
                     if transcribe2 else None),
         sim_o=float(np.nanmean(real_sims)) if real_sims else None,
+        mos=(score_naturalness(predict_mos, [(a, s) for a, s, _t in real_pairs])
+             if predict_mos else None),
         n_utterances=len(real_pairs),
         notes="real recordings, scored identically"))
     table.add(SystemScores(
@@ -177,6 +192,8 @@ def main() -> None:
         wer_second=(score_intelligibility(transcribe2, synth_pairs)
                     if transcribe2 else None),
         sim_o=float(np.nanmean(synth_sims)) if synth_sims else None,
+        mos=(score_naturalness(predict_mos, [(a, s) for a, s, _t in synth_pairs])
+             if predict_mos else None),
         n_utterances=len(synth_pairs)))
 
     print()
