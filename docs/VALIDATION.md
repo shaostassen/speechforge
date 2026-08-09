@@ -308,6 +308,21 @@ about to report was inside sampling noise. Synthesis is now seeded by default
 interest), which also means the EdAcc numbers recorded above this section are
 single unseeded samples and should be treated as such.
 
+**Verified, not assumed.** Two independent runs of the 60-utterance study at
+seed 1234 agree in every digit — 1251/1161 correct words, delta +0.0177,
+AUROC 0.607, all five percentiles, both accept rates:
+
+| | run A | run B |
+|---|---|---|
+| correct words (real / synth) | 1251 / 1161 | 1251 / 1161 |
+| mean delta | +0.0177 | +0.0177 |
+| AUROC | 0.607 | 0.607 |
+| p1 / p5 / p10 / p25 / p50, real | 0.452 / 0.827 / 0.969 / 0.993 / 0.997 | identical |
+| accepted real / synthetic | 94.9% / 91.6% | identical |
+
+So the numbers in this file are now reproducible from the recorded command, which
+is the property that lets a result be checked rather than believed.
+
 ## Follow-ups from the first run
 
 - **The dummy corpus cannot support this protocol.** One speaker with multiple
