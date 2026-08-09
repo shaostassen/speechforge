@@ -97,6 +97,11 @@ def main() -> None:
                         "AUROC 0.591 and 0.553. Pass -1 to sample freely and "
                         "measure the spread instead")
     p.add_argument("--out-dir", default=None, help="keep the synthesized wavs")
+    p.add_argument("--per-utterance", default=None, metavar="PATH",
+                   help="write per-utterance WER and text length as JSON. Lets "
+                        "a corpus-level WER be decomposed: a few long "
+                        "utterances failing badly looks identical to uniform "
+                        "mediocrity in the aggregate")
     args = p.parse_args()
 
     print(f"study=eval_zeroshot  hardware={hardware_label()}  "
@@ -183,6 +188,24 @@ def main() -> None:
                 if other is not None:
                     real_sims.append(sim_o(encoder, other[0], other[1],
                                            ho_audio, ho_sr))
+
+    if args.per_utterance:
+        # Decompose the aggregate. Whisper only, since the point is the shape of
+        # the error distribution rather than a second opinion on its level.
+        import json
+
+        from speechlens.metrics import wer as _wer
+        rows = []
+        for (swav, ssr, text), (rwav, rsr, _t) in zip(synth_pairs, real_pairs):
+            rows.append({
+                "words": len(text.split()),
+                "audio_s": round(len(swav) / ssr, 2),
+                "real_audio_s": round(len(rwav) / rsr, 2),
+                "wer_synth": round(_wer(text, transcribe(swav, ssr)), 4),
+                "wer_real": round(_wer(text, transcribe(rwav, rsr)), 4),
+            })
+        Path(args.per_utterance).write_text(json.dumps(rows, indent=2))
+        print(f"per-utterance detail -> {args.per_utterance}")
 
     print("\nscoring...")
     table = EvalTable(corpus=f"{args.corpus} (held-out)",
