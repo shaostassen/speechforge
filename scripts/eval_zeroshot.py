@@ -97,6 +97,10 @@ def main() -> None:
                         "AUROC 0.591 and 0.553. Pass -1 to sample freely and "
                         "measure the spread instead")
     p.add_argument("--out-dir", default=None, help="keep the synthesized wavs")
+    p.add_argument("--ref-seconds", type=float, default=None,
+                   help="reference-clip cap in seconds (default 10). The "
+                        "default is borrowed from other models' docs, not "
+                        "measured on this one")
     p.add_argument("--per-utterance", default=None, metavar="PATH",
                    help="write per-utterance WER and text length as JSON. Lets "
                         "a corpus-level WER be decomposed: a few long "
@@ -153,7 +157,7 @@ def main() -> None:
             print(f"second ASR unavailable ({exc}); WER-2 will be blank")
     print()
 
-    synth_pairs, real_pairs = [], []
+    synth_pairs, real_pairs, reports = [], [], []
     synth_sims, real_sims = [], []
     out_dir = Path(args.out_dir) if args.out_dir else None
     if out_dir:
@@ -167,7 +171,9 @@ def main() -> None:
 
         for j, (ho_audio, ho_sr, text) in enumerate(held):
             wav, sr, report = clone(backend, text, ref_audio, ref_sr,
-                                        seed=None if args.seed < 0 else args.seed)
+                                        seed=None if args.seed < 0 else args.seed,
+                                        ref_seconds=args.ref_seconds)
+            reports.append(report)
             if report["warnings"]:
                 print(f"  ref warnings: {report['warnings']}")
             if out_dir:
@@ -196,9 +202,12 @@ def main() -> None:
 
         from speechlens.metrics import wer as _wer
         rows = []
-        for (swav, ssr, text), (rwav, rsr, _t) in zip(synth_pairs, real_pairs):
+        for (swav, ssr, text), (rwav, rsr, _t), rep in zip(
+                synth_pairs, real_pairs, reports):
             rows.append({
                 "words": len(text.split()),
+                "ref_s": rep["duration_s"],
+                "ref_original_s": rep["original_duration_s"],
                 "audio_s": round(len(swav) / ssr, 2),
                 "real_audio_s": round(len(rwav) / rsr, 2),
                 "wer_synth": round(_wer(text, transcribe(swav, ssr)), 4),

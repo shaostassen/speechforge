@@ -207,3 +207,26 @@ def test_load_backend_forwards_generation_kwargs():
         assert seen == {"temperature": 0.25}
     finally:
         del BACKENDS["_recorder"]
+
+
+# --- reference cap ----------------------------------------------------------
+
+def test_ref_seconds_overrides_the_default_cap():
+    # The 10 s default is borrowed from other models' documentation, so it has
+    # to be testable rather than baked in.
+    b = FakeBackend()
+    clone(b, "hello", _speech(25.0), 16000, ref_seconds=20.0)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(20.0, abs=0.3)
+
+
+def test_default_cap_still_applies_when_unset():
+    b = FakeBackend()
+    clone(b, "hello", _speech(25.0), 16000)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(10.0, abs=0.3)
+
+
+def test_ref_seconds_does_not_pad_a_short_reference():
+    # Raising the cap must not invent audio that is not there.
+    b = FakeBackend()
+    clone(b, "hello", _speech(6.0), 16000, ref_seconds=30.0)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(6.0, abs=0.3)

@@ -128,8 +128,8 @@ def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:
 
 
 def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
-          out_path: Optional[str] = None,
-          seed: Optional[int] = None) -> Tuple[np.ndarray, int, dict]:
+          out_path: Optional[str] = None, seed: Optional[int] = None,
+          ref_seconds: Optional[float] = None) -> Tuple[np.ndarray, int, dict]:
     """Synthesize ``text`` in the voice of ``reference``.
 
     The reference goes through ``reference.prepare`` first — trimmed, resampled,
@@ -139,8 +139,13 @@ def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
     """
     import soundfile as sf
 
+    # ref_seconds overrides the default cap. The default (10 s) comes from
+    # CosyVoice and dots.tts documentation, which is not evidence about
+    # Chatterbox — worth being able to test rather than assume.
+    from speechforge.reference import TARGET_S
     ref_audio, ref_sr, report = prepare(
         reference, sr, target_sr=backend.sample_rate,
+        target_s=TARGET_S if ref_seconds is None else ref_seconds,
         align_ms=getattr(backend, "align_ms", None))
     if len(ref_audio) == 0:
         raise ValueError(f"unusable reference: {report.warnings}")
