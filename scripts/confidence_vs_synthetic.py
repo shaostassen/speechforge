@@ -64,6 +64,10 @@ def main() -> None:
     p.add_argument("--speakers", type=int, default=4)
     p.add_argument("--utterances", type=int, default=3)
     p.add_argument("--threads", type=int, default=16)
+    p.add_argument("--scan", type=int, default=None,
+                   help="edacc only: how many streamed rows to search for "
+                        "speakers. Utterances come grouped by conversation, so "
+                        "reaching N speakers needs ~N/2 conversations")
     p.add_argument("--seed", type=int, default=1234,
                    help="seed each synthesis. Chatterbox samples at "
                         "temperature 0.8, so unseeded runs are not "
@@ -83,7 +87,9 @@ def main() -> None:
     from speechlens.asr import RobustnessConfig
     from speechlens.pipeline import SpeechLens
 
-    speakers = corpora.load(args.corpus, args.speakers, args.utterances)
+    speakers = corpora.load(args.corpus, args.speakers, args.utterances,
+                            **({'scan': args.scan}
+                               if args.scan and args.corpus == 'edacc' else {}))
     print(f"corpus={args.corpus}  speakers={len(speakers)}  "
           f"{args.utterances} held-out each\n")
 

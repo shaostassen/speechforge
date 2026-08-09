@@ -175,10 +175,18 @@ CORPORA = {"edacc": load_edacc,
            "librispeech_dummy": load_librispeech_dummy}
 
 
-def load(name: str, n_speakers: int, per_speaker: int) -> SpeakerSet:
+def load(name: str, n_speakers: int, per_speaker: int,
+         **kwargs) -> SpeakerSet:
+    """Load a corpus by name. Extra kwargs go to the specific loader.
+
+    ``scan=`` matters for edacc: it streams, so the budget bounds how deep it
+    looks for speakers. Utterances arrive grouped by conversation and each
+    conversation has two participants, so reaching N speakers means reaching
+    roughly N/2 conversations — the default is nowhere near enough for a dozen.
+    """
     if name not in CORPORA:
         raise SystemExit(f"unknown corpus {name!r}; have {sorted(CORPORA)}")
-    speakers = CORPORA[name](n_speakers, per_speaker)
+    speakers = CORPORA[name](n_speakers, per_speaker, **kwargs)
     if not speakers:
         raise SystemExit(
             f"{name}: no speaker had {per_speaker + 1} usable utterances "
