@@ -154,3 +154,56 @@ def test_same_seed_reproduces_the_same_audio():
     a2, _sr2, _ = clone(b, "hello", _speech(5.0), 16000, seed=7)
     import numpy as np
     assert np.array_equal(a1, a2)
+
+
+# --- generation settings ----------------------------------------------------
+
+class GenKwargsBackend(FakeBackend):
+    """Mimics a backend that forwards generation kwargs to its model."""
+    def __init__(self, **gen_kwargs):
+        super().__init__()
+        self._gen_kwargs = dict(gen_kwargs)
+
+    def describe(self):
+        if self._gen_kwargs:
+            args = ", ".join(f"{k}={v}" for k, v in sorted(self._gen_kwargs.items()))
+            return f"fake [{args}]"
+        return "fake [defaults]"
+
+
+def test_describe_records_the_decode_settings():
+    # A WER without its decode configuration is not reproducible even with a
+    # seed, so the settings have to reach the provenance banner.
+    b = GenKwargsBackend(temperature=0.3, cfg_weight=0.5)
+    assert "temperature=0.3" in b.describe() and "cfg_weight=0.5" in b.describe()
+
+
+def test_describe_says_defaults_when_nothing_was_overridden():
+    assert "defaults" in GenKwargsBackend().describe()
+
+
+def test_load_backend_forwards_generation_kwargs():
+    import pytest as _pytest
+    from speechforge.synth import BACKENDS, load_backend
+    seen = {}
+
+    class Recorder:
+        sample_rate = 24000
+        align_ms = None
+
+        def __init__(self, device="cpu", **kw):
+            seen.update(kw)
+
+        def synthesize(self, text, reference_path, seed=None):
+            return np.zeros(10, np.float32), self.sample_rate
+
+        def set_threads(self, n): pass
+
+        def describe(self): return "recorder"
+
+    BACKENDS["_recorder"] = Recorder
+    try:
+        load_backend("_recorder", temperature=0.25)
+        assert seen == {"temperature": 0.25}
+    finally:
+        del BACKENDS["_recorder"]

@@ -67,6 +67,12 @@ def main() -> None:
                    choices=["edacc", "librispeech", "librispeech_dummy"],
                    help="librispeech_dummy is a smoke test: it has one speaker "
                         "with multiple utterances, so no cross-speaker floor")
+    p.add_argument("--temperature", type=float, default=None,
+                   help="override the backend's decode temperature. Chatterbox "
+                        "defaults to 0.8, which is a lot of sampling entropy "
+                        "for an evaluation")
+    p.add_argument("--cfg-weight", type=float, default=None,
+                   help="override classifier-free-guidance weight (default 0.5)")
     p.add_argument("--mos", action="store_true",
                    help="also predict MOS (UTMOS). A smoke alarm for broken "
                         "audio, not a ranking signal \u2014 it correlates poorly "
@@ -106,7 +112,12 @@ def main() -> None:
           f"{args.utterances} held-out utterances each")
     print(f"speaker ids: {list(speakers)}\n")
 
-    backend = load_backend(args.backend, device="cpu")
+    gen = {}
+    if args.temperature is not None:
+        gen["temperature"] = args.temperature
+    if args.cfg_weight is not None:
+        gen["cfg_weight"] = args.cfg_weight
+    backend = load_backend(args.backend, device="cpu", **gen)
     backend.set_threads(args.threads)
     print(f"backend: {backend.describe()}  sr={backend.sample_rate}")
 

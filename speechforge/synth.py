@@ -49,13 +49,26 @@ class ChatterboxBackend:
     docs/VALIDATION.md.
     """
 
-    def __init__(self, device: str = "cpu"):
+    def __init__(self, device: str = "cpu", **gen_kwargs):
+        """``gen_kwargs`` are passed to ``generate`` on every call.
+
+        Exposed because the defaults are not neutral. Chatterbox ships
+        ``temperature=0.8``, which is a lot of sampling entropy for an
+        evaluation: measured WER on LibriSpeech test-clean came out at 11%
+        against 1.5-3% reported for published zero-shot systems, and decode
+        temperature is the first suspect. Also ``cfg_weight=0.5`` and
+        ``exaggeration=0.5``, both of which trade stability for expressiveness.
+
+        Recording which settings produced a number is the point — a WER without
+        its decode configuration is not reproducible even with a seed.
+        """
         from chatterbox.tts import ChatterboxTTS
         self._model = ChatterboxTTS.from_pretrained(device=device)
         self.sample_rate = int(getattr(self._model, "sr", 24000))
         # S3 tokenizes the reference at 25 Hz, i.e. 40 ms per token.
         self.align_ms = 40.0
         self._device = device
+        self._gen_kwargs = dict(gen_kwargs)
 
     def synthesize(self, text: str, reference_path: str,
                    seed: Optional[int] = None) -> Tuple[np.ndarray, int]:
@@ -75,7 +88,8 @@ class ChatterboxBackend:
         if seed is not None:
             import torch
             torch.manual_seed(seed)
-        wav = self._model.generate(text, audio_prompt_path=reference_path)
+        wav = self._model.generate(text, audio_prompt_path=reference_path,
+                                   **self._gen_kwargs)
         arr = wav.detach().cpu().numpy() if hasattr(wav, "detach") else np.asarray(wav)
         return arr.astype(np.float32).ravel(), self.sample_rate
 
@@ -85,19 +99,25 @@ class ChatterboxBackend:
 
     def describe(self) -> str:
         t3 = getattr(self._model, "t3", None)
-        if t3 is None:
-            return "chatterbox (default checkpoint)"
-        params = sum(p.numel() for p in t3.parameters())
-        return f"chatterbox default, t3 backbone {params / 1e6:.0f}M"
+        base = ("chatterbox (default checkpoint)" if t3 is None else
+                f"chatterbox default, t3 backbone "
+                f"{sum(p.numel() for p in t3.parameters()) / 1e6:.0f}M")
+        if self._gen_kwargs:
+            # Decode settings travel with the description so they land in the
+            # provenance banner of every recorded run.
+            args = ", ".join(f"{k}={v}" for k, v in
+                             sorted(self._gen_kwargs.items()))
+            return f"{base} [{args}]"
+        return f"{base} [chatterbox defaults]"
 
 
 BACKENDS = {"chatterbox": ChatterboxBackend}
 
 
-def load_backend(name: str, device: str = "cpu") -> Backend:
+def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:
     if name not in BACKENDS:
         raise SystemExit(f"unknown backend {name!r}; have {sorted(BACKENDS)}")
-    return BACKENDS[name](device=device)
+    return BACKENDS[name](device=device, **gen_kwargs)
 
 
 def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
