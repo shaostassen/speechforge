@@ -122,6 +122,8 @@ def main() -> None:
             # reference clip the models were conditioned on.
             e_held = enc(held_audio, held_sr)
             sim = lambda a, s: cosine(enc(a, s), e_held)  # noqa: E731
+            # Identity shed needs a second anchor: the source voice itself.
+            e_src = enc(g.source_audio, g.source_sample_rate)
 
             rows.append({
                 "speaker": spk,
@@ -135,6 +137,10 @@ def main() -> None:
                 "sim_native_tts": sim(g.source_audio, g.source_sample_rate),
                 "sim_learner_tts": sim(learner_tts, lt_sr),
                 "sim_golden": sim(g.audio, g.sample_rate),
+                # Identity SHED: how much the output still resembles the voice it
+                # was converted away from. Without this a blend of the two voices
+                # passes every other check.
+                "sim_golden_to_source": cosine(enc(g.audio, g.sample_rate), e_src),
                 "wer_native_tts": wer(text, transcribe(g.source_audio,
                                                        g.source_sample_rate)),
                 "wer_learner_tts": wer(text, transcribe(learner_tts, lt_sr)),
@@ -156,9 +162,13 @@ def main() -> None:
     print(golden_table(rows))
 
     t = trade_off(m("sim_golden"), m("sim_native_tts"),
-                  m("wer_golden"), m("wer_native_tts"))
-    print(f"\nidentity gain (golden - native tts) : {t['identity_gain']:+.3f}")
-    print(f"WER cost      (golden - native tts) : {t['wer_cost']:+.3f}")
+                  m("wer_golden"), m("wer_native_tts"),
+                  sim_to_source=m("sim_golden_to_source"))
+    print(f"\nidentity acquired  SIM(golden, learner)    : {t['sim_to_learner']:.3f}"
+          f"   (source started at {t['sim_source_to_learner']:.3f})")
+    print(f"identity shed      SIM(golden, native tts) : {t['sim_to_source']:.3f}")
+    print(f"identity gain (golden - native tts)        : {t['identity_gain']:+.3f}")
+    print(f"WER cost      (golden - native tts)        : {t['wer_cost']:+.3f}")
     print(f"verdict: {t['verdict']}")
 
     print(f"\nvs plain cloning: golden SIM {m('sim_golden'):.3f} vs "

@@ -109,8 +109,8 @@ def test_result_is_json_ready(tmp_path):
 def test_no_identity_movement_is_named():
     # Failure mode 1: conversion did nothing. WER looks great precisely because
     # nothing happened, so a WER-only reading would call this a success.
-    out = trade_off(sim_to_learner=0.60, sim_to_source=0.90,
-                    wer_output=0.10, wer_source=0.10)
+    out = trade_off(sim_to_learner=0.60, sim_source_to_learner=0.90,
+                    wer_output=0.10, wer_source=0.10, sim_to_source=0.95)
     assert out["identity_gain"] < 0
     assert "did not move identity" in out["verdict"]
 
@@ -118,31 +118,53 @@ def test_no_identity_movement_is_named():
 def test_damaged_speech_is_named_even_when_identity_moved():
     # Failure mode 2: it sounds like the learner and no longer says the words.
     # A similarity-only reading would call this a success.
-    out = trade_off(sim_to_learner=0.92, sim_to_source=0.55,
-                    wer_output=0.40, wer_source=0.10)
+    out = trade_off(sim_to_learner=0.92, sim_source_to_learner=0.55,
+                    wer_output=0.40, wer_source=0.10, sim_to_source=0.50)
     assert out["identity_gain"] > 0
     assert "damaged the speech" in out["verdict"]
 
 
-def test_success_requires_both_axes():
-    out = trade_off(sim_to_learner=0.90, sim_to_source=0.60,
-                    wer_output=0.11, wer_source=0.10)
+def test_blend_is_named_even_though_identity_moved_and_wer_held():
+    # Failure mode 3, the one an unmeasured "identity shed" axis hid entirely:
+    # the output moved toward the learner AND kept its pronunciation, but still
+    # resembles the source voice as much as the target. That is a blend of two
+    # people, which sounds like neither, and both other axes call it a success.
+    out = trade_off(sim_to_learner=0.82, sim_source_to_learner=0.60,
+                    wer_output=0.11, wer_source=0.10, sim_to_source=0.88)
+    assert out["identity_gain"] > 0
+    assert out["wer_cost"] < 0.03
+    assert out["resembles_source_more"] is True
+    assert "blend" in out["verdict"]
+
+
+def test_success_requires_all_three_axes():
+    out = trade_off(sim_to_learner=0.90, sim_source_to_learner=0.60,
+                    wer_output=0.11, wer_source=0.10, sim_to_source=0.55)
     assert "largely intact" in out["verdict"]
 
 
 def test_modest_cost_is_distinguished_from_damage():
-    out = trade_off(sim_to_learner=0.90, sim_to_source=0.60,
-                    wer_output=0.16, wer_source=0.10)
+    out = trade_off(sim_to_learner=0.90, sim_source_to_learner=0.60,
+                    wer_output=0.16, wer_source=0.10, sim_to_source=0.55)
     assert "modest" in out["verdict"]
+
+
+def test_identity_shed_cannot_be_silently_omitted():
+    # It was omitted once: the study passed source-to-learner similarity into a
+    # parameter named sim_to_source, so shed went unmeasured while the module
+    # docstring claimed to report it. A required argument makes that impossible.
+    with pytest.raises(TypeError):
+        trade_off(0.9, 0.6, 0.11, 0.10)
 
 
 def test_no_single_figure_of_merit_is_produced():
     # Weighting "sounds like them" against "still says the words" is a product
     # decision. A combined score would bury it, so the API must not offer one.
-    out = trade_off(0.9, 0.6, 0.11, 0.10)
+    out = trade_off(0.9, 0.6, 0.11, 0.10, 0.55)
     assert "score" not in out and "overall" not in out
-    assert {"sim_to_learner", "sim_to_source", "identity_gain",
-            "wer_output", "wer_source", "wer_cost", "verdict"} == set(out)
+    assert {"sim_to_learner", "sim_source_to_learner", "sim_to_source",
+            "identity_gain", "resembles_source_more", "wer_output",
+            "wer_source", "wer_cost", "verdict"} == set(out)
 
 
 # --- the table must anchor its own similarity column -------------------------

@@ -133,21 +133,42 @@ def golden_speech(tts_backend, vc_backend, text: str,
                         reference_report=report)
 
 
-def trade_off(sim_to_learner: float, sim_to_source: float,
-              wer_output: float, wer_source: float) -> dict:
+def trade_off(sim_to_learner: float, sim_source_to_learner: float,
+              wer_output: float, wer_source: float,
+              sim_to_source: float) -> dict:
     """Summarize the three-way trade-off, without collapsing it to one score.
+
+    The three arguments carrying similarities are easy to confuse, so, precisely:
+
+      sim_to_learner        SIM(output, learner held-out)   identity acquired
+      sim_source_to_learner SIM(native tts, learner held-out)  where it started
+      sim_to_source         SIM(output, the native tts)     identity shed
+
+    ``sim_to_source`` is required rather than optional because the module docstring
+    promises to report identity shed, and an earlier version of this function
+    accepted ``sim_source_to_learner`` under the name ``sim_to_source`` and so
+    never measured shed at all. That gap hid a specific failure mode: a converter
+    that *blends* the two voices scores a gain toward the learner while still
+    resembling the source, producing audio that sounds like neither person.
 
     Deliberately returns the components and a verdict string rather than a single
     figure of merit. There is no defensible way to weight "sounds like the
     learner" against "still says the words" — that weighting is a product
     decision, and a combined score would bury it.
     """
-    identity_gain = sim_to_learner - sim_to_source
+    identity_gain = sim_to_learner - sim_source_to_learner
     wer_cost = wer_output - wer_source
+    # Threshold-free: is the output closer to the voice it was aiming for than to
+    # the voice it came from? Anything else would be an invented cutoff.
+    resembles_source_more = sim_to_source >= sim_to_learner
 
     if identity_gain <= 0.0:
         verdict = ("conversion did not move identity toward the learner; "
                    "output still resembles the source voice")
+    elif resembles_source_more:
+        verdict = ("identity moved toward the learner but the output still "
+                   "resembles its source at least as much — a blend, not a "
+                   "conversion")
     elif wer_cost > 0.10:
         verdict = ("identity moved, but conversion damaged the speech "
                    "(WER cost > 10 points) — likely re-accented or degraded")
@@ -157,8 +178,10 @@ def trade_off(sim_to_learner: float, sim_to_source: float,
         verdict = "identity moved with pronunciation largely intact"
 
     return {"sim_to_learner": sim_to_learner,
+            "sim_source_to_learner": sim_source_to_learner,
             "sim_to_source": sim_to_source,
             "identity_gain": identity_gain,
+            "resembles_source_more": resembles_source_more,
             "wer_output": wer_output,
             "wer_source": wer_source,
             "wer_cost": wer_cost,

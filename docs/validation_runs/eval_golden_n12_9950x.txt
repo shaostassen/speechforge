@@ -1,0 +1,28 @@
+study=eval_golden  hardware=AMD Ryzen 9 9950X 16-Core Processor  asr=large-v3  seed=1234  date=2026-08-10
+cmd: python repo/scripts/eval_golden.py --speakers 4 --utterances 3 --asr-model large-v3 --threads 16 --seed 1234
+learners (accented): ['EDACC-C08-A', 'EDACC-C08-B', 'EDACC-C10-B', 'EDACC-C10-A']
+pronunciation source: LibriSpeech 1089, 10.4s
+loaded PerthNet (Implicit) at step 250,000
+loaded PerthNet (Implicit) at step 250,000
+tts: chatterbox default, t3 backbone 532M [chatterbox defaults]
+vc : chatterbox-vc (MIT)
+encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+EDACC-C08-A: learner ref 3.0s, 3 held-out
+EDACC-C08-B: learner ref 3.8s, 3 held-out
+EDACC-C10-B: learner ref 3.9s, 3 held-out
+EDACC-C10-A: learner ref 9.8s, 3 held-out
+====================================================================
+GOLDEN SPEAKER — identity vs pronunciation
+====================================================================
+          signal  SIM to learner     WER
+    learner real  (held-out ref)   0.176
+      native tts           0.680   0.192
+     learner tts           0.841   0.261
+          golden           0.815   0.182
+identity gain (golden - native tts) : +0.135
+WER cost      (golden - native tts) : -0.010
+verdict: identity moved with pronunciation largely intact
+vs plain cloning: golden SIM 0.815 vs learner-tts 0.841  (-0.026)
+                  golden WER 0.182 vs learner-tts 0.261  (-0.079)
+If plain cloning already matches the learner and pronounces well, the
+conversion stage is not earning its place.
