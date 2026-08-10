@@ -1,0 +1,161 @@
+"""Golden-speaker synthesis: a learner's own voice, pronouncing correctly.
+
+The motivating application. Telling a learner they mispronounced something is
+half a tool; letting them hear the correction **in their own voice** is the other
+half, and the pedagogical literature finds that a well-matched voice is what
+actually drives improvement.
+
+Why plain zero-shot TTS does not do this
+----------------------------------------
+Cloning from an accented reference *preserves the accent* — the model treats the
+reference as the target to imitate, pronunciation included. That is a feature for
+voice cloning and precisely wrong here. What is wanted is pronunciation from one
+source and identity from another, which is **foreign accent conversion**, a
+distinct task with no maintained open-source implementation.
+
+The established recipe is *synthesize then convert*: a native-referenced TTS
+produces correct pronunciation, then voice conversion moves the timbre onto the
+learner. Both stages here are MIT-licensed.
+
+What can actually be measured
+-----------------------------
+Ground truth is impossible by construction: you cannot record a non-native
+speaker producing native pronunciation, so there is no target signal to compare
+against. That rules out the obvious evaluation and is why this is research rather
+than a library call.
+
+What remains measurable is the **trade-off**, using only machinery this repo
+already has:
+
+  identity acquired  SIM(output, learner's held-out audio) — does it sound like them?
+  identity shed      SIM(output, the native TTS it came from) — did it stop sounding like that voice?
+  pronunciation kept WER(output) against WER(the native TTS input) — did conversion damage the speech?
+
+A method that scores well on identity and badly on WER has re-accented the audio
+or destroyed it; one that scores well on WER and badly on identity has simply not
+converted. Neither number alone can distinguish success from either failure,
+which is the whole reason to report all three.
+"""
+from __future__ import annotations
+
+from dataclasses import dataclass, field
+from typing import Optional, Tuple
+
+import numpy as np
+
+from speechforge.synth import clone
+
+
+class ChatterboxVCBackend:
+    """Voice conversion via Chatterbox — MIT code and MIT weights.
+
+    Separate from the TTS backend because they are separate models with separate
+    checkpoints, even though they ship in one package. Loading both costs memory,
+    so a caller that only synthesizes should not pay for the converter.
+    """
+
+    def __init__(self, device: str = "cpu"):
+        from chatterbox.vc import ChatterboxVC
+        self._model = ChatterboxVC.from_pretrained(device=device)
+        self.sample_rate = int(getattr(self._model, "sr", 24000))
+        self._device = device
+
+    def convert(self, audio: np.ndarray, sr: int, target_ref_path: str,
+                seed: Optional[int] = None) -> Tuple[np.ndarray, int]:
+        """Re-voice ``audio`` to the speaker in ``target_ref_path``.
+
+        Seeded for the same reason synthesis is: any stochastic stage makes a
+        recorded number unreproducible, and this pipeline has two of them.
+        """
+        import soundfile as sf
+        if seed is not None:
+            import torch
+            torch.manual_seed(seed)
+
+        import tempfile
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
+            sf.write(tmp.name, np.asarray(audio, dtype=np.float32).ravel(), sr)
+            wav = self._model.generate(tmp.name,
+                                       target_voice_path=target_ref_path)
+        arr = wav.detach().cpu().numpy() if hasattr(wav, "detach") else np.asarray(wav)
+        return arr.astype(np.float32).ravel(), self.sample_rate
+
+    def describe(self) -> str:
+        return "chatterbox-vc (MIT)"
+
+
+@dataclass
+class GoldenResult:
+    """Output plus every intermediate, because each stage needs scoring."""
+    audio: np.ndarray
+    sample_rate: int
+    # Stage 1: correct pronunciation in the native reference's voice. Kept
+    # because it is the pronunciation baseline the final output is judged
+    # against — without it, a WER change cannot be attributed to conversion.
+    source_audio: np.ndarray = field(repr=False, default=None)
+    source_sample_rate: int = 0
+    reference_report: dict = field(default_factory=dict)
+
+    def to_dict(self) -> dict:
+        return {"sample_rate": self.sample_rate,
+                "duration_s": round(len(self.audio) / self.sample_rate, 2)
+                if self.sample_rate else None,
+                "source_duration_s": (
+                    round(len(self.source_audio) / self.source_sample_rate, 2)
+                    if self.source_audio is not None and self.source_sample_rate
+                    else None),
+                "reference_report": self.reference_report}
+
+
+def golden_speech(tts_backend, vc_backend, text: str,
+                  native_ref: np.ndarray, native_sr: int,
+                  learner_ref_path: str,
+                  seed: Optional[int] = None) -> GoldenResult:
+    """Say ``text`` with the native reference's pronunciation, in the learner's voice.
+
+    ``learner_ref_path`` is a path rather than an array because the converter
+    takes one, and because the learner's clip should be prepared and written once
+    by the caller rather than re-staged per utterance.
+
+    The intermediate is returned, not discarded: a WER change between stage 1 and
+    the output is the only way to tell whether conversion preserved the
+    pronunciation it was given.
+    """
+    source, src_sr, report = clone(tts_backend, text, native_ref, native_sr,
+                                   seed=seed)
+    out, out_sr = vc_backend.convert(source, src_sr, learner_ref_path, seed=seed)
+    return GoldenResult(audio=out, sample_rate=out_sr,
+                        source_audio=source, source_sample_rate=src_sr,
+                        reference_report=report)
+
+
+def trade_off(sim_to_learner: float, sim_to_source: float,
+              wer_output: float, wer_source: float) -> dict:
+    """Summarize the three-way trade-off, without collapsing it to one score.
+
+    Deliberately returns the components and a verdict string rather than a single
+    figure of merit. There is no defensible way to weight "sounds like the
+    learner" against "still says the words" — that weighting is a product
+    decision, and a combined score would bury it.
+    """
+    identity_gain = sim_to_learner - sim_to_source
+    wer_cost = wer_output - wer_source
+
+    if identity_gain <= 0.0:
+        verdict = ("conversion did not move identity toward the learner; "
+                   "output still resembles the source voice")
+    elif wer_cost > 0.10:
+        verdict = ("identity moved, but conversion damaged the speech "
+                   "(WER cost > 10 points) — likely re-accented or degraded")
+    elif wer_cost > 0.03:
+        verdict = "identity moved at a modest intelligibility cost"
+    else:
+        verdict = "identity moved with pronunciation largely intact"
+
+    return {"sim_to_learner": sim_to_learner,
+            "sim_to_source": sim_to_source,
+            "identity_gain": identity_gain,
+            "wer_output": wer_output,
+            "wer_source": wer_source,
+            "wer_cost": wer_cost,
+            "verdict": verdict}
