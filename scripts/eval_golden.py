@@ -86,7 +86,12 @@ def main() -> None:
     tts = load_backend("chatterbox", device="cpu")
     tts.set_threads(args.threads)
     vc = ChatterboxVCBackend(device="cpu")
-    print(f"tts: {tts.describe()}\nvc : {vc.describe()}")
+    print(f"tts: {tts.describe()} @ {tts.sample_rate} Hz")
+    print(f"vc : {vc.describe()} @ {vc.sample_rate} Hz")
+    if tts.sample_rate != vc.sample_rate:
+        print(f"  !! backends disagree on sample rate — the learner reference is "
+              f"prepared at the TTS rate ({tts.sample_rate}) and handed to the "
+              f"converter, so identity numbers are suspect")
 
     from speechforge.similarity import load_encoder
     enc = load_encoder()
@@ -102,6 +107,12 @@ def main() -> None:
         # Stage the learner's clip once: the converter takes a path, and
         # re-preparing it per utterance would be wasted work and one more place
         # for the two runs to diverge.
+        # Prepared to the *TTS* backend's rate and cap even though this clip is
+        # the converter's target. That is deliberate — the cloning arm prepares
+        # identically, and the two arms must see the same reference for the
+        # comparison to mean anything. But it silently assumes the two backends
+        # agree on sample rate; the banner prints both so a disagreement shows up
+        # in the log instead of skewing a result.
         prepped, pref_sr, _rep = prepare(learner_ref, lref_sr,
                                          target_sr=tts.sample_rate,
                                          target_s=getattr(tts, "ref_seconds", None) or 10.0)
