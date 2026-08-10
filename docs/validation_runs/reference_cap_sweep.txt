@@ -1,0 +1,27 @@
+=== ref cap 10s ===
+corpus=librispeech (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.021       —   0.964      —   <- read every row against this
+            chatterbox    60   0.112       —   0.951      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.
+=== ref cap 20s ===
+corpus=librispeech (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.021       —   0.964      —   <- read every row against this
+            chatterbox    60   0.096       —   0.950      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.
+=== ref cap 30s ===
+corpus=librispeech (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.021       —   0.964      —   <- read every row against this
+            chatterbox    60   0.095       —   0.950      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.

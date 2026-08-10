@@ -230,3 +230,29 @@ def test_ref_seconds_does_not_pad_a_short_reference():
     b = FakeBackend()
     clone(b, "hello", _speech(6.0), 16000, ref_seconds=30.0)
     assert b.calls[0]["ref_len"] / 24000 == pytest.approx(6.0, abs=0.3)
+
+
+class PrefersLongRefs(FakeBackend):
+    """A backend that declares it wants longer references than the default."""
+    ref_seconds = 20.0
+
+
+def test_backend_preference_overrides_the_conservative_default():
+    # The 10 s default is right for CosyVoice/dots.tts and wrong for Chatterbox,
+    # so the preferred length is a model property, not a global constant.
+    b = PrefersLongRefs()
+    clone(b, "hello", _speech(25.0), 16000)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(20.0, abs=0.3)
+
+
+def test_explicit_ref_seconds_beats_the_backend_preference():
+    # A sweep has to be able to override the model's own default.
+    b = PrefersLongRefs()
+    clone(b, "hello", _speech(25.0), 16000, ref_seconds=10.0)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(10.0, abs=0.3)
+
+
+def test_backend_without_a_preference_falls_back_to_the_default():
+    b = FakeBackend()          # declares no ref_seconds
+    clone(b, "hello", _speech(25.0), 16000)
+    assert b.calls[0]["ref_len"] / 24000 == pytest.approx(10.0, abs=0.3)

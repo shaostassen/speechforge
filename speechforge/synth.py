@@ -26,6 +26,11 @@ class Backend(Protocol):
     # by the backend rather than assumed by the caller: it is a property of the
     # model's tokenizer, not of the audio.
     align_ms: Optional[float]
+    # Preferred reference-clip length in seconds. A model property, measured per
+    # backend — the widely-repeated "~10 s is the sweet spot" comes from
+    # CosyVoice and dots.tts documentation and does NOT hold for Chatterbox,
+    # where 20 s references cut WER by 24% on the utterances it affected.
+    ref_seconds: Optional[float]
 
     def synthesize(self, text: str, reference_path: str,
                    seed: Optional[int] = None) -> Tuple[np.ndarray, int]: ...
@@ -74,6 +79,11 @@ class ChatterboxBackend:
         self.sample_rate = int(getattr(self._model, "sr", 24000))
         # S3 tokenizes the reference at 25 Hz, i.e. 40 ms per token.
         self.align_ms = 40.0
+        # Measured, not borrowed. Capping references at the commonly-cited 10 s
+        # cost 24% relative WER on the half of a LibriSpeech sample whose
+        # references exceeded it (0.126 -> 0.097), with the untruncated half
+        # unchanged to three decimals as a control. The curve plateaus by 20 s.
+        self.ref_seconds = 20.0
         self._device = device
         self._gen_kwargs = dict(gen_kwargs)
 
@@ -143,9 +153,12 @@ def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
     # CosyVoice and dots.tts documentation, which is not evidence about
     # Chatterbox — worth being able to test rather than assume.
     from speechforge.reference import TARGET_S
+    cap = ref_seconds
+    if cap is None:
+        # Backend preference first, then the conservative default.
+        cap = getattr(backend, "ref_seconds", None) or TARGET_S
     ref_audio, ref_sr, report = prepare(
-        reference, sr, target_sr=backend.sample_rate,
-        target_s=TARGET_S if ref_seconds is None else ref_seconds,
+        reference, sr, target_sr=backend.sample_rate, target_s=cap,
         align_ms=getattr(backend, "align_ms", None))
     if len(ref_audio) == 0:
         raise ValueError(f"unusable reference: {report.warnings}")

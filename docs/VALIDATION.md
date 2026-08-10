@@ -358,12 +358,42 @@ in WER is what a genuinely weaker intelligibility profile looks like, and it is
 consistent with Chatterbox being built for expressive on-device synthesis rather
 than benchmark WER — it does not appear in the Seed-TTS comparison tables at all.
 
-**One protocol variable remains untested:** references longer than 10 s are
-truncated by `reference.prepare`, and several LibriSpeech references hit that cap
-(`truncated 12.4s to 10.0s`). That cap came from CosyVoice and dots.tts
-documentation and was applied to Chatterbox without checking it holds there —
-unlike the two hypotheses above, it is *my* decision rather than a vendor
-default, so it deserves its own test.
+## The reference cap — my own mistake, measured
+
+The last protocol variable, and the only one that was my decision rather than a
+vendor default: `reference.prepare` truncated references to 10 s, a figure taken
+from CosyVoice and dots.tts documentation and applied to Chatterbox without
+checking. Swept at n=60, same seed, with per-utterance reference lengths recorded
+so the affected half can be isolated:
+
+| slice | cap 10 s | cap 20 s | cap 30 s | n |
+|---|---|---|---|---|
+| all utterances | 0.124 | 0.109 | 0.109 | 60 |
+| **reference was truncated** | **0.126** | **0.097** | 0.096 | 30 |
+| reference untouched (**control**) | 0.122 | 0.122 | 0.122 | 30 |
+
+**I was wrong, and the control proves it is causal.** Utterances whose reference
+the cap actually shortened improve by **24% relative** (0.126 → 0.097); utterances
+it never touched are unchanged **to three decimal places**, which is what a
+correct seeded control looks like. Corpus-level WER goes 0.112 → 0.095. Speaker
+similarity is flat throughout (0.951 → 0.950), so this is an intelligibility
+effect, not a voice-matching one. The curve plateaus by 20 s.
+
+Consequences:
+
+- **Preferred reference length is a model property, not a constant.** It now lives
+  on the backend (`Backend.ref_seconds`), measured at 20 s for Chatterbox, with
+  the borrowed 10 s surviving only as the fallback for unmeasured backends —
+  the same pattern already used for `align_ms`.
+- **The earlier attribution needs softening.** "The gap is the model, not the
+  protocol" was too strong: roughly 0.017 of corpus WER was mine. What survives
+  is weaker but still substantial — at the best cap, 0.095 is **3–6× the 1.5–3%**
+  published for zero-shot systems, and neither temperature nor text length nor
+  reference length accounts for that remainder.
+- The general lesson is the one this file keeps recording: guidance from one
+  model's documentation is not evidence about another. Three borrowed or assumed
+  numbers have now been tested here — the published SIM ceiling, the vendor RTF
+  claim, and this cap — and all three failed to transfer.
 
 ## Temperature sweep — a hypothesis of mine, refuted
 

@@ -117,9 +117,11 @@ undeclared weights licence worth chasing. Full detail in
 Three findings from the model docs that run against intuition, all enforced in
 `speechforge/reference.py`:
 
-- **Longer references are worse, not better.** Around 10 s is the documented sweet
-  spot; past it, inference slows *and* cloning degrades. Clips are truncated, keeping
-  the beginning.
+- **Preferred reference length is model-specific, and the popular figure is wrong for
+  Chatterbox.** CosyVoice and dots.tts document ~10 s as the sweet spot; applying that
+  here cost **24% relative WER** on references it truncated (0.126 → 0.097 at a 20 s
+  cap), with the untouched half unchanged to three decimals as a control. The cap is now
+  a backend property, measured rather than borrowed.
 - **Trailing silence is a specific hazard.** Continuation-style models treat the
   reference as a literal prefix, so trailing room tone becomes the onset of the
   generated speech. It gets trimmed and warned about by name.

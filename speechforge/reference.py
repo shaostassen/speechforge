@@ -3,12 +3,18 @@
 Every documented failure mode of zero-shot cloning traces back to the reference,
 not the model:
 
-**Longer is worse, not better.** Both CosyVoice and dots.tts state this outright
-in their docs — around 10 s is the sweet spot, and past it inference slows *and*
-cloning quality degrades. The intuition that "more reference audio is safer" is
-simply wrong for these models. (kNN-VC is the exception: it genuinely wants
-minutes, because it is doing nearest-neighbour retrieval rather than conditioning
-an embedding.)
+**Preferred reference length is model-specific — do not generalize it.** CosyVoice
+and dots.tts both state in their docs that ~10 s is the sweet spot and that longer
+degrades cloning. That is evidence about *those* models, and applying it to
+Chatterbox was a mistake: capping references at 10 s cost **24% relative WER** on
+the half of a LibriSpeech sample whose references exceeded it (0.126 → 0.097 at a
+20 s cap), with the untruncated half unchanged to three decimals as a control.
+The curve plateaus by 20 s.
+
+So the cap comes from the backend (`Backend.ref_seconds`), and ``TARGET_S`` below
+is only the fallback for a backend that has not been measured. kNN-VC is a further
+reminder that this varies widely: it wants *minutes*, because it does
+nearest-neighbour retrieval rather than conditioning an embedding.
 
 **Trailing silence is a specific killer.** Continuation-style models treat the
 reference as a literal prefix to the generation, so trailing noise or room tone
