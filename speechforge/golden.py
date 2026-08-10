@@ -39,11 +39,15 @@ which is the whole reason to report all three.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional, Tuple
+from typing import Optional, Sequence, Tuple
 
 import numpy as np
 
 from speechforge.synth import clone
+
+
+class CeilingMissing(RuntimeError):
+    """Raised when the real-vs-real identity ceiling could not be measured."""
 
 
 class ChatterboxVCBackend:
@@ -159,3 +163,50 @@ def trade_off(sim_to_learner: float, sim_to_source: float,
             "wer_source": wer_source,
             "wer_cost": wer_cost,
             "verdict": verdict}
+
+
+def mean_ignoring_nan(rows: Sequence[dict], key: str) -> float:
+    """Mean of ``key`` across ``rows``, skipping NaN. NaN if nothing is left."""
+    vals = [r[key] for r in rows if key in r and r[key] == r[key]]
+    return float(np.mean(vals)) if vals else float("nan")
+
+
+def golden_table(rows: Sequence[dict]) -> str:
+    """Render the four-signal table, with the identity ceiling always shown.
+
+    Refuses to render without a real-vs-real ceiling, for the same reason
+    ``EvalTable`` refuses to render without a ground-truth row: an unanchored
+    similarity column cannot be read. A clone at 0.84 is excellent if two real
+    recordings of that speaker score 0.85 and mediocre if they score 0.97, and
+    the number alone does not say which.
+
+    Measuring the ceiling needs two held-out utterances per speaker, so a study
+    configured with fewer fails here rather than printing an unreadable column.
+    """
+    ceiling = mean_ignoring_nan(rows, "sim_learner_real")
+    if ceiling != ceiling:
+        raise CeilingMissing(
+            "no real-vs-real speaker similarity was measured, so the SIM column "
+            "has no scale. Two held-out utterances per speaker are needed "
+            "(--utterances 3 or more)."
+        )
+
+    def m(key):
+        return mean_ignoring_nan(rows, key)
+
+    out = ["=" * 68,
+           "GOLDEN SPEAKER — identity vs pronunciation",
+           "=" * 68,
+           f"{'signal':>16} {'SIM to learner':>15} {'WER':>7}",
+           f"{'learner real':>16} {ceiling:>15.3f} {m('wer_real'):>7.3f}",
+           f"{'native tts':>16} {m('sim_native_tts'):>15.3f} "
+           f"{m('wer_native_tts'):>7.3f}",
+           f"{'learner tts':>16} {m('sim_learner_tts'):>15.3f} "
+           f"{m('wer_learner_tts'):>7.3f}",
+           f"{'golden':>16} {m('sim_golden'):>15.3f} {m('wer_golden'):>7.3f}",
+           "",
+           f"identity ceiling (real vs real, same speaker): {ceiling:.3f}  "
+           f"— the SIM column is unreadable without it",
+           f"headroom used by golden : {m('sim_golden') / ceiling:.1%} of ceiling",
+           f"headroom used by cloning: {m('sim_learner_tts') / ceiling:.1%} of ceiling"]
+    return "\n".join(out)

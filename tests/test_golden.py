@@ -7,7 +7,8 @@ named.
 import numpy as np
 import pytest
 
-from speechforge.golden import GoldenResult, golden_speech, trade_off
+from speechforge.golden import (CeilingMissing, GoldenResult, golden_speech,
+                                golden_table, mean_ignoring_nan, trade_off)
 
 
 def _speech(seconds=6.0, sr=16000, amp=0.4, f0=180.0):
@@ -142,3 +143,44 @@ def test_no_single_figure_of_merit_is_produced():
     assert "score" not in out and "overall" not in out
     assert {"sim_to_learner", "sim_to_source", "identity_gain",
             "wer_output", "wer_source", "wer_cost", "verdict"} == set(out)
+
+
+# --- the table must anchor its own similarity column -------------------------
+
+def _rows(n=4, ceiling=0.93):
+    return [{"sim_learner_real": ceiling, "sim_native_tts": 0.68,
+             "sim_learner_tts": 0.84, "sim_golden": 0.81,
+             "wer_real": 0.18, "wer_native_tts": 0.19,
+             "wer_learner_tts": 0.26, "wer_golden": 0.18} for _ in range(n)]
+
+
+def test_table_prints_the_measured_ceiling_not_a_placeholder():
+    # The bug this pins: the first version of the study computed the real-vs-real
+    # ceiling and then printed the literal string "(held-out ref)" in its place,
+    # discarding the one number that gives the SIM column a scale.
+    text = golden_table(_rows())
+    assert "0.930" in text
+    assert "held-out ref" not in text
+
+
+def test_table_refuses_to_render_without_a_ceiling():
+    # Same guardrail as EvalTable's GroundTruthMissing: an unanchored similarity
+    # column invites reading 0.84 as good when the ceiling might be 0.97.
+    rows = _rows()
+    for r in rows:
+        r["sim_learner_real"] = float("nan")
+    with pytest.raises(CeilingMissing, match="no scale"):
+        golden_table(rows)
+
+
+def test_ceiling_survives_speakers_that_could_not_supply_one():
+    # A single-utterance speaker contributes NaN. That must not poison the mean
+    # for the speakers that did supply a second recording.
+    rows = _rows(3) + [dict(_rows(1)[0], sim_learner_real=float("nan"))]
+    assert "0.930" in golden_table(rows)
+
+
+def test_mean_ignores_nan_and_reports_nan_when_empty():
+    assert mean_ignoring_nan([{"x": 1.0}, {"x": float("nan")}], "x") == 1.0
+    empty = mean_ignoring_nan([{"x": float("nan")}], "x")
+    assert empty != empty

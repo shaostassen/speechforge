@@ -29,14 +29,13 @@ import tempfile
 from datetime import date
 from pathlib import Path
 
-import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from speechforge import corpora  # noqa: E402
 from speechforge.evaluate import cosine, whisper_transcriber  # noqa: E402
 from speechforge.golden import (ChatterboxVCBackend, golden_speech,  # noqa: E402
-                                trade_off)
+                                golden_table, mean_ignoring_nan, trade_off)
 from speechforge.reference import prepare  # noqa: E402
 from speechforge.synth import clone, load_backend  # noqa: E402
 
@@ -61,6 +60,10 @@ def main() -> None:
     p.add_argument("--threads", type=int, default=16)
     p.add_argument("--seed", type=int, default=1234)
     p.add_argument("--scan", type=int, default=9000)
+    p.add_argument("--per-utterance", metavar="PATH",
+                   help="dump every row as JSON. Worth doing: the first run of "
+                        "this study printed only aggregates, so a reporting bug "
+                        "cost the whole run instead of one re-render.")
     args = p.parse_args()
 
     print(f"study=eval_golden  hardware={hardware_label()}  "
@@ -140,19 +143,17 @@ def main() -> None:
             })
 
     def m(key):
-        vals = [r[key] for r in rows if r[key] == r[key]]
-        return float(np.mean(vals)) if vals else float("nan")
+        return mean_ignoring_nan(rows, key)
 
-    print("\n" + "=" * 68)
-    print("GOLDEN SPEAKER — identity vs pronunciation")
-    print("=" * 68)
-    print(f"{'signal':>16} {'SIM to learner':>15} {'WER':>7}")
-    print(f"{'learner real':>16} {'(held-out ref)':>15} {m('wer_real'):>7.3f}")
-    print(f"{'native tts':>16} {m('sim_native_tts'):>15.3f} "
-          f"{m('wer_native_tts'):>7.3f}")
-    print(f"{'learner tts':>16} {m('sim_learner_tts'):>15.3f} "
-          f"{m('wer_learner_tts'):>7.3f}")
-    print(f"{'golden':>16} {m('sim_golden'):>15.3f} {m('wer_golden'):>7.3f}")
+    if args.per_utterance:
+        import json
+        # Written before the table, so a rendering failure cannot destroy the
+        # measurement that took an hour to produce.
+        Path(args.per_utterance).write_text(json.dumps(rows, indent=1))
+        print(f"per-utterance rows -> {args.per_utterance}")
+
+    print(f"\nn = {len(rows)} held-out utterances, {len(learners)} learners")
+    print(golden_table(rows))
 
     t = trade_off(m("sim_golden"), m("sim_native_tts"),
                   m("wer_golden"), m("wer_native_tts"))
