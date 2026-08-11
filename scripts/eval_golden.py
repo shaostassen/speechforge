@@ -39,6 +39,7 @@ from speechforge.golden import (ChatterboxVCBackend, blend_rate,  # noqa: E402
                                 mean_ignoring_nan, trade_off)
 from speechforge.reference import prepare  # noqa: E402
 from speechforge.synth import clone, load_backend  # noqa: E402
+from speechforge.text import apply_case  # noqa: E402
 
 
 def hardware_label() -> str:
@@ -61,6 +62,10 @@ def main() -> None:
     p.add_argument("--threads", type=int, default=16)
     p.add_argument("--seed", type=int, default=1234)
     p.add_argument("--scan", type=int, default=9000)
+    p.add_argument("--text-case", choices=["raw", "sentence"], default="raw",
+                   help="how EdAcc/LibriSpeech text is presented to the TTS. "
+                        "Both ship unpunctuated UPPER CASE; that cost CosyVoice 2 "
+                        "6.6x WER. Default 'raw' keeps earlier runs comparable.")
     p.add_argument("--per-utterance", metavar="PATH",
                    help="dump every row as JSON. Worth doing: the first run of "
                         "this study printed only aggregates, so a reporting bug "
@@ -69,6 +74,7 @@ def main() -> None:
 
     print(f"study=eval_golden  hardware={hardware_label()}  "
           f"asr={args.asr_model}  seed={args.seed}  "
+          f"text_case={args.text_case}  "
           f"date={date.today().isoformat()}")
     print(f"cmd: python {shlex.join(sys.argv)}\n")
 
@@ -133,9 +139,10 @@ def main() -> None:
 
         held = utts[1:]
         for j, (held_audio, held_sr, text) in enumerate(held):
-            g = golden_speech(tts, vc, text, native_ref, native_sr, tmp.name,
+            shown = apply_case(text, args.text_case)
+            g = golden_speech(tts, vc, shown, native_ref, native_sr, tmp.name,
                               seed=args.seed)
-            learner_tts, lt_sr, _ = clone(tts, text, learner_ref, lref_sr,
+            learner_tts, lt_sr, _ = clone(tts, shown, learner_ref, lref_sr,
                                           seed=args.seed)
 
             # Embed each clip once and reuse. Every similarity to the learner is
