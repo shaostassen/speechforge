@@ -102,6 +102,14 @@ def main() -> None:
                                      compute_type="int8")
     print()
 
+    # The source speaker's REAL recording, embedded once — it is the same clip for
+    # every utterance. This is what makes "did the output shed the source" a
+    # matched question: scoring golden against it is synthetic-vs-real with
+    # different text, exactly like scoring golden against the learner's held-out
+    # audio. Scoring against the native TTS instead is not matched, because golden
+    # is a conversion of that waveform and inherits its prosody and vocoder.
+    e_native_real = enc(native_ref, native_sr)
+
     rows = []
     for spk, utts in learners.items():
         learner_ref, lref_sr, _ = utts[0]
@@ -160,6 +168,15 @@ def main() -> None:
                 # similarity shared synthesis artefacts produce on their own shows
                 # up here, so only the excess above it can be retained identity.
                 "sim_ltts_to_source": cosine(e_ltts, e_src),
+                # Identity RETAINED, the matched version: golden against the
+                # source speaker's real audio. Same kind of comparison as
+                # sim_golden (synthetic vs real, different text, no shared
+                # prosody), so the two read on one scale.
+                "sim_golden_to_source_real": cosine(e_gold, e_native_real),
+                # Floor control: a clone of the LEARNER has no source speaker in
+                # it at all, so whatever this scores is the level two unrelated
+                # voices reach under this encoder and pipeline.
+                "sim_ltts_to_source_real": cosine(e_ltts, e_native_real),
                 "wer_native_tts": wer(text, transcribe(g.source_audio,
                                                        g.source_sample_rate)),
                 "wer_learner_tts": wer(text, transcribe(learner_tts, lt_sr)),
