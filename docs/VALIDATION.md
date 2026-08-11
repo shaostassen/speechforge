@@ -543,3 +543,162 @@ is the property that lets a result be checked rather than believed.
   the primary backend.
 - Measure the M2 via MLX. Unified memory and Metal make it a genuinely different
   proposition from "CPU", and it is the natural place for interactive work.
+
+---
+
+# Run — 2026-08-11 — golden speaker: does synthesize-then-convert beat plain cloning?
+
+The Phase 3 question, and deliberately not "does golden work". Plain cloning is the
+free baseline; conversion has to beat it or it is not earning its place.
+
+| | |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, CPU only |
+| TTS / VC | `chatterbox` t3 532M @ 24 kHz / `chatterbox-vc` @ 24 kHz (both MIT) |
+| ASR | `faster-whisper large-v3`, int8 |
+| speaker encoder | `microsoft/wavlm-base-plus-sv` @ 16 kHz |
+| learners | 12 EdAcc speakers, 6 held-out utterances each — **n = 72** |
+| pronunciation source | LibriSpeech 1089, 10.4 s (**n = 1**) |
+| seed | 1234 |
+| raw logs | `eval_golden_n72_anchored_9950x.txt`, `per_utterance_golden_n72_anchored.json` |
+
+```
+python scripts/eval_golden.py --speakers 12 --utterances 6 --asr-model large-v3 \
+    --threads 16 --seed 1234 --scan 9000 --per-utterance runs/golden_anchor.json
+```
+
+| signal | SIM to learner | WER |
+|---|---|---|
+| learner real *(identity ceiling)* | **0.924** | 0.225 |
+| native tts *(pronunciation source)* | 0.626 | 0.208 |
+| learner tts *(plain cloning)* | 0.855 | 0.250 |
+| **golden** *(convert native tts → learner)* | **0.824** | **0.208** |
+
+## Conversion buys intelligibility for identity, and the trade is favourable
+
+**WER cost of conversion is exactly 0.000** — golden matches the native TTS it came
+from to three decimals, so the converter does not damage the speech it is given.
+Against plain cloning, golden is **0.042 better on WER** (0.208 vs 0.250) for
+**0.031 worse on SIM** (0.824 vs 0.855).
+
+That WER gap is the accent-preservation effect showing up as a measurement: cloning
+from an accented reference reproduces the accent, and the ASR pays for it. Golden
+reaches **96.4% of the identity plain cloning achieves** (0.824 / 0.855) while
+pronouncing like the native source. For a pronunciation-teaching application, which
+is the whole motivation, that is the right side of the trade.
+
+Read the SIM column against the ceiling, never in absolute terms: real-vs-real
+same-speaker similarity is **0.924** on this encoder and corpus, so cloning uses
+92.6% of the available headroom and golden 89.2%.
+
+## Identity shed is NOT cleanly measurable in this design
+
+The third axis promised by `golden.py` does not survive scrutiny, and the honest
+result is a bound rather than a value.
+
+`SIM(golden, native tts) = 0.802` looks alarmingly high against any real-speaker
+floor. But golden and native tts are two clips from the **same TTS and vocoder**, so
+shared synthesis artefacts inflate the number regardless of retained identity. The
+run therefore also measures a same-pipeline different-speaker anchor —
+`SIM(learner tts, native tts)`, two clones of different targets from one pipeline:
+
+| quantity | value |
+|---|---|
+| `SIM(golden, native tts)` | 0.802 |
+| same-pipeline different-speaker anchor | 0.696 |
+| excess over anchor | **+0.106** |
+
+Measured same-pipeline inflation is **+0.070** — synthetic-vs-synthetic
+different-speaker pairs score 0.696 where synthetic-vs-real ones score 0.626.
+
+**The +0.106 excess is an upper bound on retained source identity, not an estimate.**
+The anchor removes the shared-pipeline component but not a shared-prosody one: golden
+is a *conversion of the source waveform*, so it inherits the source's prosody, timing
+and phonetic realisation, which speaker embeddings partly capture. `learner tts` is an
+independent generation and shares none of that, so the anchor is not matched on
+prosody. Separating the two needs a control this run does not have — convert the same
+source waveform to a **decoy** target and compare; prosody sharing is then identical
+and only target identity differs.
+
+## A "majority blend" finding that did not survive its own bias check
+
+Worth recording because it was one step from being written down as a result.
+
+Per utterance, **39/72 (54%)** of golden outputs are closer to the source voice than
+to the learner — a majority-blend outcome, while the *means* (0.824 vs 0.802) favour
+the learner comfortably. That per-utterance check is genuinely more sensitive than the
+means, and it is now what the verdict uses: two heavily overlapping distributions
+produce a mean gap that no individual utterance need exhibit.
+
+But the comparison is not apples-to-apples. `SIM(golden, learner)` is
+synthetic-vs-real while `SIM(golden, native tts)` is synthetic-vs-synthetic, and the
+latter carries the measured +0.070 inflation. Subtracting it:
+
+| | closer to source |
+|---|---|
+| raw | 39/72 (54%) |
+| after removing the +0.070 same-pipeline inflation | **16/72 (22%)** |
+
+A plausible correction of a *measured* bias moves the statistic from majority to
+minority, so **the blend claim is unsupported**. The uniform subtraction is itself
+crude, which is the point: a number that flips its conclusion under a rough
+correction was never load-bearing.
+
+## Caveats that ship with these numbers
+
+- **WER is not comparable between the real and synthetic arms on this corpus.** EdAcc
+  transcripts are verbatim spontaneous speech: **3.1% of the 2582 reference words in
+  these texts are bare fillers** (`UM`, `UH`, …), before repetitions and false starts
+  like "WHICH IS JUST THE WHICH IS JUST A UH". TTS reads fillers aloud; Whisper tends
+  to drop them, so every synthetic arm pays a penalty the real arm does not — which is
+  why native tts (0.208) scores *better* than real speech (0.225). The three synthetic
+  arms share identical text and evaluator, and every claim above is a comparison
+  among them.
+- **One pronunciation source** (LibriSpeech 1089). n=1 on that side of the design.
+- **Cross-gender conversion is unseparated.** EdAcc speaker gender was not read, so
+  same- vs cross-gender conversion — known to differ in difficulty for VC — is pooled.
+  Per-speaker rows are in the JSON if this needs revisiting.
+- **Ground truth is impossible by construction.** A non-native speaker producing
+  native pronunciation cannot be recorded, so there is no target signal. Everything
+  here is a trade-off measurement, never an accuracy one.
+
+## Reproducibility
+
+Two independent seeded runs of this study agree to three decimals on every similarity
+(0.924 / 0.626 / 0.855 / 0.824 / 0.802) and on WER for three of four arms. Only
+`learner tts` WER differed, 0.249 vs 0.250 — consistent with float reduction order
+across 16 threads rather than with sampling, since the seeds fix the sampling.
+
+## Three reporting bugs this study found in itself
+
+The runs above are the third, fourth and fifth attempts. Each earlier one produced a
+plausible table that was wrong in a way the table itself concealed.
+
+- **The identity ceiling was computed and discarded.** The table printed the literal
+  string `(held-out ref)` where real-vs-real similarity belonged, leaving the SIM
+  column with no scale — 0.84 reads as excellent against a 0.85 ceiling and mediocre
+  against 0.97. `golden_table` now refuses to render without it, exactly as
+  `EvalTable` refuses without a ground-truth row.
+- **Identity shed was promised and never computed.** The module docstring listed it as
+  one of three axes, but the study passed *source-to-learner* similarity into a
+  parameter named `sim_to_source`. It is now a required argument.
+- **The verdict was read off the means**, which cannot detect a majority blend.
+
+All three are the same failure as the earlier `sim_o`/`cosine` episode: a guardrail
+existed in the library and the study reached around it by hand-rolling its own
+reporting. `--per-utterance` now dumps every row *before* the table renders, which is
+why the 54%→22% bias check above cost a re-render instead of another 90-minute run.
+
+## Operational note
+
+`/tmp` on the 9950X is wiped on reboot, and the box rebooted mid-run — destroying one
+in-flight study. Run logs now go to `~/speechforge/runs/`. The earlier results survived
+only because they had already been copied into this repo.
+
+## Follow-up
+
+**The decoy-target control**, which converts the same source waveform to a speaker who
+is neither the source nor the learner. That makes prosody sharing identical across the
+comparison and leaves target identity as the only difference, turning the +0.106 upper
+bound into an actual estimate of retained source identity. One extra VC call per
+utterance.

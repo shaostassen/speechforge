@@ -12,7 +12,7 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and two studies have results. 81 tests pass offline with no weights and no network.
+and three studies have results. 112 tests pass offline with no weights and no network.
 
 What is deliberately *not* claimed: that Chatterbox is good. The samples so far are 12
 utterances across 4 speakers — enough to demonstrate the harness and to catch three of
@@ -63,6 +63,32 @@ trained on LibriSpeech, so their agreement here (0.021 vs 0.016) partly reflects
 match, not corroboration. On EdAcc, where HuBERT is out of domain, they diverged sharply
 (0.130 vs 0.259). Read the pair with that in mind.
 
+**A learner's own voice, pronouncing correctly — and the conversion stage earns its
+place.** The motivating application: synthesize with a native reference, then convert
+the timbre onto the learner. Scored against plain cloning, which is the baseline that
+matters, at n=72 across 12 accented EdAcc speakers:
+
+| signal | SIM to learner | WER |
+|---|---|---|
+| learner real *(identity ceiling)* | 0.924 | 0.225 |
+| native tts | 0.626 | 0.208 |
+| learner tts *(plain cloning)* | 0.855 | 0.250 |
+| **golden** | **0.824** | **0.208** |
+
+Conversion costs **exactly 0.000 WER** against the TTS it came from, and beats plain
+cloning by 0.042 WER for 0.031 SIM — reaching 96% of the identity cloning achieves
+while pronouncing like the native source. That WER gap is accent preservation showing
+up as a measurement: cloning an accented reference reproduces the accent.
+
+**What that table cannot tell you is whether the output stopped sounding like the
+source**, and saying so is the finding. `SIM(golden, native tts)` compares two clips
+from the same TTS and vocoder, so shared synthesis artefacts inflate it by a measured
+**+0.070** regardless of retained identity. Against a same-pipeline anchor the excess
+is +0.106 — an *upper bound*, not an estimate, because golden is a conversion of the
+source waveform and inherits its prosody too. A per-utterance statistic that made this
+look like a majority "blend" (54%) fell to 22% once that measured bias was subtracted,
+so the claim was dropped rather than published.
+
 **ASR confidence does not detect synthetic speech.** Holding the transcribed word
 *correct* — so accuracy can't explain the result — real and synthetic confidence
 distributions are the same shape at every percentile, and the mean difference changed
@@ -70,9 +96,11 @@ sign between two identical runs. Whisper's per-word confidence measures acoustic
 fit, not provenance. It is not a free deepfake detector, and it does not meaningfully
 bias WER-based evaluation either.
 
-## Three measurement errors this harness caught in its own results
+## Measurement errors this harness caught in its own results
 
 Kept here because they are the reason to trust anything above.
+
+Three came from trusting a number that was never measured here:
 
 - **A vendor RTF claim was wrong by ~6×.** Chatterbox-Nano is advertised at 3× faster
   than realtime on 8 CPU cores; the installable checkpoint measured **2× slower** than
@@ -84,6 +112,22 @@ Kept here because they are the reason to trust anything above.
   identical study runs gave AUROC 0.591 and 0.553 with the mean difference flipping
   sign. Synthesis is now seeded by default; pass `--seed -1` when the spread is the
   quantity you actually want.
+
+Three more came from studies that printed a plausible table while concealing their own
+gap — all in the golden-speaker work, all the same shape: a guardrail existed in the
+library and the study hand-rolled its own reporting around it.
+
+- **An identity ceiling computed and then discarded**, printing a placeholder string
+  where the number belonged, leaving a similarity column with no scale.
+- **An axis promised in the docstring and never computed** — source-to-learner
+  similarity was passed into a parameter named `sim_to_source`, so "identity shed" went
+  unmeasured while the docs claimed otherwise.
+- **A verdict read off the means**, which cannot see a majority of individual
+  utterances going the other way.
+
+The lesson that generalises: reach for the library's guardrail instead of re-printing
+the table by hand, and dump per-utterance rows *before* rendering — the last bug's bias
+check then costs a re-render instead of a 90-minute re-run.
 
 ## Why the licences get their own document
 
