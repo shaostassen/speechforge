@@ -164,7 +164,10 @@ def main() -> None:
         out_dir.mkdir(parents=True, exist_ok=True)
 
     for spk, utts in speakers.items():
-        ref_audio, ref_sr, _ref_text = utts[0]
+        # The reference transcript is not spare: CosyVoice 2 conditions on it,
+        # and the corpora already carry it, so no extra work is needed to supply
+        # it. Backends that ignore it are unaffected.
+        ref_audio, ref_sr, ref_text = utts[0]
         held = utts[1:]
         print(f"speaker {spk}: cloning from {len(ref_audio)/ref_sr:.1f}s, "
               f"{len(held)} held-out")
@@ -172,7 +175,8 @@ def main() -> None:
         for j, (ho_audio, ho_sr, text) in enumerate(held):
             wav, sr, report = clone(backend, text, ref_audio, ref_sr,
                                         seed=None if args.seed < 0 else args.seed,
-                                        ref_seconds=args.ref_seconds)
+                                        ref_seconds=args.ref_seconds,
+                                        reference_text=ref_text)
             reports.append(report)
             if report["warnings"]:
                 print(f"  ref warnings: {report['warnings']}")
