@@ -17,13 +17,34 @@ omitted. Audited 2026-08-07.
 | Model | Code | Weights | Role |
 |---|---|---|---|
 | **Chatterbox** (Resemble AI) | MIT | **MIT** | Local CPU cloning + voice conversion |
-| **CosyVoice 2** (0.5B) | Apache-2.0 | **Apache-2.0** | Quality ceiling, Colab GPU |
+| **CosyVoice 2** (0.5B) | Apache-2.0 | **Apache-2.0** | Second backend — quality comparison |
 | **Piper** (archived MIT build) | MIT | MIT | Non-cloning latency/quality baseline |
 | **kNN-VC** | MIT | MIT | Training-free, explainable VC baseline |
 
 Chatterbox is the only family found with permissive *weights* and a vendor claim of
 better-than-realtime CPU synthesis. CosyVoice 2 has the best licence-to-quality ratio
 in the field — genuinely Apache-2.0 on both sides.
+
+**CosyVoice 2's Apache-2.0 weights licence was re-verified on the model card itself**
+(`FunAudioLLM/CosyVoice2-0.5B`, checked 2026-08-11), not taken from a third-party
+summary — which is the same discipline that caught F5-TTS and OmniVoice shipping
+permissive code with `cc-by-nc-4.0` checkpoints. It holds.
+
+Three practical notes, all found by installing it rather than reading about it:
+
+- **It is not on PyPI.** It installs as a recursive `git clone` whose
+  `third_party/Matcha-TTS` submodule must be on `sys.path`. The backend takes a
+  `repo_dir` for exactly this reason.
+- **Its `requirements.txt` targets CUDA** — a `cu121` extra index, `tensorrt-cu12`,
+  `onnxruntime-gpu` — and mixes in training-only packages. Installed verbatim on a
+  CPU box that is gigabytes of unusable wheels. The inference subset is much smaller:
+  `deepspeed` is training-only, `vllm` is imported lazily inside methods, `pyarrow`
+  belongs to the dataset pipeline. Only `openai-whisper` is a genuine top-level
+  inference dependency, and it needs `setuptools<81` to build (newer setuptools drops
+  `pkg_resources`).
+- **It needs the reference transcript**, not just reference audio, which is a real
+  API difference from Chatterbox rather than a detail — see `needs_reference_text` in
+  `speechforge/synth.py`.
 
 Two notes on Chatterbox that are easy to miss:
 
