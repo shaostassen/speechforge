@@ -38,6 +38,7 @@ from speechforge.evaluate import (EvalTable, SystemScores,  # noqa: E402
                                   score_intelligibility, score_naturalness,
                                   sim_o, whisper_transcriber)
 from speechforge.synth import clone, load_backend  # noqa: E402
+from speechforge.text import apply_case  # noqa: E402
 
 
 def hardware_label() -> str:
@@ -106,11 +107,19 @@ def main() -> None:
                         "a corpus-level WER be decomposed: a few long "
                         "utterances failing badly looks identical to uniform "
                         "mediocrity in the aggregate")
+    p.add_argument("--text-case", choices=["raw", "sentence"], default="raw",
+                   help="how corpus text is presented to the model. LibriSpeech "
+                        "and EdAcc ship unpunctuated UPPER CASE, which is "
+                        "out-of-distribution for an LLM-based TTS: CosyVoice 2 "
+                        "measured WER 0.316 on raw caps vs 0.048 on sentence "
+                        "case. Default 'raw' keeps earlier runs comparable. "
+                        "WER scoring is case-insensitive, so this cannot flatter "
+                        "a system through the metric.")
     args = p.parse_args()
 
     print(f"study=eval_zeroshot  hardware={hardware_label()}  "
           f"backend={args.backend}  asr={args.asr_model}  "
-          f"seed={args.seed}  "
+          f"seed={args.seed}  text_case={args.text_case}  "
           f"date={date.today().isoformat()}")
     print(f"cmd: python {shlex.join(sys.argv)}\n")
 
@@ -173,10 +182,15 @@ def main() -> None:
               f"{len(held)} held-out")
 
         for j, (ho_audio, ho_sr, text) in enumerate(held):
-            wav, sr, report = clone(backend, text, ref_audio, ref_sr,
+            # Presentation applies to what the MODEL reads, on both the synthesis
+            # text and the reference transcript. `text` itself stays raw for
+            # scoring below — and WER normalizes case anyway.
+            wav, sr, report = clone(backend, apply_case(text, args.text_case),
+                                        ref_audio, ref_sr,
                                         seed=None if args.seed < 0 else args.seed,
                                         ref_seconds=args.ref_seconds,
-                                        reference_text=ref_text)
+                                        reference_text=apply_case(
+                                            ref_text, args.text_case))
             reports.append(report)
             if report["warnings"]:
                 print(f"  ref warnings: {report['warnings']}")

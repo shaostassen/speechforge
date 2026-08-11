@@ -266,25 +266,54 @@ def golden_table(rows: Sequence[dict]) -> str:
            f"headroom used by golden : {m('sim_golden') / ceiling:.1%} of ceiling",
            f"headroom used by cloning: {m('sim_learner_tts') / ceiling:.1%} of ceiling"]
 
-    # The identity-shed number needs its own anchor, and it is not the ceiling
-    # above. SIM(golden, native tts) compares two synthetic clips from the same
-    # TTS and vocoder, so it carries shared synthesis artefacts that no
-    # real-vs-synthetic pair does. Read against a real-speaker floor it looks
-    # alarmingly high whether or not any identity was retained. The honest
-    # anchor is two clones of DIFFERENT speakers from the SAME pipeline.
+    # --- identity retained, measured against the SOURCE SPEAKER'S REAL AUDIO ---
+    #
+    # This is the comparison that is actually confound-matched, and getting here
+    # took two wrong turns worth recording.
+    #
+    # SIM(golden, native tts) is not it: two synthetic clips from one TTS and
+    # vocoder share artefacts, and golden is a *conversion of that very waveform*
+    # so it also inherits its prosody and timing. Both inflate the number whether
+    # or not identity was retained.
+    #
+    # Nor is a decoy conversion (converting the same source waveform to some third
+    # speaker): golden and decoy are both conversions of the same audio, so they
+    # would retain source identity equally and the comparison is null.
+    #
+    # What works is scoring golden against the source speaker's REAL recording.
+    # Then both sides of the question are synthetic-vs-real with different text
+    # and no shared prosody:
+    #     acquired = SIM(golden, learner's real held-out audio)
+    #     retained = SIM(golden, source speaker's real audio)
+    # and they read on one scale whose ends this same run measures.
+    retained = mean_ignoring_nan(rows, "sim_golden_to_source_real")
+    control = mean_ignoring_nan(rows, "sim_ltts_to_source_real")
+    out.append("")
+    if retained == retained:
+        floor = m("sim_native_tts")      # different speaker, synthetic vs real
+        out.append(f"identity retained  SIM(golden, source REAL audio) : "
+                   f"{retained:.3f}")
+        if control == control:
+            out.append(f"  control: SIM(learner clone, source real)        : "
+                       f"{control:.3f}  (a clone with no source involvement — "
+                       f"the floor)")
+            out.append(f"  excess over control                            : "
+                       f"{retained - control:+.3f}  — this is retained source "
+                       f"identity")
+        out.append(f"  scale: {floor:.3f} different speaker … {ceiling:.3f} same "
+                   f"speaker, both measured in this run")
+    else:
+        out.append("identity retained: NOT MEASURED — needs SIM against the "
+                   "source speaker's real audio. SIM(golden, native tts) is not "
+                   "a substitute: shared vocoder and shared prosody inflate it.")
+
+    # Kept as a secondary diagnostic, explicitly labelled as the unmatched one.
     anchor = mean_ignoring_nan(rows, "sim_ltts_to_source")
     shed = m("sim_golden_to_source")
-    out.append("")
-    if anchor == anchor:
-        out.append(f"identity shed  SIM(golden, native tts) : {shed:.3f}")
-        out.append(f"  synthetic different-speaker anchor   : {anchor:.3f}  "
-                   f"(learner clone vs native clone — same pipeline, "
-                   f"different targets)")
-        out.append(f"  excess over anchor                   : {shed - anchor:+.3f}  "
-                   f"— only this part can be retained source identity")
-    else:
-        out.append(f"identity shed  SIM(golden, native tts) : {shed:.3f}  "
-                   f"** UNINTERPRETABLE: no synthetic different-speaker anchor "
-                   f"measured, so shared vocoder artefacts and retained source "
-                   f"identity cannot be separated **")
+    if shed == shed:
+        out.append("")
+        out.append(f"[unmatched, for reference] SIM(golden, native tts) : "
+                   f"{shed:.3f}"
+                   + (f"  vs same-pipeline anchor {anchor:.3f}"
+                      if anchor == anchor else "  (no anchor)"))
     return "\n".join(out)

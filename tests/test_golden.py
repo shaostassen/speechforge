@@ -234,22 +234,34 @@ def test_blend_rate_refuses_when_shed_was_never_measured():
         blend_rate([{"sim_golden": 0.8}])
 
 
-def test_shed_is_flagged_uninterpretable_without_a_synthetic_anchor():
-    # SIM(golden, native tts) compares two clips from the same TTS and vocoder,
-    # so shared synthesis artefacts inflate it regardless of retained identity.
-    # Without a same-pipeline different-speaker anchor the number must not be
-    # presented as if it meant something.
-    text = golden_table(_rows())
-    assert "UNINTERPRETABLE" in text
+def test_retained_identity_is_flagged_when_not_measured():
+    # SIM(golden, native tts) is NOT a substitute: two clips from one TTS and
+    # vocoder share artefacts, and golden is a conversion of that very waveform
+    # so it inherits its prosody too. Absent the matched comparison, the table
+    # must say the axis is missing rather than print the unmatched one as if it
+    # answered the question.
+    text = golden_table([dict(r, sim_golden_to_source=0.80) for r in _rows()])
+    assert "NOT MEASURED" in text
 
 
-def test_shed_is_reported_against_the_anchor_when_present():
-    rows = [dict(r, sim_golden_to_source=0.80, sim_ltts_to_source=0.77)
+def test_retained_identity_is_reported_against_a_matched_control():
+    # Both sides synthetic-vs-real, different text, no shared prosody:
+    #   retained = SIM(golden, source speaker's REAL audio)
+    #   control  = SIM(learner clone, source real) — a clone with no source in it
+    rows = [dict(r, sim_golden_to_source_real=0.74,
+                 sim_ltts_to_source_real=0.66) for r in _rows()]
+    text = golden_table(rows)
+    assert "NOT MEASURED" not in text
+    assert "0.740" in text and "0.660" in text
+    assert "+0.080" in text      # the excess is the retained source identity
+
+
+def test_unmatched_comparison_is_kept_but_labelled():
+    rows = [dict(r, sim_golden_to_source=0.80, sim_ltts_to_source=0.70,
+                 sim_golden_to_source_real=0.74, sim_ltts_to_source_real=0.66)
             for r in _rows()]
     text = golden_table(rows)
-    assert "UNINTERPRETABLE" not in text
-    assert "0.770" in text          # the anchor
-    assert "+0.030" in text         # only the excess can be retained identity
+    assert "unmatched" in text
 
 
 def test_mean_ignores_nan_and_reports_nan_when_empty():
