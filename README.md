@@ -74,11 +74,18 @@ Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handica
 `--text-case` makes the choice explicit and recorded, defaulting to `raw` so earlier
 numbers stay comparable.
 
-⚠️ **The CosyVoice 2 numbers here are a floor, not a model comparison.** Its run logged
-`no frontend is avaliable` — my trimmed CPU install omitted both `ttsfrd` and `wetext`,
-so its text normalization was entirely disabled. Chatterbox has no comparable frontend
-dependency, so the two are not yet measuring the same thing and **no ranking between
-them is claimed.**
+⚠️ **No ranking between the two backends is claimed yet.** In sentence case CosyVoice 2
+measures 0.212 against Chatterbox's 0.022, but one asymmetry is mine: the reference cap
+is 20 s for Chatterbox (**measured**) and 10 s for CosyVoice 2 (**taken from its docs,
+unmeasured here**). A 10× gap is far larger than the ~24% relative the cap moved on
+Chatterbox, so it probably isn't the explanation — but three borrowed numbers have
+already failed in this project, so a cap sweep comes before any ranking.
+
+Its first run also logged `no frontend is avaliable`, my trimmed install having omitted
+`ttsfrd` and `wetext`. Re-running with `wetext` active gave **byte-identical** results:
+normalization is a no-op on plain sentence-case prose, so that defect was real and
+immaterial here. Two separate processes producing identical rows also makes this the
+project's strongest reproducibility check.
 
 ⚠️ **The two ASRs are not independent on this corpus.** `hubert-large-ls960-ft` is
 trained on LibriSpeech, so their agreement here (0.021 vs 0.016) partly reflects domain

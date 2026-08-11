@@ -784,3 +784,31 @@ study, whose EdAcc text has the same convention. Speaker similarity appears
 unaffected (0.951 vs 0.949). Re-running the golden study in sentence case is the
 immediate follow-up; the rows are kept rather than deleted, since the comparison
 *between* them is what produced this finding.
+
+## The missing normalizer turned out not to matter — and proved reproducibility
+
+Re-ran CosyVoice 2 with `wetext` installed and the log confirming `use wetext
+frontend` (raw log `eval_cosy_libri_wetext_9950x.txt`). Result: **0.212 / 0.204 /
+0.957 — identical to three decimals**, and the per-utterance JSON is byte-identical
+to the run that had no frontend at all.
+
+Two things follow. Text normalization is a **no-op on this corpus**: LibriSpeech
+sentence-case English prose contains no numbers, currency or abbreviations for a
+normalizer to expand, which is exactly what `wetext` returned when tested directly.
+So the earlier `no frontend is avaliable` warning was a real defect in my install
+and immaterial to this measurement — worth having checked rather than assumed, and
+worth not having published a ranking over.
+
+And two separate processes produced byte-identical rows at seed 1234, which is a
+stronger reproducibility check than the earlier golden-speaker pair (that one
+differed by 0.001 on one WER, consistent with thread reduction order).
+
+**Where that leaves the comparison.** In sentence case, n=60, identical utterances:
+Chatterbox 0.022, CosyVoice 2 0.212. One asymmetry remains and it is mine: the
+reference cap is **20 s for Chatterbox, measured** (0.126 → 0.097 at 20 s versus
+10 s) and **10 s for CosyVoice 2, taken from its own documentation and not measured
+here**. A 10× WER difference is much larger than the ~24% relative the cap moved on
+Chatterbox, so it is unlikely to be the explanation — but "unlikely" is not
+"measured", and three borrowed numbers have already failed in this project. A
+reference-cap sweep for CosyVoice 2 is the outstanding work before any ranking
+between these two backends is stated.
