@@ -12,7 +12,7 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and three studies have results. 112 tests pass offline with no weights and no network.
+and four studies have results. 125 tests pass offline with no weights and no network.
 
 What is deliberately *not* claimed: that Chatterbox is good. The samples so far are 12
 utterances across 4 speakers — enough to demonstrate the harness and to catch three of
@@ -100,23 +100,27 @@ matters, at n=72 across 12 accented EdAcc speakers:
 | signal | SIM to learner | WER |
 |---|---|---|
 | learner real *(identity ceiling)* | 0.924 | 0.225 |
-| native tts | 0.626 | 0.208 |
-| learner tts *(plain cloning)* | 0.855 | 0.250 |
-| **golden** | **0.824** | **0.208** |
+| native tts | 0.621 | 0.076 |
+| learner tts *(plain cloning)* | 0.856 | 0.087 |
+| **golden** | **0.818** | **0.073** |
 
-Conversion costs **exactly 0.000 WER** against the TTS it came from, and beats plain
-cloning by 0.042 WER for 0.031 SIM — reaching 96% of the identity cloning achieves
-while pronouncing like the native source. That WER gap is accent preservation showing
-up as a measurement: cloning an accented reference reproduces the accent.
+Conversion costs **−0.003 WER** against the TTS it came from — it does not damage the
+speech — and beats plain cloning by 0.014 WER for 0.039 SIM. That WER gap is accent
+preservation showing up as a measurement: cloning an accented reference reproduces the
+accent, and the ASR pays for it.
 
-**What that table cannot tell you is whether the output stopped sounding like the
-source**, and saying so is the finding. `SIM(golden, native tts)` compares two clips
-from the same TTS and vocoder, so shared synthesis artefacts inflate it by a measured
-**+0.070** regardless of retained identity. Against a same-pipeline anchor the excess
-is +0.106 — an *upper bound*, not an estimate, because golden is a conversion of the
-source waveform and inherits its prosody too. A per-utterance statistic that made this
-look like a majority "blend" (54%) fell to 22% once that measured bias was subtracted,
-so the claim was dropped rather than published.
+**The output carries both voices, and measuring that took three attempts.** Scored
+against the source speaker's *real* audio — so that both sides are synthetic-vs-real
+with different text and no shared prosody — golden sits **65% of the way toward the
+learner and 56% toward the source** on a scale this run measures at its own ends
+(0.621 different speaker, 0.924 same speaker). Retained source identity is **+0.114**
+above a clone that never touched the source. Partial conversion, not a clean transfer.
+
+Comparing against the source *TTS* instead is the trap: golden is a conversion of that
+waveform, so it shares its vocoder and prosody, a bias measured at **+0.070**. That
+substitution inflated the per-utterance "closer to the source" rate from **44% to 54%**
+and produced a spurious "majority blend" verdict, now retracted. The function that
+computes it refuses the unmatched input outright.
 
 **ASR confidence does not detect synthetic speech.** Holding the transcribed word
 *correct* — so accuracy can't explain the result — real and synthetic confidence
