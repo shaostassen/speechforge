@@ -702,3 +702,85 @@ is neither the source nor the learner. That makes prosody sharing identical acro
 comparison and leaves target identity as the only difference, turning the +0.106 upper
 bound into an actual estimate of retained source identity. One extra VC call per
 utterance.
+
+---
+
+# Run — 2026-08-11 — the WER gap was text presentation, and it is now closed
+
+The single largest correction in this log. Everything below supersedes the
+"unexplained ~0.095" left over from the gap decomposition above.
+
+| | |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, CPU only |
+| corpus | LibriSpeech test-clean, 12 speakers × 5 held-out — **n = 60**, identical utterance set across all rows |
+| ASR | `faster-whisper large-v3` int8, plus `hubert-large-ls960-ft` CTC |
+| encoder | `microsoft/wavlm-base-plus-sv` |
+| seed | 1234 |
+| raw logs | `eval_chatter_libri_cased_9950x.txt`, `eval_cosy_libri_9950x.txt`, `eval_cosy_libri_cased_9950x.txt` |
+
+## The result
+
+| system | text as the model sees it | WER | WER-2 | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | **0.021** | 0.016 | 0.964 |
+| chatterbox | raw `ALL CAPS` (as the corpus ships) | 0.112 | 0.110 | 0.951 |
+| **chatterbox** | **sentence case** | **0.022** | **0.022** | 0.949 |
+| cosyvoice2 | raw `ALL CAPS` | 0.425 | 0.430 | 0.954 |
+| cosyvoice2 | sentence case | 0.212 | 0.204 | 0.957 |
+
+**Chatterbox goes from 0.112 to 0.022 — a 5× reduction — on a change to nothing
+but the case and terminal punctuation of the input string.** At 0.022 it sits on
+top of the ground-truth row (0.021) and inside the 1.5–3% band published for
+zero-shot systems on this corpus. SIM-o is unmoved (0.951 → 0.949), so this is
+specifically an intelligibility effect, not a general quality shift.
+
+**This refutes a claim recorded earlier in this log and in the README**: that
+Chatterbox at 11% was "well behind published zero-shot systems … a gap large
+enough not to be protocol noise". It was protocol noise. Mine. The decomposition
+above correctly excluded temperature, text length and the reference cap, and the
+~0.095 residual it could not explain is almost exactly the 0.090 that text
+presentation accounts for.
+
+LibriSpeech and EdAcc both distribute transcripts as unpunctuated upper case. That
+is a corpus convention for *scoring*, and I passed it straight through to a
+generative model as though it were input. WER scoring is case- and
+punctuation-insensitive — verified — so the metric never noticed.
+
+## Why "give both models the same text" was the wrong kind of fairness
+
+Feeding every backend the raw corpus string looks scrupulously even-handed. It is
+not, because the models are not equally robust to it: the same input costs
+Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handicap.
+The defensible protocol is to give each model input of the kind it was trained on
+and to record that choice, which is what `--text-case` now does — defaulting to
+`raw` so every number recorded before this remains comparable, and printing the
+setting in the provenance banner.
+
+## The CosyVoice 2 row is a floor, not a measurement
+
+**Do not read this as a model comparison.** The run logged `no frontend is
+avaliable`: neither `ttsfrd` nor `wetext` was installed, so CosyVoice 2 ran with
+its text normalization entirely disabled, which my trimmed CPU install caused. Its
+0.212 is a lower bound set by my environment. A re-run with `wetext` active is
+recorded separately. Chatterbox has no comparable frontend dependency, so the two
+rows are not yet measuring the same thing and no ranking between them is claimed.
+
+## A third small-sample lesson
+
+The probe that found this effect used 3 speakers × 3 utterances and put CosyVoice 2
+at **0.048** in sentence case. At n=60 the same configuration measured **0.212** —
+4.4× worse. The probe was right about the *direction* and badly wrong about the
+*magnitude*, which is the same failure as the "consistent ~0.05 SIM gap" (n=12) and
+the "54% blend rate" earlier in this file. n≤12 is good for deciding what to
+measure properly and not for any number that gets written down.
+
+## What this invalidates
+
+Every synthesis WER previously recorded in this file used raw `ALL CAPS` text and
+therefore understates its backend, by ~0.090 for Chatterbox on LibriSpeech. The
+affected numbers are the EdAcc and LibriSpeech rows above and the golden-speaker
+study, whose EdAcc text has the same convention. Speaker similarity appears
+unaffected (0.951 vs 0.949). Re-running the golden study in sentence case is the
+immediate follow-up; the rows are kept rather than deleted, since the comparison
+*between* them is what produced this finding.

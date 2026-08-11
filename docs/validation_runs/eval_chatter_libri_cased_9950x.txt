@@ -1,0 +1,80 @@
+study=eval_zeroshot  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)  backend=chatterbox  asr=large-v3  seed=1234  text_case=sentence  date=2026-08-11
+cmd: python repo/scripts/eval_zeroshot.py --backend chatterbox --corpus librispeech --speakers 12 --utterances 5 --asr-model large-v3 --second-asr --threads 16 --seed 1234 --text-case sentence --per-utterance /home/shao/speechforge/runs/chatter_libri_cased.json
+corpus=librispeech  speakers=12  5 held-out utterances each
+speaker ids: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/pkg_resources/__init__.py:2212: UserWarning: /home/shao/speechforge/repo/._speechforge.egg-info could not be properly decoded in UTF-8
+  warnings.warn(msg)
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/diffusers/models/lora.py:393: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
+  deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
+loaded PerthNet (Implicit) at step 250,000
+backend: chatterbox default, t3 backbone 532M [chatterbox defaults]  sr=24000
+speaker encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+second ASR: facebook/hubert-large-ls960-ft (CTC)
+speaker 1089: cloning from 10.4s, 5 held-out
+/home/shao/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:105: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
+  self.gen = func(*args, **kwds)
+`sdpa` attention does not support `output_attentions=True`. Please set your attention to `eager` if you want any of these features.
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/torch/nn/functional.py:5962: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+speaker 1188: cloning from 10.7s, 5 held-out
+speaker 121: cloning from 8.5s, 5 held-out
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+speaker 1221: cloning from 12.4s, 5 held-out
+speaker 1284: cloning from 8.1s, 5 held-out
+speaker 1320: cloning from 13.5s, 5 held-out
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+speaker 1580: cloning from 8.9s, 5 held-out
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+speaker 1995: cloning from 9.5s, 5 held-out
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+speaker 2094: cloning from 22.6s, 5 held-out
+  ref warnings: ['truncated 22.6s to 20.0s (longer references degrade cloning, not improve it)', 'reference is clipping; distortion will be cloned']
+  ref warnings: ['truncated 22.6s to 20.0s (longer references degrade cloning, not improve it)', 'reference is clipping; distortion will be cloned']
+  ref warnings: ['truncated 22.6s to 20.0s (longer references degrade cloning, not improve it)', 'reference is clipping; distortion will be cloned']
+  ref warnings: ['truncated 22.6s to 20.0s (longer references degrade cloning, not improve it)', 'reference is clipping; distortion will be cloned']
+  ref warnings: ['truncated 22.6s to 20.0s (longer references degrade cloning, not improve it)', 'reference is clipping; distortion will be cloned']
+speaker 2300: cloning from 5.1s, 5 held-out
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+speaker 237: cloning from 13.3s, 5 held-out
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+speaker 260: cloning from 7.0s, 5 held-out
+per-utterance detail -> /home/shao/speechforge/runs/chatter_libri_cased.json
+scoring...
+corpus=librispeech (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.021   0.016   0.964      —   <- read every row against this
+            chatterbox    60   0.022   0.022   0.949      —
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.

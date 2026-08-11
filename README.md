@@ -45,18 +45,40 @@ recorded a "consistent ~0.05 gap across corpora" and concluded harder references
 conclusion inverts. Absolute SIM values are encoder-specific and inflated by matched
 recording conditions, so only the ground-truth row in the same run bounds them.
 
-**On LibriSpeech, WER at scale (n=60):**
+**The biggest finding is a mistake of mine: the WER gap was the shape of my input.**
+LibriSpeech and EdAcc ship transcripts as unpunctuated `ALL CAPS`. That is a convention
+for *scoring*; I passed it straight to a generative model as though it were input. On
+LibriSpeech test-clean, n=60, identical utterances in every row:
 
-| | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
-|---|---|---|---|
-| ground truth | **0.021** | 0.016 | 0.964 |
-| chatterbox | 0.112 | 0.110 | 0.951 |
+| | text as the model sees it | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | **0.021** | 0.016 | 0.964 |
+| chatterbox | raw `ALL CAPS` | 0.112 | 0.110 | 0.951 |
+| **chatterbox** | **sentence case** | **0.022** | **0.022** | 0.949 |
 
-The ground-truth 2.1% reproduces the published LibriSpeech test-clean figure, which is
-the check that says the harness is measuring the same thing the literature does.
-Against that, Chatterbox at 11% is well behind published zero-shot systems, which
-report 1.5–3% on this corpus — a gap large enough not to be protocol noise, though the
-protocol does differ (cloning from one held-out reference rather than a fixed 3 s prompt).
+**A 5× reduction from changing nothing but case and a full stop.** At 0.022 Chatterbox
+sits on the ground-truth row and inside the 1.5–3% published for zero-shot systems.
+SIM-o barely moves (0.951 → 0.949), so it is specifically intelligibility.
+
+This **refutes what this README previously claimed** — that 11% was "a gap large enough
+not to be protocol noise". It was protocol noise, and mine. An earlier decomposition had
+correctly excluded temperature, text length and reference cap, leaving ~0.095
+unexplained; text presentation accounts for ~0.090 of it.
+
+The ground-truth 2.1% reproducing the published figure is what made the error findable:
+the harness was measuring correctly the whole time, so the anomaly had to be the input.
+
+**"Give every model the same text" is the wrong kind of fairness.** It looks
+even-handed and isn't, because robustness to it differs — the same raw input costs
+Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handicap.
+`--text-case` makes the choice explicit and recorded, defaulting to `raw` so earlier
+numbers stay comparable.
+
+⚠️ **The CosyVoice 2 numbers here are a floor, not a model comparison.** Its run logged
+`no frontend is avaliable` — my trimmed CPU install omitted both `ttsfrd` and `wetext`,
+so its text normalization was entirely disabled. Chatterbox has no comparable frontend
+dependency, so the two are not yet measuring the same thing and **no ranking between
+them is claimed.**
 
 ⚠️ **The two ASRs are not independent on this corpus.** `hubert-large-ls960-ft` is
 trained on LibriSpeech, so their agreement here (0.021 vs 0.016) partly reflects domain
@@ -128,6 +150,13 @@ library and the study hand-rolled its own reporting around it.
 The lesson that generalises: reach for the library's guardrail instead of re-printing
 the table by hand, and dump per-utterance rows *before* rendering — the last bug's bias
 check then costs a re-render instead of a 90-minute re-run.
+
+And one that is really the same lesson three times: **small samples are for choosing
+what to measure, never for a number that gets written down.** A "consistent ~0.05 SIM
+gap" (n=12) inverted at n=60. A "54% blend rate" fell to 22% under a measured bias
+correction. A probe putting CosyVoice 2 at 0.048 in sentence case (n=9) measured 0.212 at
+n=60 — right about the direction, 4.4× wrong about the size. All three were directionally
+useful and quantitatively worthless.
 
 ## Why the licences get their own document
 
