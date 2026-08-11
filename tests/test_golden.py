@@ -214,24 +214,35 @@ def test_blend_rate_catches_what_the_means_hide():
     # heavily overlapping distributions produce a mean gap that no single
     # utterance need exhibit, so a verdict read off the means calls this a
     # success. Half the rows lean each way by different margins.
-    rows = ([{"sim_golden": 0.95, "sim_golden_to_source": 0.60}] * 3 +
-            [{"sim_golden": 0.70, "sim_golden_to_source": 0.88}] * 5)
+    rows = ([{"sim_golden": 0.95, "sim_golden_to_source_real": 0.60}] * 3 +
+            [{"sim_golden": 0.70, "sim_golden_to_source_real": 0.88}] * 5)
     assert mean_ignoring_nan(rows, "sim_golden") > \
-        mean_ignoring_nan(rows, "sim_golden_to_source")   # means say "fine"
+        mean_ignoring_nan(rows, "sim_golden_to_source_real")   # means say "fine"
     assert blend_rate(rows) == 0.625                       # utterances say otherwise
 
     out = trade_off(sim_to_learner=mean_ignoring_nan(rows, "sim_golden"),
                     sim_source_to_learner=0.60, wer_output=0.10,
                     wer_source=0.10,
-                    sim_to_source=mean_ignoring_nan(rows, "sim_golden_to_source"),
+                    sim_to_source=mean_ignoring_nan(rows,
+                                                    "sim_golden_to_source_real"),
                     blend_fraction=blend_rate(rows))
     assert out["resembles_source_more"] is False   # the mean test misses it
     assert "majority" in out["verdict"]            # the per-utterance test does not
 
 
-def test_blend_rate_refuses_when_shed_was_never_measured():
-    with pytest.raises(CeilingMissing, match="blend rate is undefined"):
+def test_blend_rate_refuses_when_the_matched_comparison_is_missing():
+    with pytest.raises(CeilingMissing, match="sim_golden_to_source_real"):
         blend_rate([{"sim_golden": 0.8}])
+
+
+def test_blend_rate_refuses_the_unmatched_substitute():
+    # The real bug: scoring golden against the source TTS instead of the source
+    # speaker's real audio inflated this from 44% to 54% and produced a spurious
+    # "majority blend" verdict. golden is a conversion of that waveform, so it
+    # shares its vocoder and prosody. The unmatched key must not silently stand in.
+    rows = [{"sim_golden": 0.80, "sim_golden_to_source": 0.90}] * 5
+    with pytest.raises(CeilingMissing, match="not a substitute"):
+        blend_rate(rows)
 
 
 def test_retained_identity_is_flagged_when_not_measured():

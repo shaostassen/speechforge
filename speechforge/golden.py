@@ -205,24 +205,34 @@ def mean_ignoring_nan(rows: Sequence[dict], key: str) -> float:
 
 
 def blend_rate(rows: Sequence[dict]) -> float:
-    """Fraction of utterances whose output resembles its source at least as much
-    as its target.
+    """Fraction of utterances whose output resembles the source speaker at least
+    as much as the learner.
 
-    Computed per utterance, never from the means, because the means hid exactly
-    this. At n=72 the mean similarities were 0.824 to the learner and 0.802 to
-    the source — a comfortable-looking margin — while **54% of individual
-    utterances were closer to the source**. Averaging two heavily overlapping
-    distributions yields a gap that no single utterance need exhibit, so a
-    verdict read off the means called a majority-blend outcome a success.
+    Computed per utterance, never from the means, because the means hide it: at
+    n=72 the mean similarities were 0.818 to the learner and 0.791 to the source,
+    a comfortable-looking margin, while 44% of individual utterances were closer
+    to the source. Averaging two heavily overlapping distributions yields a gap
+    that no single utterance need exhibit.
+
+    Uses ``sim_golden_to_source_real`` and nothing else, because the comparison
+    has to be like with like. Both sides are then synthetic-vs-real with different
+    text and no shared prosody. Substituting ``sim_golden_to_source`` — the output
+    against the source *TTS* — is what an earlier version did, and it inflated
+    this statistic from **44% to 54%**, flipping the verdict to a spurious
+    "majority blend": golden is a conversion of that waveform, so it shares the
+    source's vocoder and prosody, and the same-pipeline bias measured +0.070.
     """
-    pairs = [(r["sim_golden"], r["sim_golden_to_source"]) for r in rows
-             if r.get("sim_golden", float("nan")) == r.get("sim_golden", float("nan"))
-             and r.get("sim_golden_to_source", float("nan"))
-             == r.get("sim_golden_to_source", float("nan"))]
+    def ok(r, k):
+        v = r.get(k, float("nan"))
+        return v == v
+    pairs = [(r["sim_golden"], r["sim_golden_to_source_real"]) for r in rows
+             if ok(r, "sim_golden") and ok(r, "sim_golden_to_source_real")]
     if not pairs:
         raise CeilingMissing(
-            "identity shed was not measured per utterance, so the blend rate is "
-            "undefined; the means alone cannot detect a majority blend."
+            "blend rate needs sim_golden_to_source_real — the output scored "
+            "against the source speaker's REAL audio. The output-vs-source-TTS "
+            "comparison is not a substitute: it shares vocoder and prosody and "
+            "inflated this statistic from 44% to 54%."
         )
     return sum(1 for target, source in pairs if source >= target) / len(pairs)
 
@@ -302,6 +312,13 @@ def golden_table(rows: Sequence[dict]) -> str:
                        f"identity")
         out.append(f"  scale: {floor:.3f} different speaker … {ceiling:.3f} same "
                    f"speaker, both measured in this run")
+        # Position on that scale, so "0.791" and "0.818" become comparable
+        # statements about identity rather than two bare cosines.
+        span = ceiling - floor
+        if span > 0:
+            out.append(f"  on that scale: {(m('sim_golden') - floor) / span:.0%} "
+                       f"toward the learner, {(retained - floor) / span:.0%} "
+                       f"toward the source — the output carries both")
     else:
         out.append("identity retained: NOT MEASURED — needs SIM against the "
                    "source speaker's real audio. SIM(golden, native tts) is not "

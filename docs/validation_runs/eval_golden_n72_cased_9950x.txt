@@ -1,0 +1,48 @@
+study=eval_golden  hardware=AMD Ryzen 9 9950X 16-Core Processor  asr=large-v3  seed=1234  text_case=sentence  date=2026-08-11
+cmd: python repo/scripts/eval_golden.py --speakers 12 --utterances 6 --asr-model large-v3 --threads 16 --seed 1234 --scan 9000 --text-case sentence --per-utterance /home/shao/speechforge/runs/golden_final.json
+learners (accented): ['EDACC-C08-A', 'EDACC-C08-B', 'EDACC-C10-B', 'EDACC-C10-A', 'EDACC-C02-A', 'EDACC-C02-B', 'EDACC-C19-A', 'EDACC-C19-B', 'EDACC-C20-A', 'EDACC-C20-B', 'EDACC-C21-B', 'EDACC-C21-A']
+pronunciation source: LibriSpeech 1089, 10.4s
+loaded PerthNet (Implicit) at step 250,000
+loaded PerthNet (Implicit) at step 250,000
+tts: chatterbox default, t3 backbone 532M [chatterbox defaults] @ 24000 Hz
+vc : chatterbox-vc (MIT) @ 24000 Hz
+encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+EDACC-C08-A: learner ref 3.0s, 6 held-out
+EDACC-C08-B: learner ref 3.8s, 6 held-out
+EDACC-C10-B: learner ref 3.9s, 6 held-out
+EDACC-C10-A: learner ref 9.8s, 6 held-out
+EDACC-C02-A: learner ref 13.6s, 6 held-out
+EDACC-C02-B: learner ref 3.1s, 6 held-out
+EDACC-C19-A: learner ref 14.4s, 6 held-out
+EDACC-C19-B: learner ref 20.0s, 6 held-out
+EDACC-C20-A: learner ref 6.0s, 6 held-out
+EDACC-C20-B: learner ref 5.4s, 6 held-out
+EDACC-C21-B: learner ref 12.9s, 6 held-out
+EDACC-C21-A: learner ref 8.9s, 6 held-out
+per-utterance rows -> /home/shao/speechforge/runs/golden_final.json
+n = 72 held-out utterances, 12 learners
+====================================================================
+GOLDEN SPEAKER — identity vs pronunciation
+====================================================================
+          signal  SIM to learner     WER
+    learner real           0.924   0.225
+      native tts           0.621   0.076
+     learner tts           0.856   0.087
+          golden           0.818   0.073
+identity ceiling (real vs real, same speaker): 0.924  — the SIM column is unreadable without it
+headroom used by golden : 88.5% of ceiling
+headroom used by cloning: 92.7% of ceiling
+identity retained  SIM(golden, source REAL audio) : 0.791
+  control: SIM(learner clone, source real)        : 0.677  (a clone with no source involvement — the floor)
+  excess over control                            : +0.114  — this is retained source identity
+  scale: 0.621 different speaker … 0.924 same speaker, both measured in this run
+[unmatched, for reference] SIM(golden, native tts) : 0.795  vs same-pipeline anchor 0.675
+identity acquired  SIM(golden, learner)    : 0.818   (source started at 0.621)
+identity gain (golden - native tts)        : +0.196
+WER cost      (golden - native tts)        : -0.003
+closer to source than learner              : 39/72 utterances (54%)
+verdict: a majority of utterances (54%) are closer to the source voice than to the learner — blending, not conversion, even though the mean similarities favour the learner
+vs plain cloning: golden SIM 0.818 vs learner-tts 0.856  (-0.039)
+                  golden WER 0.073 vs learner-tts 0.087  (-0.014)
+If plain cloning already matches the learner and pronounces well, the
+conversion stage is not earning its place.

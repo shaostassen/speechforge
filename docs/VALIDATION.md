@@ -812,3 +812,78 @@ Chatterbox, so it is unlikely to be the explanation — but "unlikely" is not
 "measured", and three borrowed numbers have already failed in this project. A
 reference-cap sweep for CosyVoice 2 is the outstanding work before any ranking
 between these two backends is stated.
+
+---
+
+# Run — 2026-08-11 — golden speaker, re-measured in sentence case with a matched control
+
+Supersedes the earlier golden-speaker run. Same 12 EdAcc learners, same 6 held-out
+utterances each (**n = 72**), same seed, same source speaker — two changes:
+`--text-case sentence`, and identity retention scored against the source speaker's
+**real audio** instead of its TTS. Raw logs `eval_golden_n72_cased_9950x.txt`,
+`per_utterance_golden_final.json`.
+
+| signal | SIM to learner | WER (sentence case) | WER (was, raw caps) |
+|---|---|---|---|
+| learner real *(ceiling)* | **0.924** | 0.225 | 0.225 |
+| native tts | 0.621 | **0.076** | 0.208 |
+| learner tts *(plain cloning)* | 0.856 | **0.087** | 0.250 |
+| **golden** | **0.818** | **0.073** | 0.208 |
+
+## The text-presentation prediction held exactly
+
+Every synthetic arm improved by roughly 2.7-2.9x, and **`learner real` did not move
+at all** (0.225 both times) — which is the control that proves the mechanism: real
+audio does not read text, so only the arms that were handed ALL-CAPS input could
+change. The earlier anomaly where native tts (0.208) scored *worse* than real
+spontaneous speech (0.225) is gone; at 0.076 it is now cleanly better, as clean read
+speech should be.
+
+## Conversion still earns its place, by a smaller margin
+
+WER cost against the TTS it came from is **−0.003** — conversion does not damage the
+speech. Against plain cloning, golden is **0.014 better on WER** for **0.039 worse on
+SIM**. Both effects shrank once the text handicap was removed (they were 0.041 and
+0.031 in raw caps), which is the expected direction: the accent-preservation penalty
+that conversion recovers is smaller when the model is not also fighting its input.
+
+## Identity: the output carries both voices, measured properly this time
+
+| quantity | value |
+|---|---|
+| acquired — SIM(golden, learner's real held-out) | 0.818 |
+| retained — SIM(golden, source speaker's **real** audio) | 0.791 |
+| control — SIM(learner clone, source real) | 0.677 |
+| excess over control | **+0.114** |
+| scale measured in this run | 0.621 different speaker … 0.924 same speaker |
+
+Both numbers are synthetic-vs-real with different text and no shared prosody, so for
+the first time they are directly comparable. On the run's own scale the output sits
+**65% of the way toward the learner and 56% of the way toward the source**. There is
+real retained source identity — +0.114 above a clone that never touched the source —
+and it coexists with substantial acquired identity. Partial conversion, not a clean
+transfer.
+
+## The "majority blend" claim is retracted
+
+Per utterance, **32/72 (44%)** of outputs are closer to the source than to the
+learner — a large minority, not a majority. The earlier 54% came from `blend_rate`
+comparing `sim_golden` (synthetic-vs-real) against `sim_golden_to_source`
+(synthetic-vs-**synthetic**), and golden is a conversion of that very waveform, so it
+shares the source's vocoder and prosody; the same-pipeline bias measured +0.070.
+
+`blend_rate` now accepts only the matched key and raises if handed the unmatched one,
+with the 44%-to-54% inflation named in the error. This is the second time this exact
+statistic misled me and the third time in this project that a like-for-unlike
+similarity comparison produced a false finding — the first was SIM-r vs SIM-o.
+
+## What still bounds this
+
+- **One pronunciation source** (LibriSpeech 1089), n=1 on that side.
+- **Cross-gender conversion is pooled**, not separated; per-speaker rows are in the JSON.
+- **Ground truth is impossible by construction** — a non-native speaker producing
+  native pronunciation cannot be recorded. Every number here is a trade-off, never an
+  accuracy.
+- EdAcc `learner real` WER stays high (0.225) because the corpus transcribes
+  disfluencies verbatim; that arm is not comparable with the synthetic ones, and no
+  claim above crosses that line.
