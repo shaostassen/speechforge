@@ -14,9 +14,11 @@ in every table.
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
 and four studies have results. 125 tests pass offline with no weights and no network.
 
-What is deliberately *not* claimed: that Chatterbox is good. The samples so far are 12
-utterances across 4 speakers — enough to demonstrate the harness and to catch three of
-my own measurement errors, not enough to rank a model. Everything measured is in
+What is deliberately *not* claimed: a ranking between backends. Two are wired up
+(Chatterbox, CosyVoice 2) and one known asymmetry remains between them — see the warning
+below. The largest studies run at n=60-72 across 12 speakers, on two corpora, and their
+main product so far has been **six measurement errors of mine that the harness caught**,
+including one that had already been written into this README. Everything measured is in
 [`docs/VALIDATION.md`](docs/VALIDATION.md) with raw logs; model licences and exclusions
 are in [`docs/LICENSES.md`](docs/LICENSES.md).
 
@@ -29,6 +31,12 @@ real recording conditions — cloning from a ~4 s conversational reference:
 |---|---|---|---|
 | ground truth | 0.130 | 0.259 | 0.894 |
 | chatterbox | 0.346 | 0.383 | 0.844 |
+
+⚠️ Measured on **raw `ALL CAPS`** corpus text, before that was found to cost Chatterbox
+~0.090 WER on LibriSpeech (below). The synthesis row here therefore understates the
+model; the ground-truth row is unaffected, since real audio does not read text. Kept as
+recorded rather than deleted — the comparison *between* presentations is what produced
+the finding.
 
 **The second ASR changes the headline.** Synthesis is 2.7× worse than real speech under
 Whisper and 1.5× worse under HuBERT-CTC. Both are true; which you report is decided by
