@@ -34,8 +34,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from speechforge import corpora  # noqa: E402
 from speechforge.evaluate import cosine, whisper_transcriber  # noqa: E402
-from speechforge.golden import (ChatterboxVCBackend, golden_speech,  # noqa: E402
-                                golden_table, mean_ignoring_nan, trade_off)
+from speechforge.golden import (ChatterboxVCBackend, blend_rate,  # noqa: E402
+                                golden_speech, golden_table,
+                                mean_ignoring_nan, trade_off)
 from speechforge.reference import prepare  # noqa: E402
 from speechforge.synth import clone, load_backend  # noqa: E402
 
@@ -129,12 +130,15 @@ def main() -> None:
             learner_tts, lt_sr, _ = clone(tts, text, learner_ref, lref_sr,
                                           seed=args.seed)
 
-            # Every similarity is against the HELD-OUT utterance, never the
-            # reference clip the models were conditioned on.
+            # Embed each clip once and reuse. Every similarity to the learner is
+            # against the HELD-OUT utterance, never the reference clip the models
+            # were conditioned on.
             e_held = enc(held_audio, held_sr)
-            sim = lambda a, s: cosine(enc(a, s), e_held)  # noqa: E731
-            # Identity shed needs a second anchor: the source voice itself.
             e_src = enc(g.source_audio, g.source_sample_rate)
+            e_gold = enc(g.audio, g.sample_rate)
+            e_ltts = enc(learner_tts, lt_sr)
+            other_audio, other_sr, _ = held[(j + 1) % len(held)]
+            e_other = enc(other_audio, other_sr) if len(held) > 1 else None
 
             rows.append({
                 "speaker": spk,
@@ -142,16 +146,20 @@ def main() -> None:
                 # A DIFFERENT real recording of the same speaker, cyclically —
                 # comparing utts[1] every time would compare the first held-out
                 # utterance against itself and report a spurious 1.0.
-                "sim_learner_real": (sim(held[(j + 1) % len(held)][0],
-                                         held[(j + 1) % len(held)][1])
-                                     if len(held) > 1 else float("nan")),
-                "sim_native_tts": sim(g.source_audio, g.source_sample_rate),
-                "sim_learner_tts": sim(learner_tts, lt_sr),
-                "sim_golden": sim(g.audio, g.sample_rate),
+                "sim_learner_real": (cosine(e_other, e_held)
+                                     if e_other is not None else float("nan")),
+                "sim_native_tts": cosine(e_src, e_held),
+                "sim_learner_tts": cosine(e_ltts, e_held),
+                "sim_golden": cosine(e_gold, e_held),
                 # Identity SHED: how much the output still resembles the voice it
                 # was converted away from. Without this a blend of the two voices
                 # passes every other check.
-                "sim_golden_to_source": cosine(enc(g.audio, g.sample_rate), e_src),
+                "sim_golden_to_source": cosine(e_gold, e_src),
+                # The anchor that makes the line above readable: two clones of
+                # DIFFERENT speakers from the SAME TTS and vocoder. Whatever
+                # similarity shared synthesis artefacts produce on their own shows
+                # up here, so only the excess above it can be retained identity.
+                "sim_ltts_to_source": cosine(e_ltts, e_src),
                 "wer_native_tts": wer(text, transcribe(g.source_audio,
                                                        g.source_sample_rate)),
                 "wer_learner_tts": wer(text, transcribe(learner_tts, lt_sr)),
@@ -172,14 +180,20 @@ def main() -> None:
     print(f"\nn = {len(rows)} held-out utterances, {len(learners)} learners")
     print(golden_table(rows))
 
+    frac = blend_rate(rows)
     t = trade_off(m("sim_golden"), m("sim_native_tts"),
                   m("wer_golden"), m("wer_native_tts"),
-                  sim_to_source=m("sim_golden_to_source"))
+                  sim_to_source=m("sim_golden_to_source"),
+                  blend_fraction=frac)
     print(f"\nidentity acquired  SIM(golden, learner)    : {t['sim_to_learner']:.3f}"
           f"   (source started at {t['sim_source_to_learner']:.3f})")
-    print(f"identity shed      SIM(golden, native tts) : {t['sim_to_source']:.3f}")
     print(f"identity gain (golden - native tts)        : {t['identity_gain']:+.3f}")
     print(f"WER cost      (golden - native tts)        : {t['wer_cost']:+.3f}")
+    # Per utterance, not from the means: the means can favour the learner while
+    # most individual utterances do not.
+    n_blend = round(frac * len(rows))
+    print(f"closer to source than learner              : {n_blend}/{len(rows)} "
+          f"utterances ({frac:.0%})")
     print(f"verdict: {t['verdict']}")
 
     print(f"\nvs plain cloning: golden SIM {m('sim_golden'):.3f} vs "

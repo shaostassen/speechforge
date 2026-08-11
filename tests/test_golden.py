@@ -7,8 +7,9 @@ named.
 import numpy as np
 import pytest
 
-from speechforge.golden import (CeilingMissing, GoldenResult, golden_speech,
-                                golden_table, mean_ignoring_nan, trade_off)
+from speechforge.golden import (CeilingMissing, GoldenResult, blend_rate,
+                                golden_speech, golden_table, mean_ignoring_nan,
+                                trade_off)
 
 
 def _speech(seconds=6.0, sr=16000, amp=0.4, f0=180.0):
@@ -110,7 +111,8 @@ def test_no_identity_movement_is_named():
     # Failure mode 1: conversion did nothing. WER looks great precisely because
     # nothing happened, so a WER-only reading would call this a success.
     out = trade_off(sim_to_learner=0.60, sim_source_to_learner=0.90,
-                    wer_output=0.10, wer_source=0.10, sim_to_source=0.95)
+                    wer_output=0.10, wer_source=0.10, sim_to_source=0.95,
+                    blend_fraction=1.0)
     assert out["identity_gain"] < 0
     assert "did not move identity" in out["verdict"]
 
@@ -119,7 +121,8 @@ def test_damaged_speech_is_named_even_when_identity_moved():
     # Failure mode 2: it sounds like the learner and no longer says the words.
     # A similarity-only reading would call this a success.
     out = trade_off(sim_to_learner=0.92, sim_source_to_learner=0.55,
-                    wer_output=0.40, wer_source=0.10, sim_to_source=0.50)
+                    wer_output=0.40, wer_source=0.10, sim_to_source=0.50,
+                    blend_fraction=0.0)
     assert out["identity_gain"] > 0
     assert "damaged the speech" in out["verdict"]
 
@@ -130,7 +133,8 @@ def test_blend_is_named_even_though_identity_moved_and_wer_held():
     # resembles the source voice as much as the target. That is a blend of two
     # people, which sounds like neither, and both other axes call it a success.
     out = trade_off(sim_to_learner=0.82, sim_source_to_learner=0.60,
-                    wer_output=0.11, wer_source=0.10, sim_to_source=0.88)
+                    wer_output=0.11, wer_source=0.10, sim_to_source=0.88,
+                    blend_fraction=0.4)
     assert out["identity_gain"] > 0
     assert out["wer_cost"] < 0.03
     assert out["resembles_source_more"] is True
@@ -139,13 +143,15 @@ def test_blend_is_named_even_though_identity_moved_and_wer_held():
 
 def test_success_requires_all_three_axes():
     out = trade_off(sim_to_learner=0.90, sim_source_to_learner=0.60,
-                    wer_output=0.11, wer_source=0.10, sim_to_source=0.55)
+                    wer_output=0.11, wer_source=0.10, sim_to_source=0.55,
+                    blend_fraction=0.0)
     assert "largely intact" in out["verdict"]
 
 
 def test_modest_cost_is_distinguished_from_damage():
     out = trade_off(sim_to_learner=0.90, sim_source_to_learner=0.60,
-                    wer_output=0.16, wer_source=0.10, sim_to_source=0.55)
+                    wer_output=0.16, wer_source=0.10, sim_to_source=0.55,
+                    blend_fraction=0.0)
     assert "modest" in out["verdict"]
 
 
@@ -154,17 +160,17 @@ def test_identity_shed_cannot_be_silently_omitted():
     # parameter named sim_to_source, so shed went unmeasured while the module
     # docstring claimed to report it. A required argument makes that impossible.
     with pytest.raises(TypeError):
-        trade_off(0.9, 0.6, 0.11, 0.10)
+        trade_off(0.9, 0.6, 0.11, 0.10)   # missing shed AND blend rate
 
 
 def test_no_single_figure_of_merit_is_produced():
     # Weighting "sounds like them" against "still says the words" is a product
     # decision. A combined score would bury it, so the API must not offer one.
-    out = trade_off(0.9, 0.6, 0.11, 0.10, 0.55)
+    out = trade_off(0.9, 0.6, 0.11, 0.10, 0.55, 0.0)
     assert "score" not in out and "overall" not in out
     assert {"sim_to_learner", "sim_source_to_learner", "sim_to_source",
-            "identity_gain", "resembles_source_more", "wer_output",
-            "wer_source", "wer_cost", "verdict"} == set(out)
+            "identity_gain", "resembles_source_more", "blend_fraction",
+            "wer_output", "wer_source", "wer_cost", "verdict"} == set(out)
 
 
 # --- the table must anchor its own similarity column -------------------------
@@ -200,6 +206,50 @@ def test_ceiling_survives_speakers_that_could_not_supply_one():
     # for the speakers that did supply a second recording.
     rows = _rows(3) + [dict(_rows(1)[0], sim_learner_real=float("nan"))]
     assert "0.930" in golden_table(rows)
+
+
+def test_blend_rate_catches_what_the_means_hide():
+    # The real n=72 shape: mean similarity favours the learner (0.824 vs 0.802)
+    # while a majority of individual utterances are closer to the source. Two
+    # heavily overlapping distributions produce a mean gap that no single
+    # utterance need exhibit, so a verdict read off the means calls this a
+    # success. Half the rows lean each way by different margins.
+    rows = ([{"sim_golden": 0.95, "sim_golden_to_source": 0.60}] * 3 +
+            [{"sim_golden": 0.70, "sim_golden_to_source": 0.88}] * 5)
+    assert mean_ignoring_nan(rows, "sim_golden") > \
+        mean_ignoring_nan(rows, "sim_golden_to_source")   # means say "fine"
+    assert blend_rate(rows) == 0.625                       # utterances say otherwise
+
+    out = trade_off(sim_to_learner=mean_ignoring_nan(rows, "sim_golden"),
+                    sim_source_to_learner=0.60, wer_output=0.10,
+                    wer_source=0.10,
+                    sim_to_source=mean_ignoring_nan(rows, "sim_golden_to_source"),
+                    blend_fraction=blend_rate(rows))
+    assert out["resembles_source_more"] is False   # the mean test misses it
+    assert "majority" in out["verdict"]            # the per-utterance test does not
+
+
+def test_blend_rate_refuses_when_shed_was_never_measured():
+    with pytest.raises(CeilingMissing, match="blend rate is undefined"):
+        blend_rate([{"sim_golden": 0.8}])
+
+
+def test_shed_is_flagged_uninterpretable_without_a_synthetic_anchor():
+    # SIM(golden, native tts) compares two clips from the same TTS and vocoder,
+    # so shared synthesis artefacts inflate it regardless of retained identity.
+    # Without a same-pipeline different-speaker anchor the number must not be
+    # presented as if it meant something.
+    text = golden_table(_rows())
+    assert "UNINTERPRETABLE" in text
+
+
+def test_shed_is_reported_against_the_anchor_when_present():
+    rows = [dict(r, sim_golden_to_source=0.80, sim_ltts_to_source=0.77)
+            for r in _rows()]
+    text = golden_table(rows)
+    assert "UNINTERPRETABLE" not in text
+    assert "0.770" in text          # the anchor
+    assert "+0.030" in text         # only the excess can be retained identity
 
 
 def test_mean_ignores_nan_and_reports_nan_when_empty():

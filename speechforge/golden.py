@@ -135,7 +135,7 @@ def golden_speech(tts_backend, vc_backend, text: str,
 
 def trade_off(sim_to_learner: float, sim_source_to_learner: float,
               wer_output: float, wer_source: float,
-              sim_to_source: float) -> dict:
+              sim_to_source: float, blend_fraction: float) -> dict:
     """Summarize the three-way trade-off, without collapsing it to one score.
 
     The three arguments carrying similarities are easy to confuse, so, precisely:
@@ -165,6 +165,15 @@ def trade_off(sim_to_learner: float, sim_source_to_learner: float,
     if identity_gain <= 0.0:
         verdict = ("conversion did not move identity toward the learner; "
                    "output still resembles the source voice")
+    elif blend_fraction > 0.5:
+        # Checked before the mean comparison because it is strictly more
+        # sensitive: a majority of utterances can be blends while the means still
+        # show the target ahead. "Majority" is the only line here that does not
+        # require inventing a cutoff.
+        verdict = (f"a majority of utterances ({blend_fraction:.0%}) are closer to "
+                   f"the source voice than to the learner — blending, not "
+                   f"conversion, even though the mean similarities favour the "
+                   f"learner")
     elif resembles_source_more:
         verdict = ("identity moved toward the learner but the output still "
                    "resembles its source at least as much — a blend, not a "
@@ -182,6 +191,7 @@ def trade_off(sim_to_learner: float, sim_source_to_learner: float,
             "sim_to_source": sim_to_source,
             "identity_gain": identity_gain,
             "resembles_source_more": resembles_source_more,
+            "blend_fraction": blend_fraction,
             "wer_output": wer_output,
             "wer_source": wer_source,
             "wer_cost": wer_cost,
@@ -192,6 +202,29 @@ def mean_ignoring_nan(rows: Sequence[dict], key: str) -> float:
     """Mean of ``key`` across ``rows``, skipping NaN. NaN if nothing is left."""
     vals = [r[key] for r in rows if key in r and r[key] == r[key]]
     return float(np.mean(vals)) if vals else float("nan")
+
+
+def blend_rate(rows: Sequence[dict]) -> float:
+    """Fraction of utterances whose output resembles its source at least as much
+    as its target.
+
+    Computed per utterance, never from the means, because the means hid exactly
+    this. At n=72 the mean similarities were 0.824 to the learner and 0.802 to
+    the source — a comfortable-looking margin — while **54% of individual
+    utterances were closer to the source**. Averaging two heavily overlapping
+    distributions yields a gap that no single utterance need exhibit, so a
+    verdict read off the means called a majority-blend outcome a success.
+    """
+    pairs = [(r["sim_golden"], r["sim_golden_to_source"]) for r in rows
+             if r.get("sim_golden", float("nan")) == r.get("sim_golden", float("nan"))
+             and r.get("sim_golden_to_source", float("nan"))
+             == r.get("sim_golden_to_source", float("nan"))]
+    if not pairs:
+        raise CeilingMissing(
+            "identity shed was not measured per utterance, so the blend rate is "
+            "undefined; the means alone cannot detect a majority blend."
+        )
+    return sum(1 for target, source in pairs if source >= target) / len(pairs)
 
 
 def golden_table(rows: Sequence[dict]) -> str:
@@ -232,4 +265,26 @@ def golden_table(rows: Sequence[dict]) -> str:
            f"— the SIM column is unreadable without it",
            f"headroom used by golden : {m('sim_golden') / ceiling:.1%} of ceiling",
            f"headroom used by cloning: {m('sim_learner_tts') / ceiling:.1%} of ceiling"]
+
+    # The identity-shed number needs its own anchor, and it is not the ceiling
+    # above. SIM(golden, native tts) compares two synthetic clips from the same
+    # TTS and vocoder, so it carries shared synthesis artefacts that no
+    # real-vs-synthetic pair does. Read against a real-speaker floor it looks
+    # alarmingly high whether or not any identity was retained. The honest
+    # anchor is two clones of DIFFERENT speakers from the SAME pipeline.
+    anchor = mean_ignoring_nan(rows, "sim_ltts_to_source")
+    shed = m("sim_golden_to_source")
+    out.append("")
+    if anchor == anchor:
+        out.append(f"identity shed  SIM(golden, native tts) : {shed:.3f}")
+        out.append(f"  synthetic different-speaker anchor   : {anchor:.3f}  "
+                   f"(learner clone vs native clone — same pipeline, "
+                   f"different targets)")
+        out.append(f"  excess over anchor                   : {shed - anchor:+.3f}  "
+                   f"— only this part can be retained source identity")
+    else:
+        out.append(f"identity shed  SIM(golden, native tts) : {shed:.3f}  "
+                   f"** UNINTERPRETABLE: no synthetic different-speaker anchor "
+                   f"measured, so shared vocoder artefacts and retained source "
+                   f"identity cannot be separated **")
     return "\n".join(out)
