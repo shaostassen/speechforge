@@ -26,7 +26,7 @@ class FakeTTS:
     def __init__(self):
         self.calls = []
 
-    def synthesize(self, text, reference_path, seed=None):
+    def synthesize(self, text, reference_path, seed=None, reference_text=None):
         self.calls.append({"text": text, "seed": seed})
         t = np.arange(int(2.0 * self.sample_rate)) / self.sample_rate
         return (0.3 * np.sin(2 * np.pi * 200 * t)).astype(np.float32), self.sample_rate

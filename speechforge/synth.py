@@ -31,9 +31,16 @@ class Backend(Protocol):
     # CosyVoice and dots.tts documentation and does NOT hold for Chatterbox,
     # where 20 s references cut WER by 24% on the utterances it affected.
     ref_seconds: Optional[float]
+    # Whether the model needs a TRANSCRIPT of the reference clip, not just its
+    # audio. Chatterbox does not; CosyVoice 2's `inference_zero_shot` takes a
+    # `prompt_text` and conditions on it. Declared rather than inferred, because
+    # a caller that passes nothing gets quietly degraded audio, not an error.
+    needs_reference_text: bool
 
     def synthesize(self, text: str, reference_path: str,
-                   seed: Optional[int] = None) -> Tuple[np.ndarray, int]: ...
+                   seed: Optional[int] = None,
+                   reference_text: Optional[str] = None
+                   ) -> Tuple[np.ndarray, int]: ...
 
     def set_threads(self, n: int) -> None: ...
 
@@ -84,11 +91,15 @@ class ChatterboxBackend:
         # references exceeded it (0.126 -> 0.097), with the untruncated half
         # unchanged to three decimals as a control. The curve plateaus by 20 s.
         self.ref_seconds = 20.0
+        # Conditions on reference audio alone; a transcript would be ignored.
+        self.needs_reference_text = False
         self._device = device
         self._gen_kwargs = dict(gen_kwargs)
 
     def synthesize(self, text: str, reference_path: str,
-                   seed: Optional[int] = None) -> Tuple[np.ndarray, int]:
+                   seed: Optional[int] = None,
+                   reference_text: Optional[str] = None
+                   ) -> Tuple[np.ndarray, int]:
         """Synthesize, optionally seeded for reproducibility.
 
         Chatterbox samples at ``temperature=0.8`` by default, so the same text
@@ -128,7 +139,102 @@ class ChatterboxBackend:
         return f"{base} [chatterbox defaults]"
 
 
-BACKENDS = {"chatterbox": ChatterboxBackend}
+class CosyVoice2Backend:
+    """FunAudioLLM CosyVoice 2 (0.5B) — Apache-2.0 code and **Apache-2.0 weights**.
+
+    The best licence-to-quality ratio available: most competitive zero-shot models
+    pair permissive code with restricted checkpoints (F5-TTS and OmniVoice ship
+    `cc-by-nc-4.0` weights, XTTS-v2 is non-commercial for its outputs too). Both
+    halves being Apache-2.0 was verified on the model card, not taken from a
+    third-party summary — see docs/LICENSES.md.
+
+    Not pip-installable. It is a recursive repo clone whose `third_party/Matcha-TTS`
+    submodule must be on `sys.path`, so ``repo_dir`` points at that checkout. The
+    upstream `requirements.txt` also targets CUDA (cu121 index, `tensorrt-cu12`,
+    `onnxruntime-gpu`) and includes training-only packages; on a CPU box the
+    inference subset is much smaller, because `deepspeed` is training-only,
+    `vllm` is imported lazily inside methods, and `pyarrow` belongs to the dataset
+    pipeline. Only `openai-whisper` is a genuine top-level inference dependency.
+
+    **It needs the reference transcript.** `inference_zero_shot` takes a
+    `prompt_text` alongside the prompt audio and conditions on it, so this backend
+    sets ``needs_reference_text = True`` and refuses to guess when it is missing.
+    """
+
+    def __init__(self, device: str = "cpu", repo_dir: Optional[str] = None,
+                 model_dir: Optional[str] = None, **gen_kwargs):
+        import os
+        import sys
+
+        repo = repo_dir or os.environ.get("COSYVOICE_REPO", "")
+        if not repo or not os.path.isdir(repo):
+            raise SystemExit(
+                "CosyVoice 2 needs the cloned repo: pass repo_dir= or set "
+                "COSYVOICE_REPO. It is not installable from PyPI.")
+        # Both the repo root and the Matcha-TTS submodule have to be importable.
+        for p in (repo, os.path.join(repo, "third_party", "Matcha-TTS")):
+            if p not in sys.path:
+                sys.path.insert(0, p)
+
+        from cosyvoice.cli.cosyvoice import CosyVoice2
+
+        weights = model_dir or os.environ.get(
+            "COSYVOICE_MODEL",
+            os.path.join(repo, "pretrained_models", "CosyVoice2-0.5B"))
+        self._model = CosyVoice2(weights)
+        self.sample_rate = int(getattr(self._model, "sample_rate", 24000))
+        # No public statement of a reference tokenizer frame size, and guessing
+        # one would silently change how references are trimmed.
+        self.align_ms = None
+        # CosyVoice's own documentation is the source of the ~10 s figure, so
+        # unlike Chatterbox (measured at 20 s) this is the model's stated
+        # preference. Still worth measuring rather than trusting.
+        self.ref_seconds = 10.0
+        self.needs_reference_text = True
+        self._device = device
+        self._gen_kwargs = dict(gen_kwargs)
+
+    def synthesize(self, text: str, reference_path: str,
+                   seed: Optional[int] = None,
+                   reference_text: Optional[str] = None
+                   ) -> Tuple[np.ndarray, int]:
+        if not reference_text:
+            raise ValueError(
+                "CosyVoice 2 conditions on a transcript of the reference clip; "
+                "pass reference_text. Synthesizing without it degrades the "
+                "output silently rather than failing.")
+        if seed is not None:
+            import torch
+            torch.manual_seed(seed)
+
+        # inference_zero_shot is a generator yielding chunks, one per synthesized
+        # segment. Concatenate rather than taking the first, or long texts come
+        # back truncated with no error.
+        chunks = []
+        for out in self._model.inference_zero_shot(
+                text, reference_text, reference_path,
+                stream=False, **self._gen_kwargs):
+            wav = out["tts_speech"]
+            arr = (wav.detach().cpu().numpy() if hasattr(wav, "detach")
+                   else np.asarray(wav))
+            chunks.append(arr.astype(np.float32).ravel())
+        if not chunks:
+            raise RuntimeError("CosyVoice 2 produced no audio")
+        return np.concatenate(chunks), self.sample_rate
+
+    def set_threads(self, n: int) -> None:
+        import torch
+        torch.set_num_threads(n)
+
+    def describe(self) -> str:
+        base = "cosyvoice2-0.5B (Apache-2.0 code + weights)"
+        if self._gen_kwargs:
+            args = ", ".join(f"{k}={v}" for k, v in sorted(self._gen_kwargs.items()))
+            return f"{base} [{args}]"
+        return f"{base} [cosyvoice defaults]"
+
+
+BACKENDS = {"chatterbox": ChatterboxBackend, "cosyvoice2": CosyVoice2Backend}
 
 
 def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:
@@ -139,15 +245,27 @@ def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:
 
 def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
           out_path: Optional[str] = None, seed: Optional[int] = None,
-          ref_seconds: Optional[float] = None) -> Tuple[np.ndarray, int, dict]:
+          ref_seconds: Optional[float] = None,
+          reference_text: Optional[str] = None) -> Tuple[np.ndarray, int, dict]:
     """Synthesize ``text`` in the voice of ``reference``.
 
     The reference goes through ``reference.prepare`` first — trimmed, resampled,
     length-capped, normalized — because that is where clone quality is actually
     determined. The report comes back with the audio so a batch job can record
     *why* a particular clip produced a poor clone instead of guessing later.
+
+    ``reference_text`` is the transcript of the reference clip. Backends that
+    declare ``needs_reference_text`` require it — CosyVoice 2 conditions on it —
+    and this refuses rather than proceeding, because the failure mode is degraded
+    audio scored as a model result rather than an exception.
     """
     import soundfile as sf
+
+    if getattr(backend, "needs_reference_text", False) and not reference_text:
+        raise ValueError(
+            f"{backend.describe()} conditions on a transcript of the reference "
+            f"clip, but reference_text was not given. Refusing rather than "
+            f"synthesizing degraded audio that would be scored as a result.")
 
     # ref_seconds overrides the default cap. The default (10 s) comes from
     # CosyVoice and dots.tts documentation, which is not evidence about
@@ -167,7 +285,8 @@ def clone(backend: Backend, text: str, reference: np.ndarray, sr: int,
     import tempfile
     with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as tmp:
         sf.write(tmp.name, ref_audio, ref_sr)
-        wav, out_sr = backend.synthesize(text, tmp.name, seed=seed)
+        wav, out_sr = backend.synthesize(text, tmp.name, seed=seed,
+                                         reference_text=reference_text)
 
     if out_path:
         sf.write(out_path, wav, out_sr)

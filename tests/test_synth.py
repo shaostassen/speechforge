@@ -20,7 +20,7 @@ class FakeBackend:
         self.calls = []
         self.threads = None
 
-    def synthesize(self, text, reference_path, seed=None):
+    def synthesize(self, text, reference_path, seed=None, reference_text=None):
         import soundfile as sf
         ref, sr = sf.read(reference_path, dtype="float32")
         self.calls.append({"text": text, "ref_len": len(ref), "ref_sr": sr,
@@ -121,7 +121,7 @@ class SeedAwareBackend(FakeBackend):
         self.seeds = []
         self._n = 0
 
-    def synthesize(self, text, reference_path, seed=None):
+    def synthesize(self, text, reference_path, seed=None, reference_text=None):
         self.seeds.append(seed)
         self._n += 1
         import numpy as np
@@ -194,7 +194,7 @@ def test_load_backend_forwards_generation_kwargs():
         def __init__(self, device="cpu", **kw):
             seen.update(kw)
 
-        def synthesize(self, text, reference_path, seed=None):
+        def synthesize(self, text, reference_path, seed=None, reference_text=None):
             return np.zeros(10, np.float32), self.sample_rate
 
         def set_threads(self, n): pass
@@ -256,3 +256,42 @@ def test_backend_without_a_preference_falls_back_to_the_default():
     b = FakeBackend()          # declares no ref_seconds
     clone(b, "hello", _speech(25.0), 16000)
     assert b.calls[0]["ref_len"] / 24000 == pytest.approx(10.0, abs=0.3)
+
+
+# --- backends that need the reference transcript ----------------------------
+
+class FakeTextConditionedBackend(FakeBackend):
+    """A CosyVoice-shaped backend: conditions on the reference's transcript."""
+    needs_reference_text = True
+
+    def synthesize(self, text, reference_path, seed=None, reference_text=None):
+        out = super().synthesize(text, reference_path, seed=seed)
+        self.calls[-1]["reference_text"] = reference_text
+        return out
+
+    def describe(self):
+        return "fake-text-conditioned"
+
+
+def test_reference_text_reaches_a_backend_that_needs_it():
+    b = FakeTextConditionedBackend()
+    clone(b, "say this", _speech(4.0), 16000, reference_text="the reference said this")
+    assert b.calls[0]["reference_text"] == "the reference said this"
+
+
+def test_missing_reference_text_is_refused_not_silently_degraded():
+    # CosyVoice 2 conditions on a transcript of the prompt audio. Given none, it
+    # would still return audio — worse audio — which would be scored as a model
+    # result. An exception is the only outcome that cannot be mistaken for one.
+    b = FakeTextConditionedBackend()
+    with pytest.raises(ValueError, match="reference_text"):
+        clone(b, "say this", _speech(4.0), 16000)
+    assert b.calls == []
+
+
+def test_backends_that_do_not_need_text_are_unaffected():
+    # Widening the protocol must not force a transcript on Chatterbox-shaped
+    # backends, which ignore one.
+    b = FakeBackend()
+    clone(b, "say this", _speech(4.0), 16000)
+    assert b.calls[0]["text"] == "say this"
