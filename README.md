@@ -14,11 +14,12 @@ in every table.
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
 and four studies have results. 125 tests pass offline with no weights and no network.
 
-What is deliberately *not* claimed: a ranking between backends. Two are wired up
-(Chatterbox, CosyVoice 2) and one known asymmetry remains between them — see the warning
-below. The largest studies run at n=60-72 across 12 speakers, on two corpora, and their
-main product so far has been **six measurement errors of mine that the harness caught**,
-including one that had already been written into this README. Everything measured is in
+Two backends are wired up (Chatterbox, CosyVoice 2) and, with each at a *measured*
+reference cap, both land essentially on the ground-truth row — so what is reported
+between them is a trade-off, not a ranking. The largest studies run at n=60-72 across 12
+speakers on two corpora, and their main product so far has been **seven measurement
+errors of mine that the harness caught**, two of which had already been written up as
+findings before being refuted. Everything measured is in
 [`docs/VALIDATION.md`](docs/VALIDATION.md) with raw logs; model licences and exclusions
 are in [`docs/LICENSES.md`](docs/LICENSES.md).
 
@@ -82,18 +83,42 @@ Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handica
 `--text-case` makes the choice explicit and recorded, defaulting to `raw` so earlier
 numbers stay comparable.
 
-⚠️ **No ranking between the two backends is claimed yet.** In sentence case CosyVoice 2
-measures 0.212 against Chatterbox's 0.022, but one asymmetry is mine: the reference cap
-is 20 s for Chatterbox (**measured**) and 10 s for CosyVoice 2 (**taken from its docs,
-unmeasured here**). A 10× gap is far larger than the ~24% relative the cap moved on
-Chatterbox, so it probably isn't the explanation — but three borrowed numbers have
-already failed in this project, so a cap sweep comes before any ranking.
+**The second backend's "10× worse" was also my configuration.** CosyVoice 2 first
+measured 0.212 against Chatterbox's 0.022 — and I declined to publish that ranking
+because one asymmetry was mine: a 10 s reference cap taken from CosyVoice's own docs
+rather than measured. Splitting the run by whether that cap had truncated the reference:
 
-Its first run also logged `no frontend is avaliable`, my trimmed install having omitted
-`ttsfrd` and `wetext`. Re-running with `wetext` active gave **byte-identical** results:
-normalization is a no-op on plain sentence-case prose, so that defect was real and
-immaterial here. Two separate processes producing identical rows also makes this the
-project's strongest reproducibility check.
+| CosyVoice 2, 10 s cap | WER mean | WER median | n |
+|---|---|---|---|
+| reference **hit** the cap | **0.507** | 0.375 | 25 |
+| reference **under** the cap | **0.033** | **0.000** | 35 |
+
+`corr(seconds discarded, WER) = +0.870`. Cutting at a hard 10.0 s lands mid-phrase and
+the model over-generates — `corr(duration ratio, WER) = +0.861`, outputs up to 2.42×
+the expected length. Re-run without truncation, CosyVoice 2 measures **0.036**, and
+utterances above WER 0.5 go from 8 to **zero**. With each backend at a cap that was
+measured rather than borrowed:
+
+| system | reference cap | WER | WER-2 | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | 0.021 | 0.016 | **0.964** |
+| chatterbox | 20 s (measured optimum) | **0.022** | **0.022** | 0.949 |
+| cosyvoice2 | no truncation | 0.036 | 0.034 | **0.958** |
+
+Both sit essentially on the ground-truth row. What is left is a trade-off, not a
+ranking: Chatterbox lower WER, CosyVoice 2 higher similarity and nearer the SIM
+ceiling. One corpus, one language, n=60.
+
+That cap is the **fourth** constant taken from documentation rather than measured that
+turned out not to transfer — after the published SIM ceiling, the vendor RTF claim, and
+the original 10 s cap I had already caught once on Chatterbox and then reintroduced
+here. Four for four.
+
+CosyVoice 2's first run also logged `no frontend is avaliable`, my trimmed install
+having omitted `ttsfrd` and `wetext`. Re-running with `wetext` active gave
+**byte-identical** results: normalization is a no-op on plain sentence-case prose, so
+that defect was real and immaterial. Two processes producing identical rows also makes
+this the project's strongest reproducibility check.
 
 ⚠️ **The two ASRs are not independent on this corpus.** `hubert-large-ls960-ft` is
 trained on LibriSpeech, so their agreement here (0.021 vs 0.016) partly reflects domain
@@ -141,7 +166,7 @@ bias WER-based evaluation either.
 
 Kept here because they are the reason to trust anything above.
 
-Three came from trusting a number that was never measured here:
+Four came from trusting a number that was never measured here — the whole category has a perfect failure record:
 
 - **A vendor RTF claim was wrong by ~6×.** Chatterbox-Nano is advertised at 3× faster
   than realtime on 8 CPU cores; the installable checkpoint measured **2× slower** than
@@ -153,6 +178,11 @@ Three came from trusting a number that was never measured here:
   identical study runs gave AUROC 0.591 and 0.553 with the mean difference flipping
   sign. Synthesis is now seeded by default; pass `--seed -1` when the spread is the
   quantity you actually want.
+- **A documented reference-length "sweet spot" was catastrophic.** CosyVoice's own docs
+  say ~10 s; a hard 10 s cap cut references mid-phrase and drove the model into
+  autoregressive over-generation, costing **5.9× WER** (0.212 → 0.036). This is the same
+  mistake I had already caught and fixed on Chatterbox, then reintroduced for a new
+  backend because the vendor stated it.
 
 Three more came from studies that printed a plausible table while concealing their own
 gap — all in the golden-speaker work, all the same shape: a guardrail existed in the

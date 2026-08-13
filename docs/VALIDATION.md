@@ -887,3 +887,77 @@ similarity comparison produced a false finding — the first was SIM-r vs SIM-o.
 - EdAcc `learner real` WER stays high (0.225) because the corpus transcribes
   disfluencies verbatim; that arm is not comparable with the synthetic ones, and no
   claim above crosses that line.
+
+---
+
+# Run — 2026-08-12 — the CosyVoice 2 gap was my reference cap, and it is the fourth borrowed number to fail
+
+The comparison this project refused to publish, now measurable. LibriSpeech
+test-clean, 12 speakers × 5 held-out (**n = 60**, identical utterances in every
+row), sentence case, seed 1234, 9950X. Raw logs `eval_cosy_libri_ref30_9950x.txt`,
+`per_utterance_cosy_libri_ref30.json`.
+
+## Found by splitting the existing run, before spending compute
+
+CosyVoice 2's mean WER of 0.212 was not uniform mediocrity. Its **median was
+0.032** while its mean was 0.231 — the worst 10% of utterances carried 55% of the
+error mass. Splitting the same run by whether my 10 s cap had truncated the
+reference:
+
+| CosyVoice 2, 10 s cap | WER mean | WER median | n |
+|---|---|---|---|
+| reference **hit** the cap | **0.507** | 0.375 | 25 |
+| reference **under** the cap | **0.033** | **0.000** | 35 |
+
+`corr(seconds discarded, WER)` = **+0.870**. The mechanism is visible in the audio
+lengths: `corr(duration ratio, WER)` = **+0.861**, with outputs up to **2.42× the
+expected duration**. A hard cut at 10.0 s lands mid-phrase, and the model then
+over-generates — autoregressive looping. Chatterbox at its measured 20 s cap
+discards a median of 0.7 s and shows `corr` = +0.126, i.e. nothing.
+
+## Confirmed directly, and the subgroup prediction held
+
+Re-run with `--ref-seconds 30`, which truncates nothing on this corpus (longest
+reference used: 22.6 s):
+
+| | WER | WER-2 | SIM-o |
+|---|---|---|---|
+| ground truth | **0.021** | 0.016 | 0.964 |
+| cosyvoice2, 10 s cap | 0.212 | 0.204 | 0.957 |
+| **cosyvoice2, no truncation** | **0.036** | **0.034** | 0.958 |
+
+**5.9× better from removing my own truncation.** The untruncated subgroup predicted
+0.033; the clean run measured 0.036. The failure mode is gone: utterances above WER
+0.5 went 8 → **0**, over-long outputs 13 → **1**, worst duration ratio 2.42 → 1.42.
+
+## The comparison, finally stateable
+
+Each backend at a cap that was **measured rather than borrowed**:
+
+| system | reference cap | WER | WER-2 | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | 0.021 | 0.016 | **0.964** |
+| chatterbox | 20 s (measured optimum) | **0.022** | **0.022** | 0.949 |
+| cosyvoice2 | no truncation | 0.036 | 0.034 | **0.958** |
+
+Both sit essentially on the ground-truth row, and **the 10× difference reported
+earlier was entirely an artefact of my configuration.** What remains is a genuine
+trade-off rather than a ranking: Chatterbox has the lower WER, CosyVoice 2 the
+higher speaker similarity — and CosyVoice 2's 0.958 is nearer the ground-truth
+ceiling of 0.964. On one corpus, in one language, with n=60. Chatterbox's own sweep
+found its curve plateaus by 20 s, so its row is not disadvantaged by using 20 rather
+than 30.
+
+## Fourth borrowed number, same failure
+
+`ref_seconds = 10.0` for CosyVoice 2 came **from CosyVoice's own documentation**.
+That is the same mistake already made and fixed for Chatterbox — where measurement
+showed 20 s beats 10 s by 24% relative — reintroduced for a new backend because the
+vendor stated it. The running tally of constants taken from documentation or papers
+rather than measured here: published SIM ceiling (0.69–0.76, actual 0.89–0.98),
+vendor RTF claim (3× realtime, actual 2× slower), the original 10 s cap, and now
+this. **Four for four.**
+
+Refusing to publish the ranking while this was outstanding was correct for the
+stated reason — "unlikely is not measured". Ranking on the means would have reported
+a well-regarded model as 10× worse than it is.
