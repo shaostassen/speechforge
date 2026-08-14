@@ -191,3 +191,40 @@ def test_bounds_beyond_the_audio_are_clamped():
 def test_no_replacements_returns_the_original():
     base = np.full(1000, 0.5, dtype=np.float32)
     assert splice(base, 16000, []) == pytest.approx(base, abs=1e-6)
+
+
+# --- mapping ASR spans back to the words the learner meant to say ------------
+
+def _ref_words_for_span(*a, **k):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(
+        "eval_targeted",
+        str(__import__("pathlib").Path(__file__).resolve().parents[1]
+            / "scripts" / "eval_targeted.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.reference_words_for_span(*a, **k)
+
+
+@pytest.mark.skipif(
+    __import__("importlib").util.find_spec("speechlens") is None,
+    reason="needs speechlens for Levenshtein alignment")
+def test_correction_speaks_the_reference_word_not_the_misrecognition():
+    # The whole point: the span was flagged *because* the ASR misheard it, so
+    # synthesizing the ASR's own guess would faithfully reproduce the error.
+    ref = "SHE SELLS SEA SHELLS"
+    hyp = [{"word": w} for w in ["SHE", "CELLS", "SEA", "SHELLS"]]
+    out = _ref_words_for_span(ref, hyp, 1, 2)
+    assert out == "SELLS"
+
+
+@pytest.mark.skipif(
+    __import__("importlib").util.find_spec("speechlens") is None,
+    reason="needs speechlens for Levenshtein alignment")
+def test_a_deleted_word_inside_the_span_is_still_spoken():
+    # The learner dropped a word entirely. A correction that also drops it has
+    # corrected nothing, so the reference slice is taken contiguously.
+    ref = "THE QUICK BROWN FOX JUMPS"
+    hyp = [{"word": w} for w in ["THE", "QUICK", "FOX", "JUMPS"]]
+    out = _ref_words_for_span(ref, hyp, 1, 3)
+    assert "BROWN" in out
