@@ -1,0 +1,35 @@
+study=text_presentation  hardware=AMD Ryzen 9 9950X 16-Core Processor  backend=piper  corpus=librispeech  asr=large-v3  seed=1234  date=2026-08-14
+cmd: python repo/scripts/text_presentation.py --backend piper --corpus librispeech --speakers 12 --utterances 5 --asr-model large-v3 --threads 16 --seed 1234 --per-utterance /home/shao/speechforge/runs/present_piper.json
+
+speakers: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+
+backend: piper en_US-lessac-medium (VITS, non-autoregressive; GPL-3.0 CLI via subprocess)  sr=22050  needs_reference_text=False
+
+1089: 5 held-out
+1188: 5 held-out
+121: 5 held-out
+1221: 5 held-out
+1284: 5 held-out
+1320: 5 held-out
+1580: 5 held-out
+1995: 5 held-out
+2094: 5 held-out
+2300: 5 held-out
+237: 5 held-out
+260: 5 held-out
+
+per-utterance rows -> /home/shao/speechforge/runs/present_piper.json
+
+==================================================================
+TEXT PRESENTATION — piper on librispeech, n=60
+==================================================================
+  presentation      WER   dur ratio
+    real audio    0.021        1.00   <- must not move between arms
+           raw    0.051        0.75
+      sentence    0.036        0.74
+
+sentence case − raw caps: -0.015 WER  (1.4x better)
+improved on 12/60 utterances, worse on 7
+
+The real-audio row is the control: it reads no text, so if it differs
+between arms the difference is not presentation.

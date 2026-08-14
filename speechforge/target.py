@@ -29,6 +29,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import List, Optional, Sequence, Tuple
 
+import numpy as np
+
 
 @dataclass
 class Span:
@@ -145,3 +147,74 @@ def replacement_fraction(spans: Sequence[Span], total_words: int,
             # Stated, not assumed: every span boundary is a splice, and splices
             # are where concatenation artefacts live.
             "splice_points": 2 * len(spans)}
+
+
+def _crossfade_concat(chunks: Sequence[np.ndarray], n: int) -> np.ndarray:
+    """Join chunks, overlap-adding ``n`` samples at each junction.
+
+    Butt-joining two waveforms at an arbitrary sample produces a step
+    discontinuity, which is audible as a click — and a correction tool whose
+    output clicks at every repair is worse than one that repairs nothing. A short
+    equal-power-ish linear fade removes it.
+
+    The overlap costs ``n`` samples per junction, so the result is slightly
+    shorter than the sum of its parts. That is stated here because callers compute
+    replacement fractions from these lengths.
+    """
+    chunks = [np.asarray(c, dtype=np.float32).ravel() for c in chunks if len(c)]
+    if not chunks:
+        return np.zeros(0, dtype=np.float32)
+    out = chunks[0]
+    for nxt in chunks[1:]:
+        # Never fade over more than either side has, or the fade eats a whole
+        # chunk and the audio it carried disappears.
+        k = int(min(n, len(out), len(nxt)))
+        if k <= 0:
+            out = np.concatenate([out, nxt])
+            continue
+        fade = np.linspace(0.0, 1.0, k, dtype=np.float32)
+        head = out[:-k] if len(out) > k else np.zeros(0, dtype=np.float32)
+        joint = out[-k:] * (1.0 - fade) + nxt[:k] * fade
+        out = np.concatenate([head, joint, nxt[k:]])
+    return out.astype(np.float32)
+
+
+def splice(base: np.ndarray, sr: int,
+           replacements: Sequence[Tuple[float, float, np.ndarray, int]],
+           crossfade_ms: float = 20.0) -> np.ndarray:
+    """Replace time ranges of ``base`` with new audio.
+
+    ``replacements`` are ``(start_s, end_s, audio, audio_sr)``, and they must not
+    overlap — overlapping repairs would mean two different corrections claiming the
+    same moment, which has no defined answer. ``select_spans`` already merges
+    overlaps, so a caller hitting this error has built the list some other way.
+
+    **The output is not the same length as the input**, and cannot be: synthesized
+    speech does not take the same time as the words it replaces. Anything holding
+    timestamps into ``base`` — including the word timings the spans came from —
+    is invalid afterwards.
+    """
+    from speechforge.reference import resample
+
+    base = np.asarray(base, dtype=np.float32).ravel()
+    if sr <= 0:
+        raise ValueError("sample rate must be positive")
+    reps = sorted(replacements, key=lambda r: r[0])
+
+    chunks: List[np.ndarray] = []
+    cursor = 0
+    for start_s, end_s, audio, audio_sr in reps:
+        i0 = max(0, min(int(round(start_s * sr)), len(base)))
+        i1 = max(i0, min(int(round(end_s * sr)), len(base)))
+        if i0 < cursor:
+            raise ValueError(
+                f"overlapping replacement at {start_s:.3f}s: the previous one "
+                f"already covers this audio")
+        chunks.append(base[cursor:i0])
+        a = np.asarray(audio, dtype=np.float32).ravel()
+        if audio_sr != sr:
+            a = resample(a, audio_sr, sr)
+        chunks.append(a)
+        cursor = i1
+    chunks.append(base[cursor:])
+    return _crossfade_concat(chunks, int(round(crossfade_ms * sr / 1000.0)))

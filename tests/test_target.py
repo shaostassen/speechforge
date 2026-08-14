@@ -111,3 +111,83 @@ def test_degenerate_totals_are_refused():
         replacement_fraction([], total_words=0, total_duration_s=1.0)
     with pytest.raises(ValueError):
         replacement_fraction([], total_words=1, total_duration_s=0.0)
+
+
+# --- splicing corrected audio back in ---------------------------------------
+
+import numpy as np  # noqa: E402
+
+from speechforge.target import splice  # noqa: E402
+
+
+def test_replaced_region_carries_the_new_audio():
+    base = np.full(16000, 0.5, dtype=np.float32)
+    rep = np.full(4000, -0.5, dtype=np.float32)
+    out = splice(base, 16000, [(0.25, 0.5, rep, 16000)], crossfade_ms=0.0)
+    # Middle of the replacement, clear of any boundary.
+    assert out[4000 + 2000] == pytest.approx(-0.5, abs=1e-5)
+
+
+def test_audio_outside_the_span_is_untouched():
+    base = np.full(16000, 0.5, dtype=np.float32)
+    out = splice(base, 16000, [(0.5, 0.75, np.zeros(100, np.float32), 16000)],
+                 crossfade_ms=0.0)
+    assert out[:8000] == pytest.approx(np.full(8000, 0.5), abs=1e-6)
+
+
+def test_no_click_at_the_seam():
+    # The failure this exists to prevent: butt-joining two waveforms mid-cycle is
+    # a step discontinuity, and a repair tool that clicks at every repair is worse
+    # than one that repairs nothing.
+    base = np.full(16000, 1.0, dtype=np.float32)
+    rep = np.full(4000, -1.0, dtype=np.float32)
+    smooth = splice(base, 16000, [(0.25, 0.5, rep, 16000)], crossfade_ms=20.0)
+    abrupt = splice(base, 16000, [(0.25, 0.5, rep, 16000)], crossfade_ms=0.0)
+    assert np.max(np.abs(np.diff(smooth))) < np.max(np.abs(np.diff(abrupt)))
+
+
+def test_crossfade_never_consumes_a_whole_chunk():
+    # A fade longer than the audio it spans would delete the replacement.
+    base = np.full(2000, 0.5, dtype=np.float32)
+    rep = np.full(20, -0.5, dtype=np.float32)      # 1.25 ms at 16 kHz
+    out = splice(base, 16000, [(0.05, 0.06, rep, 16000)], crossfade_ms=500.0)
+    assert len(out) > 0 and np.all(np.isfinite(out))
+
+
+def test_overlapping_replacements_are_refused():
+    # Two corrections claiming the same moment has no defined answer.
+    base = np.zeros(16000, dtype=np.float32)
+    r = np.zeros(100, dtype=np.float32)
+    with pytest.raises(ValueError, match="overlapping"):
+        splice(base, 16000, [(0.1, 0.5, r, 16000), (0.3, 0.6, r, 16000)])
+
+
+def test_replacement_at_a_different_rate_is_resampled():
+    # Backends synthesize at their own rate (24 kHz Chatterbox, 22.05 kHz Piper);
+    # splicing without resampling would shift pitch and tempo of the repair.
+    base = np.zeros(16000, dtype=np.float32)
+    rep = np.full(24000, 0.3, dtype=np.float32)     # 1.0 s at 24 kHz
+    out = splice(base, 16000, [(0.25, 0.5, rep, 24000)], crossfade_ms=0.0)
+    # 0.75 s of base + ~1.0 s of resampled replacement
+    assert len(out) / 16000 == pytest.approx(1.75, abs=0.05)
+
+
+def test_spans_out_of_order_are_handled():
+    base = np.full(16000, 0.5, dtype=np.float32)
+    a = np.full(100, 0.1, dtype=np.float32)
+    b = np.full(100, 0.2, dtype=np.float32)
+    out = splice(base, 16000, [(0.6, 0.7, b, 16000), (0.1, 0.2, a, 16000)],
+                 crossfade_ms=0.0)
+    assert np.all(np.isfinite(out))
+
+
+def test_bounds_beyond_the_audio_are_clamped():
+    base = np.full(1000, 0.5, dtype=np.float32)
+    out = splice(base, 16000, [(0.5, 99.0, np.zeros(10, np.float32), 16000)],
+                 crossfade_ms=0.0)
+    assert np.all(np.isfinite(out))
+
+
+def test_no_replacements_returns_the_original():
+    base = np.full(1000, 0.5, dtype=np.float32)
+    assert splice(base, 16000, []) == pytest.approx(base, abs=1e-6)
