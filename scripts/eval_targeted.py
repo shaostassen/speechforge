@@ -171,9 +171,14 @@ def main() -> None:
             # numpy array straight to soundfile and raises.
             res = lens.analyze((audio, sr), language="en", cfg=cfg,
                                policy="auto")
-            words = [w for s in res.segments for w in (s.words or [])]
-            if not words or "reliability" not in (words[0] if words else {}):
-                print("  no per-word reliability available; skipping utterance")
+            # AnalysisResult exposes dicts, not objects: the scored words live in
+            # transcript["segments"][i]["words"], and `reliability` is a coverage
+            # summary rather than the per-word scores.
+            words = [w for s in res.transcript["segments"]
+                     for w in (s.get("words") or [])]
+            if not words or "reliability" not in words[0]:
+                print(f"  no per-word reliability "
+                      f"({res.reliability or 'no policy selected'}); skipping")
                 continue
 
             spans = select_spans(words, threshold=args.threshold,
