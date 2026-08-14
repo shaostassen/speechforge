@@ -261,12 +261,14 @@ class PiperBackend:
 
     def __init__(self, device: str = "cpu", voice: str = "en_US-lessac-medium",
                  data_dir: Optional[str] = None, **gen_kwargs):
-        import shutil
         import subprocess
 
         self.voice = voice
         self._data_dir = data_dir
-        self._python = shutil.which("python3") or sys.executable
+        # sys.executable, not shutil.which("python3"): piper is installed in the
+        # environment running this code, and `python3` on PATH is very often the
+        # system interpreter instead — which has no piper and fails at the probe.
+        self._python = sys.executable
         # Fail at construction, not at the first synthesis inside a study.
         probe = subprocess.run([self._python, "-m", "piper", "--help"],
                                capture_output=True, text=True)

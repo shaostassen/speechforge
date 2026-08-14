@@ -342,3 +342,28 @@ def test_piper_reads_its_sample_rate_from_the_voice_config(monkeypatch, tmp_path
     b = PiperBackend(voice="en_US-test-low", data_dir=str(tmp_path))
     assert b.sample_rate == 16000
     assert b.needs_reference_text is False
+
+
+def test_piper_uses_the_running_interpreter_not_system_python(monkeypatch, tmp_path):
+    # The bug this pins: preferring shutil.which("python3") picked the *system*
+    # interpreter, which has no piper installed, so construction failed on a box
+    # where piper was correctly installed in the active venv.
+    import json
+    import subprocess
+    import sys as _sys
+
+    from speechforge.synth import PiperBackend
+
+    (tmp_path / "v.onnx.json").write_text(json.dumps({"audio": {"sample_rate": 22050}}))
+    seen = {}
+
+    class OK:
+        returncode = 0
+        stderr = ""
+
+    def fake_run(cmd, *a, **k):
+        seen["cmd"] = cmd
+        return OK()
+    monkeypatch.setattr(subprocess, "run", fake_run)
+    PiperBackend(voice="v", data_dir=str(tmp_path))
+    assert seen["cmd"][0] == _sys.executable
