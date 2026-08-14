@@ -1013,3 +1013,67 @@ the comparison stands — but that file does not meet this project's own rule th
 every recorded run keeps its raw stdout with hardware, model and date. The original
 stdout predates the current archiving discipline and is not recoverable. Recorded
 here rather than left as a silently incomplete log.
+
+---
+
+# Study — 2026-08-14 — is the text-presentation effect specific to autoregressive TTS?
+
+The first *paired* test of the finding, and a test of what causes it. Earlier
+evidence compared separate runs post-hoc; this synthesizes the same utterance twice
+with the same seed, varying only the case of the input string, so a per-utterance
+difference cannot be sampling noise or utterance difficulty.
+
+| | |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, CPU |
+| corpus | LibriSpeech test-clean, 12 speakers x 5 — **n = 60**, identical in both arms |
+| ASR | `faster-whisper large-v3` int8 |
+| seed | 1234 |
+| raw logs | `present_chatterbox_librispeech_9950x.txt`, `present_piper_librispeech_9950x.txt` |
+
+| backend | architecture | raw `CAPS` | sentence | ratio | improved / worse / same | sign test |
+|---|---|---|---|---|---|---|
+| **chatterbox** | autoregressive (T3) | 0.109 | **0.025** | **4.4x** | 37 / 4 / 19 | **p = 1e-7** |
+| **piper** | non-autoregressive (VITS) | 0.051 | 0.036 | 1.4x | 12 / 7 / 41 | p = 0.36 |
+
+**The autoregressive model is hit hard and the non-autoregressive one is not
+measurably hit at all.** Chatterbox improves on 37 of 60 utterances against 4 that
+worsen — a result no reasonable amount of noise produces. Piper's 12-versus-7 is
+indistinguishable from chance, and its 1.4x rests on that.
+
+## The mechanism, not just the correlation
+
+Over-generation — output running well past the duration the text warrants — appears
+**only in the autoregressive model, and only on raw capitals**: 2/60 for Chatterbox
+on raw, **0/60** once cased, and **0/60 for Piper in both arms**. CosyVoice 2, also
+autoregressive, showed the same signature far more strongly (13/60, up to 2.42x
+duration, `corr(duration ratio, WER) = +0.861`).
+
+That is what the architecture predicts. An autoregressive decoder conditions each
+step on its own previous outputs, so unfamiliar input can push it into a state it
+never recovers from; VITS emits a whole utterance in one non-recurrent pass and
+structurally *cannot* run away. The effect and its proposed cause are both present
+in one family and both absent in the other.
+
+## The control reproduced for the fifth time
+
+The real-audio row measured **0.021** in both studies — identical, and identical to
+the ground-truth row of every other LibriSpeech run in this file. Real speech reads
+no text, so it cannot respond to presentation; that it never moves is what licenses
+attributing the synthetic arms' movement to presentation at all.
+
+## What this does not establish
+
+**One model is not a family.** Piper is a single non-autoregressive system, and a
+null result on one model is consistent with the architectural explanation without
+demonstrating it. A second non-AR model would strengthen this considerably.
+
+**The absolute WERs are not comparable across the two backends.** Piper does not
+clone: it reads in a fixed studio voice, which is an easier task than matching a
+target speaker, and that alone could explain its lower raw-caps WER (0.051 against
+0.109). Only the *within-backend* raw-to-sentence ratio is a fair comparison, which
+is why the ratio is what is reported.
+
+**Piper's voice carries its own licence.** `en_US-lessac-medium`, from
+`rhasspy/piper-voices`; the CLI is GPL-3.0-or-later and is invoked as a subprocess
+rather than imported. See docs/LICENSES.md.

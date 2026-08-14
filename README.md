@@ -91,6 +91,24 @@ Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handica
 `--text-case` makes the choice explicit and recorded, defaulting to `raw` so earlier
 numbers stay comparable.
 
+**And the effect looks specific to autoregressive TTS.** A paired study — same
+utterance, same seed, only the input's case differing — across two architectures:
+
+| backend | architecture | raw `CAPS` | sentence | ratio | sign test |
+|---|---|---|---|---|---|
+| chatterbox | autoregressive | 0.109 | **0.025** | **4.4×** | **p = 1e-7** |
+| piper | non-autoregressive (VITS) | 0.051 | 0.036 | 1.4× | p = 0.36 |
+
+Chatterbox improves on 37 of 60 utterances against 4 that worsen; Piper's 12-vs-7 is
+indistinguishable from chance. The mechanism tracks the architecture: **over-generation
+appears only in autoregressive models and only on raw capitals** — 2/60 for Chatterbox
+raw, 0/60 cased, 0/60 for Piper either way, and 13/60 for CosyVoice 2 at up to 2.42×
+duration. An AR decoder conditions on its own output and can run away; VITS emits in
+one pass and structurally cannot.
+
+Caveat kept in view: one non-AR model is not a family, and Piper doesn't clone, so only
+the within-backend ratio is a fair comparison.
+
 **The second backend's "10× worse" was also my configuration.** CosyVoice 2 first
 measured 0.212 against Chatterbox's 0.022 — and I declined to publish that ranking
 because one asymmetry was mine: a 10 s reference cap taken from CosyVoice's own docs
