@@ -961,3 +961,55 @@ this. **Four for four.**
 Refusing to publish the ranking while this was outstanding was correct for the
 stated reason — "unlikely is not measured". Ranking on the means would have reported
 a well-regarded model as 10× worse than it is.
+
+---
+
+# Run — 2026-08-14 — text presentation replicates on a second corpus
+
+EdAcc re-run in sentence case, matched to the raw-caps run above: same 12 speakers,
+5 held-out each (**n = 60**), scan 9000, seed 1234, `large-v3` + HuBERT-CTC. Raw log
+`eval_edacc_n60_cased_9950x.txt`, rows `per_utterance_edacc_cased.json`.
+
+| system | text as the model sees it | WER | WER-2 | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | 0.149 | 0.281 | 0.922 |
+| chatterbox | raw `ALL CAPS` | 0.369 | 0.427 | 0.862 |
+| **chatterbox** | **sentence case** | **0.093** | **0.126** | 0.858 |
+
+**A 4.0x reduction, replicating the LibriSpeech result on a completely different
+domain** — spontaneous, accented, real recording conditions rather than clean read
+speech. Both ASRs move together (0.369→0.093 and 0.427→0.126), so it is not a
+Whisper artefact.
+
+**The control held exactly.** The ground-truth row is *identical to three decimals
+in both runs* (0.149 / 0.281 / 0.922). Real audio does not read text, so it cannot
+respond to presentation; had it moved, something other than presentation would have
+changed between the runs. Speaker similarity is also near-unmoved (0.862 → 0.858),
+matching LibriSpeech (0.951 → 0.949): this is specifically an intelligibility
+effect, not a general quality shift.
+
+## The harness caught its own result crossing a line
+
+At 0.093 the synthesis row now sits **below** the 0.149 human row, and the table
+flagged it automatically:
+
+```
+chatterbox    60   0.093   0.126   0.858    (WER below human: not an intelligibility win)
+```
+
+That guardrail exists because modern TTS routinely scores better ASR-WER than real
+speech — clean read synthesis has none of the disfluencies, false starts and fillers
+that EdAcc transcribes verbatim, so the ASR has less to get wrong. **A WER below the
+ground-truth row is not evidence of better intelligibility**, and without the warning
+this run would read as "synthesis beats humans".
+
+## An archival defect in the raw-caps run
+
+`eval_edacc_n60_9950x.txt` begins mid-stream: no provenance banner, no `cmd:` line,
+and its first speaker row is missing. It lists 11 speakers x 5 held-out = 55 against
+a table reporting n=60; twelve speakers reconciles it, and the sentence-case run's
+speaker list is exactly those 11 plus `EDACC-C08-A`. So the two runs are matched and
+the comparison stands — but that file does not meet this project's own rule that
+every recorded run keeps its raw stdout with hardware, model and date. The original
+stdout predates the current archiving discipline and is not recoverable. Recorded
+here rather than left as a silently incomplete log.

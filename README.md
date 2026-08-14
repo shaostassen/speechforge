@@ -28,23 +28,31 @@ are in [`docs/LICENSES.md`](docs/LICENSES.md).
 **Cloning works, scored against the right baseline.** On EdAcc — spontaneous, accented,
 real recording conditions — cloning from a ~4 s conversational reference:
 
-| | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
-|---|---|---|---|
-| ground truth | 0.130 | 0.259 | 0.894 |
-| chatterbox | 0.346 | 0.383 | 0.844 |
+| | text as the model sees it | WER (Whisper) | WER (HuBERT-CTC) | SIM-o |
+|---|---|---|---|---|
+| ground truth | — | 0.149 | 0.281 | 0.922 |
+| chatterbox | raw `ALL CAPS` | 0.369 | 0.427 | 0.862 |
+| **chatterbox** | **sentence case** | **0.093** | **0.126** | 0.858 |
 
-⚠️ Measured on **raw `ALL CAPS`** corpus text, before that was found to cost Chatterbox
-~0.090 WER on LibriSpeech (below). The synthesis row here therefore understates the
-model; the ground-truth row is unaffected, since real audio does not read text. Kept as
-recorded rather than deleted — the comparison *between* presentations is what produced
-the finding.
+⚠️ **The 0.093 is not an intelligibility win**, and the harness says so itself — it
+sits *below* the 0.149 human row, which the table flags automatically. EdAcc
+transcribes disfluencies, false starts and fillers verbatim; clean synthesis has none
+of them, so the ASR has less to get wrong. Any WER beneath the ground-truth row means
+the comparison has stopped measuring intelligibility.
 
-**The second ASR changes the headline.** Synthesis is 2.7× worse than real speech under
-Whisper and 1.5× worse under HuBERT-CTC. Both are true; which you report is decided by
-your choice of evaluator. HuBERT has no language model to repair the disfluencies of
-real spontaneous speech, so it scores *real* audio far harder; synthetic speech is
-cleaner, leaving less to repair, and the two converge. Reporting one ASR alone hides
-that entirely — which is why the harness reports two.
+**The second ASR changes the headline.** On raw caps, synthesis is **2.5× worse** than
+real speech under Whisper but only **1.5× worse** under HuBERT-CTC. Both are true;
+which you report is decided by your choice of evaluator. HuBERT has no language model
+to repair the disfluencies of real spontaneous speech, so it scores *real* audio far
+harder; synthetic speech is cleaner, leaving less to repair, and the two converge.
+Reporting one ASR alone hides that entirely — which is why the harness reports two.
+
+Fix the text presentation and the ratio doesn't just shrink, it **inverts**: synthesis
+lands at 0.62× real under Whisper and 0.45× under HuBERT. That is not synthesis
+becoming more intelligible than people. It is the ratio ceasing to measure
+intelligibility once synthesis drops below the human row — which is exactly what the
+ground-truth row is there to reveal, and why "×  worse than real" is only meaningful
+above it.
 
 **Speaker similarity depends heavily on the reference, and my earlier reading was a
 small-sample artefact.** At n=60 the clone-to-real gap is **0.013 on LibriSpeech** and
@@ -200,12 +208,18 @@ The lesson that generalises: reach for the library's guardrail instead of re-pri
 the table by hand, and dump per-utterance rows *before* rendering — the last bug's bias
 check then costs a re-render instead of a 90-minute re-run.
 
-And one that is really the same lesson three times: **small samples are for choosing
-what to measure, never for a number that gets written down.** A "consistent ~0.05 SIM
-gap" (n=12) inverted at n=60. A "54% blend rate" fell to 22% under a measured bias
-correction. A probe putting CosyVoice 2 at 0.048 in sentence case (n=9) measured 0.212 at
-n=60 — right about the direction, 4.4× wrong about the size. All three were directionally
-useful and quantitatively worthless.
+And one that is really the same lesson twice: **small samples are for choosing what to
+measure, never for a number that gets written down.** A "consistent ~0.05 SIM gap"
+(n=12) inverted at n=60. A probe putting CosyVoice 2 at 0.048 in sentence case (n=9)
+measured 0.212 at n=60 — right about the direction, 4.4× wrong about the size. Both
+were directionally useful and quantitatively worthless.
+
+The sharpest one has its own shape: **a similarity comparison where one side shares a
+pipeline, a waveform, or a recording session with the thing being scored reads high for
+reasons that have nothing to do with identity.** That is SIM-r versus SIM-o, and it is
+also what inflated the "closer to the source" rate from a true **44%** to a spurious
+54%, and what made a same-pipeline pair look like retained identity until an anchor
+measured the artefact at +0.070.
 
 ## Why the licences get their own document
 

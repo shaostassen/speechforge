@@ -1,0 +1,50 @@
+study=eval_zeroshot  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)  backend=chatterbox  asr=large-v3  seed=1234  text_case=sentence  date=2026-08-14
+cmd: python repo/scripts/eval_zeroshot.py --corpus edacc --backend chatterbox --asr-model large-v3 --second-asr --speakers 12 --utterances 5 --scan 9000 --threads 16 --seed 1234 --text-case sentence --per-utterance /home/shao/speechforge/runs/edacc_cased.json
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+corpus=edacc  speakers=12  5 held-out utterances each
+speaker ids: ['EDACC-C08-A', 'EDACC-C08-B', 'EDACC-C10-B', 'EDACC-C10-A', 'EDACC-C02-A', 'EDACC-C02-B', 'EDACC-C19-A', 'EDACC-C19-B', 'EDACC-C20-A', 'EDACC-C20-B', 'EDACC-C21-B', 'EDACC-C21-A']
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/pkg_resources/__init__.py:2212: UserWarning: /home/shao/speechforge/repo/._speechforge.egg-info could not be properly decoded in UTF-8
+  warnings.warn(msg)
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/diffusers/models/lora.py:393: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
+  deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
+loaded PerthNet (Implicit) at step 250,000
+backend: chatterbox default, t3 backbone 532M [chatterbox defaults]  sr=24000
+speaker encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+second ASR: facebook/hubert-large-ls960-ft (CTC)
+speaker EDACC-C08-A: cloning from 5.3s, 5 held-out
+/home/shao/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:105: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
+  self.gen = func(*args, **kwds)
+`sdpa` attention does not support `output_attentions=True`. Please set your attention to `eager` if you want any of these features.
+  ref warnings: ['only 3.0s of speech after trimming; under 3s the voice is under-determined']
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/torch/nn/functional.py:5962: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+  ref warnings: ['only 3.0s of speech after trimming; under 3s the voice is under-determined']
+  ref warnings: ['only 3.0s of speech after trimming; under 3s the voice is under-determined']
+  ref warnings: ['only 3.0s of speech after trimming; under 3s the voice is under-determined']
+  ref warnings: ['only 3.0s of speech after trimming; under 3s the voice is under-determined']
+speaker EDACC-C08-B: cloning from 3.9s, 5 held-out
+speaker EDACC-C10-B: cloning from 4.0s, 5 held-out
+speaker EDACC-C10-A: cloning from 9.9s, 5 held-out
+speaker EDACC-C02-A: cloning from 15.0s, 5 held-out
+speaker EDACC-C02-B: cloning from 3.2s, 5 held-out
+speaker EDACC-C19-A: cloning from 14.5s, 5 held-out
+speaker EDACC-C19-B: cloning from 21.4s, 5 held-out
+  ref warnings: ['truncated 21.3s to 20.0s (longer references degrade cloning, not improve it)']
+  ref warnings: ['truncated 21.3s to 20.0s (longer references degrade cloning, not improve it)']
+  ref warnings: ['truncated 21.3s to 20.0s (longer references degrade cloning, not improve it)']
+  ref warnings: ['truncated 21.3s to 20.0s (longer references degrade cloning, not improve it)']
+  ref warnings: ['truncated 21.3s to 20.0s (longer references degrade cloning, not improve it)']
+speaker EDACC-C20-A: cloning from 6.1s, 5 held-out
+speaker EDACC-C20-B: cloning from 5.4s, 5 held-out
+speaker EDACC-C21-B: cloning from 13.1s, 5 held-out
+speaker EDACC-C21-A: cloning from 9.0s, 5 held-out
+per-utterance detail -> /home/shao/speechforge/runs/edacc_cased.json
+scoring...
+corpus=edacc (held-out)  hardware=AMD Ryzen 9 9950X 16-Core Processor (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.149   0.281   0.922      —   <- read every row against this
+            chatterbox    60   0.093   0.126   0.858      —   (WER below human: not an intelligibility win)
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.922), not the 0.69-0.76 seen in papers, which used a different encoder.
