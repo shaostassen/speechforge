@@ -32,6 +32,13 @@ eval = [
 # on a machine without a GPU, or pip pulls ~2.5 GB of unusable CUDA wheels.
 chatterbox = ["chatterbox-tts>=0.1.7"]
 
+# Piper is GPL-3.0-or-later (the MIT rhasspy/piper was archived 2025-10). It is an
+# optional extra and is invoked as a subprocess rather than imported, so a plain
+# install of this package pulls in no GPL code. See docs/LICENSES.md. Voices are
+# licensed separately and download on their own:
+#   python3 -m piper.download_voices en_US-lessac-medium
+piper = ["piper-tts>=1.3"]
+
 # Speaker similarity and predicted MOS both need torch.
 similarity = ["torch>=2.0", "torchaudio>=2.0", "transformers>=4.40"]
 

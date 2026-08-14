@@ -18,7 +18,7 @@ omitted. Audited 2026-08-07.
 |---|---|---|---|
 | **Chatterbox** (Resemble AI) | MIT | **MIT** | Local CPU cloning + voice conversion |
 | **CosyVoice 2** (0.5B) | Apache-2.0 | **Apache-2.0** | Second backend — quality comparison |
-| **Piper** (archived MIT build) | MIT | MIT | Non-cloning latency/quality baseline |
+| **Piper** (`piper-tts` ≥1.3) | **GPL-3.0-or-later** | per-voice, mostly CC BY 4.0 | Non-LLM control for the text-presentation audit |
 | **kNN-VC** | MIT | MIT | Training-free, explainable VC baseline |
 
 Chatterbox is the only family found with permissive *weights* and a vendor claim of
@@ -51,9 +51,9 @@ Two notes on Chatterbox that are easy to miss:
 - **Every output is watermarked** with Resemble's PerTh neural watermarker. Harmless,
   arguably a responsible-AI feature, but worth knowing in a project that also does
   signal analysis — the audio is not pristine.
-- The current `piper` development repo (`OHF-Voice/piper1-gpl`) is **GPL-3.0**. The
-  MIT-licensed `rhasspy/piper` was archived 2025-10-06. Use the archived MIT build, or
-  accept GPL.
+- **The released package cannot load `chatterbox-nano`**: `from_pretrained` takes only
+  `device` with a hardcoded repo id, and Nano ships an incompatible file layout. Its
+  MIT weights are real; the loader is the obstacle.
 
 ## Excluded, and why
 
@@ -88,3 +88,32 @@ The repo has also been quiet since 2025-12.
 Licences here drift — Fish Speech is the proof. Re-read the actual `LICENSE` file and
 the HuggingFace `cardData.license` field before any public claim or release, and update
 this table with the date checked. A repo badge is not evidence.
+
+## Piper relicensed from MIT to GPL-3.0 — caught by re-checking, not assumed
+
+This document existed because licence drift is real, and Piper is the second case
+after Fish Speech. The MIT `rhasspy/piper` repository was **archived read-only in
+October 2025**; development moved to `OHF-Voice/piper1-gpl`, and what
+`pip install piper-tts` fetches today (1.6.1) declares **`GPL-3.0-or-later`**,
+verified from PyPI's own metadata rather than a third-party summary or the older
+README. The earlier entry in this file said MIT, which was true when written and is
+now wrong — the fifth documented constant this project adopted and later found not
+to hold.
+
+**Consequence for this repo, and how it is handled.** GPL-3.0 is copyleft: importing
+Piper into `speechforge` and distributing the result would raise a real question about
+whether `speechforge` must itself be GPL. That question is contested for Python
+imports and not one to resolve casually in a portfolio project. So `PiperBackend`
+**invokes the `piper` CLI as a subprocess** instead of importing it. A process
+boundary is the widely accepted separation for GPL tools — the same relationship a
+project has with `ffmpeg` — and it costs almost nothing here, because the CLI
+(`python3 -m piper -m VOICE -f OUT.wav -- TEXT`) does exactly what is needed.
+
+Piper is also **not installed by default**: it is an optional extra, so a plain
+install of this package pulls no GPL code at all.
+
+**The voices are licensed separately from the code.** `rhasspy/piper-voices`
+checkpoints carry their own terms, mostly CC BY 4.0 (attribution) with some CC0 and
+some more restrictive, varying per voice and per dataset. As with F5-TTS and
+OmniVoice, **the restriction lives in the weights**, so the specific voice used in any
+recorded run is named in that run's provenance banner rather than left implicit.

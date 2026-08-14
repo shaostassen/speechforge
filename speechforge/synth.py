@@ -11,6 +11,7 @@ and they conflict, so importing this module must not import any of them.
 """
 from __future__ import annotations
 
+import sys
 from typing import Optional, Protocol, Tuple
 
 import numpy as np
@@ -234,7 +235,109 @@ class CosyVoice2Backend:
         return f"{base} [cosyvoice defaults]"
 
 
-BACKENDS = {"chatterbox": ChatterboxBackend, "cosyvoice2": CosyVoice2Backend}
+class PiperBackend:
+    """Piper — a **non-autoregressive** VITS model, here as an experimental control.
+
+    Not a cloning backend: its voice is fixed by the checkpoint, so the reference
+    audio is ignored and speaker similarity against a target is meaningless. It
+    earns its place for one question the cloning backends cannot answer.
+
+    Both other backends are transformer decoders — Chatterbox's T3, CosyVoice 2's
+    Qwen — and both degrade badly on unpunctuated UPPER CASE input (5.1x and 2.0x
+    WER on LibriSpeech). The obvious hypothesis is that this is a property of
+    *LLM-style* TTS, which reads prose and finds corpus capitals out of
+    distribution. Piper tests it: VITS has no autoregressive decoder, so it
+    structurally cannot over-generate — the failure that produced outputs 2.42x
+    their expected length. If Piper barely moves, the finding sharpens from "text
+    presentation matters" to "text presentation matters for LLM-based TTS", which
+    is the version that tells you which published comparisons to distrust.
+
+    **Invoked as a subprocess, deliberately.** `piper-tts` >= 1.3 is
+    `GPL-3.0-or-later` (the MIT `rhasspy/piper` was archived in October 2025).
+    Importing it into this package and distributing the result would raise a real
+    copyleft question; a process boundary is the accepted separation, and the CLI
+    does everything needed. See docs/LICENSES.md.
+    """
+
+    def __init__(self, device: str = "cpu", voice: str = "en_US-lessac-medium",
+                 data_dir: Optional[str] = None, **gen_kwargs):
+        import shutil
+        import subprocess
+
+        self.voice = voice
+        self._data_dir = data_dir
+        self._python = shutil.which("python3") or sys.executable
+        # Fail at construction, not at the first synthesis inside a study.
+        probe = subprocess.run([self._python, "-m", "piper", "--help"],
+                               capture_output=True, text=True)
+        if probe.returncode != 0:
+            raise SystemExit(
+                "piper CLI not available: pip install piper-tts, then "
+                f"python3 -m piper.download_voices {voice}\n{probe.stderr[:300]}")
+
+        # Piper voices are 16 kHz (x_low/low) or 22.05 kHz (medium/high); read it
+        # from the voice's own config rather than assuming, since a wrong rate
+        # silently changes pitch and duration.
+        self.sample_rate = self._read_voice_rate()
+        self.align_ms = None
+        self.ref_seconds = None
+        self.needs_reference_text = False
+        self._device = device
+        self._gen_kwargs = dict(gen_kwargs)
+
+    def _read_voice_rate(self) -> int:
+        import glob
+        import json
+        import os
+        roots = [self._data_dir] if self._data_dir else []
+        roots += [os.path.expanduser("~/.local/share/piper"), os.getcwd()]
+        for root in roots:
+            if not root:
+                continue
+            for cfg in glob.glob(os.path.join(root, "**", f"{self.voice}.onnx.json"),
+                                 recursive=True):
+                with open(cfg) as fh:
+                    return int(json.load(fh)["audio"]["sample_rate"])
+        # Medium-quality voices, the common default, are 22.05 kHz.
+        return 22050
+
+    def synthesize(self, text: str, reference_path: str,
+                   seed: Optional[int] = None,
+                   reference_text: Optional[str] = None
+                   ) -> Tuple[np.ndarray, int]:
+        """``reference_path`` is accepted and ignored — Piper does not clone.
+
+        Kept in the signature so this satisfies the same Protocol as the cloning
+        backends and can be dropped into the same studies unchanged.
+        """
+        import subprocess
+        import tempfile
+
+        import soundfile as sf
+
+        with tempfile.NamedTemporaryFile(suffix=".wav", delete=False) as out:
+            cmd = [self._python, "-m", "piper", "-m", self.voice, "-f", out.name]
+            if self._data_dir:
+                cmd += ["--data-dir", self._data_dir]
+            cmd += ["--", text]
+            r = subprocess.run(cmd, capture_output=True, text=True)
+            if r.returncode != 0:
+                raise RuntimeError(f"piper failed: {r.stderr[:400]}")
+            wav, sr = sf.read(out.name, dtype="float32")
+        return np.asarray(wav, dtype=np.float32).ravel(), int(sr)
+
+    def set_threads(self, n: int) -> None:
+        # onnxruntime threading lives in the subprocess; nothing to set here, and
+        # pretending otherwise would put a false claim in a provenance banner.
+        pass
+
+    def describe(self) -> str:
+        return (f"piper {self.voice} (VITS, non-autoregressive; "
+                f"GPL-3.0 CLI via subprocess)")
+
+
+BACKENDS = {"chatterbox": ChatterboxBackend, "cosyvoice2": CosyVoice2Backend,
+            "piper": PiperBackend}
 
 
 def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:

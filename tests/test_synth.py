@@ -295,3 +295,50 @@ def test_backends_that_do_not_need_text_are_unaffected():
     b = FakeBackend()
     clone(b, "say this", _speech(4.0), 16000)
     assert b.calls[0]["text"] == "say this"
+
+
+# --- Piper: non-cloning, subprocess-isolated -------------------------------
+
+def test_piper_is_registered_and_not_imported_at_module_load():
+    # The GPL boundary only holds if nothing imports piper. Registering the
+    # backend must not pull it in.
+    import sys as _sys
+
+    from speechforge.synth import BACKENDS
+    assert "piper" in BACKENDS
+    assert "piper" not in _sys.modules
+
+
+def test_piper_construction_fails_loudly_when_the_cli_is_absent(monkeypatch):
+    # Failing at construction beats failing on the first synthesis, halfway
+    # through a study that has already spent an hour of compute.
+    import subprocess
+
+    from speechforge.synth import PiperBackend
+
+    class Fail:
+        returncode = 1
+        stderr = "No module named piper"
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: Fail())
+    with pytest.raises(SystemExit, match="piper CLI not available"):
+        PiperBackend()
+
+
+def test_piper_reads_its_sample_rate_from_the_voice_config(monkeypatch, tmp_path):
+    # Piper voices are 16 kHz or 22.05 kHz depending on quality tier. Assuming
+    # one silently changes pitch and duration of every output.
+    import json
+    import subprocess
+
+    from speechforge.synth import PiperBackend
+
+    (tmp_path / "en_US-test-low.onnx.json").write_text(
+        json.dumps({"audio": {"sample_rate": 16000}}))
+
+    class OK:
+        returncode = 0
+        stderr = ""
+    monkeypatch.setattr(subprocess, "run", lambda *a, **k: OK())
+    b = PiperBackend(voice="en_US-test-low", data_dir=str(tmp_path))
+    assert b.sample_rate == 16000
+    assert b.needs_reference_text is False
