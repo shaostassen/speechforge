@@ -166,7 +166,11 @@ def main() -> None:
             # word_timestamps defaults to False, and without it speechlens returns
             # no per-word scores at all — correctly refusing to invent them, which
             # would have silently skipped every utterance in this study.
-            res = lens.analyze(audio, language="en", cfg=cfg, policy="auto")
+            # (array, sr) tuple, not a bare array: analyze() routes tuples through
+            # from_array and everything else through load_audio, which hands a
+            # numpy array straight to soundfile and raises.
+            res = lens.analyze((audio, sr), language="en", cfg=cfg,
+                               policy="auto")
             words = [w for s in res.segments for w in (s.words or [])]
             if not words or "reliability" not in (words[0] if words else {}):
                 print("  no per-word reliability available; skipping utterance")
