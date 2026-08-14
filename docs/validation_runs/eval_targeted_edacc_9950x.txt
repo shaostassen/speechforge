@@ -1,0 +1,147 @@
+study=eval_targeted  hardware=AMD Ryzen 9 9950X 16-Core Processor  asr=large-v3  seed=1234  threshold=0.5  pad_words=1  text_case=sentence  date=2026-08-14
+cmd: python repo/scripts/eval_targeted.py --speakers 8 --utterances 4 --asr-model large-v3 --threads 16 --seed 1234 --scan 9000 --threshold 0.5 --pad-words 1 --text-case sentence --per-utterance /home/shao/speechforge/runs/targeted.json
+
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+learners: ['EDACC-C08-A', 'EDACC-C08-B', 'EDACC-C10-B', 'EDACC-C10-A', 'EDACC-C02-A', 'EDACC-C02-B', 'EDACC-C19-A', 'EDACC-C19-B']
+pronunciation source: LibriSpeech 1089
+
+/home/shao/speechforge/.venv/lib/python3.12/site-packages/diffusers/models/lora.py:393: FutureWarning: `LoRACompatibleLinear` is deprecated and will be removed in version 1.0.0. Use of `LoRACompatibleLinear` is deprecated. Please switch to PEFT backend by installing PEFT: `pip install peft`.
+  deprecate("LoRACompatibleLinear", "1.0.0", deprecation_message)
+loaded PerthNet (Implicit) at step 250,000
+loaded PerthNet (Implicit) at step 250,000
+
+tts: chatterbox default, t3 backbone 532M [chatterbox defaults]
+vc : chatterbox-vc (MIT)
+enc: microsoft/wavlm-base-plus-sv @ 16000 Hz
+
+EDACC-C08-A: 4 held-out
+  no per-word reliability (no policy selected); skipping
+/home/shao/.local/share/uv/python/cpython-3.12.13-linux-x86_64-gnu/lib/python3.12/contextlib.py:105: FutureWarning: `torch.backends.cuda.sdp_kernel()` is deprecated. In the future, this context manager will be removed. Please see `torch.nn.attention.sdpa_kernel()` for the new context manager, with updated signature.
+  self.gen = func(*args, **kwds)
+`sdpa` attention does not support `output_attentions=True`. Please set your attention to `eager` if you want any of these features.
+
+
+
+
+
+
+
+
+
+
+
+
+EDACC-C08-B: 4 held-out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EDACC-C10-B: 4 held-out
+
+
+
+
+
+
+
+
+
+
+
+
+EDACC-C10-A: 4 held-out
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EDACC-C02-A: 4 held-out
+
+
+
+
+
+
+
+EDACC-C02-B: 4 held-out
+  no per-word reliability (no policy selected); skipping
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+EDACC-C19-A: 4 held-out
+  no per-word reliability (no policy selected); skipping
+
+
+
+
+
+
+
+
+EDACC-C19-B: 4 held-out
+
+
+
+
+
+
+
+
+
+
+
+
+per-utterance rows -> /home/shao/speechforge/runs/targeted.json
+
+======================================================================
+TARGETED vs WHOLE-UTTERANCE CORRECTION — n=29
+======================================================================
+             arm  SIM to learner      WER
+    learner real           0.917    0.176   <- identity ceiling
+    golden whole           0.838    0.045
+ golden targeted           0.909    0.253
+
+regenerated: 18.4% of words, 19.5% of audio, 2.3 seams per utterance
+utterances with nothing flagged: 8/29
+
+WER on the targeted arm is near-circular — flagged audio is replaced with
+speech synthesized from the reference transcript. Read it only as a check
+that splicing did not damage the surrounding audio.

@@ -1077,3 +1077,76 @@ is why the ratio is what is reported.
 **Piper's voice carries its own licence.** `en_US-lessac-medium`, from
 `rhasspy/piper-voices`; the CLI is GPL-3.0-or-later and is invoked as a subprocess
 rather than imported. See docs/LICENSES.md.
+
+---
+
+# Study — 2026-08-14 — targeted correction: identity is preserved, intelligibility is not
+
+Regenerate only the words a calibrated reliability policy flags, splice them into the
+learner's own recording, and compare against regenerating the whole utterance.
+
+| | |
+|---|---|
+| hardware | AMD Ryzen 9 9950X, 16 threads, CPU |
+| learners | 8 EdAcc speakers, 4 held-out each — **n = 29** scored |
+| selector | speechlens per-word reliability, `policy="auto"`, threshold 0.5, pad 1 word |
+| correction | `golden_speech` (Chatterbox TTS → ChatterboxVC) on the reference words |
+| ASR / encoder | `faster-whisper large-v3` int8 / `wavlm-base-plus-sv` |
+| raw logs | `eval_targeted_edacc_9950x.txt`, `per_utterance_targeted.json` |
+
+| arm | SIM to learner | WER |
+|---|---|---|
+| learner real *(identity ceiling)* | **0.917** | 0.176 |
+| golden whole | 0.838 | **0.045** |
+| **golden targeted** | **0.909** | **0.253** |
+
+Regenerated **18.4% of words / 19.5% of audio**, 2.3 seams per utterance; 8 of 29
+utterances had nothing flagged at all.
+
+## The identity claim holds
+
+Targeting reaches **0.909 against a 0.917 ceiling — 99% of the available identity**,
+where whole-utterance regeneration reaches 0.838 (91%). That is the engineering case
+for targeting, and it is confirmed: replacing a fifth of the audio costs almost none
+of the speaker.
+
+## The intelligibility claim fails, and the split says why
+
+WER on the targeted arm is **worse than leaving the audio alone** (0.253 vs 0.176).
+This is the arm whose WER was expected to be near-circular — flagged audio is replaced
+by speech synthesized *from the reference transcript*, so an ASR reading it back should
+score better almost mechanically. It scores worse. Splitting by whether anything was
+actually spliced:
+
+| | n | WER real → targeted | replaced |
+|---|---|---|---|
+| nothing flagged | 8 | 0.195 → 0.195 (**+0.000**) | 0% |
+| spliced | 21 | 0.169 → 0.275 (**+0.106**) | 26.9% |
+
+The untouched group is an exact no-op — identical WER *and* identical similarity —
+which rules out the pipeline damaging audio it does not touch, and confirms the
+damage is caused by splicing rather than by those utterances being harder.
+
+**And it is not the seams.** Damage scales with how much audio is replaced
+(`corr = +0.675`) and barely at all with how many boundaries are created
+(`corr = +0.109`). The crossfades are doing their job; the *replacement audio itself*
+is the problem.
+
+That is a specific diagnosis, because the same synthesis method scores **0.045** when
+it produces a whole utterance. Two or three words synthesized in isolation are not a
+small version of that — they get no surrounding context, so their prosody, pacing and
+duration do not fit the gap they are dropped into, and the mismatch costs more
+recognition than the mispronunciation did.
+
+## What to try next, and what not to conclude
+
+The fix this points at is **synthesize the whole utterance, then splice in only the
+corrected region from it**: the fragment then carries context-appropriate prosody and
+duration, at the cost of one extra full synthesis per utterance. That is a direct
+test of the diagnosis above and is the obvious next iteration.
+
+Not concluded here: whether the *right* words were selected. That needs labels for
+which words the learner actually mispronounced, which EdAcc does not carry — the same
+"ground truth is impossible by construction" limit `golden.py` documents. Low ASR
+confidence marks hard-to-recognise words, and mispronunciation is only one of the
+causes; this study measures the cost of acting on that signal, not its accuracy.

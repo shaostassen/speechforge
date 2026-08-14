@@ -12,7 +12,7 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and four studies have results. 125 tests pass offline with no weights and no network.
+and six studies have results. 155 tests pass offline with no weights and no network.
 
 Two backends are wired up (Chatterbox, CosyVoice 2) and, with each at a *measured*
 reference cap, both land essentially on the ground-truth row — so what is reported
@@ -180,6 +180,31 @@ waveform, so it shares its vocoder and prosody, a bias measured at **+0.070**. T
 substitution inflated the per-utterance "closer to the source" rate from **44% to 54%**
 and produced a spurious "majority blend" verdict, now retracted. The function that
 computes it refuses the unmatched input outright.
+
+**Correcting only the flagged words keeps the voice but loses the words.** The
+motivating product is fixing the two words a learner mispronounced, not regenerating
+all thirty. Using speechlens's calibrated per-word reliability to pick spans and
+splicing corrections into the learner's own recording, n=29:
+
+| arm | SIM to learner | WER |
+|---|---|---|
+| learner real *(identity ceiling)* | **0.917** | 0.176 |
+| golden whole | 0.838 | **0.045** |
+| **golden targeted** | **0.909** | **0.253** |
+
+Half the idea works: regenerating **19.5% of the audio** retains **99% of the identity
+ceiling**, against 91% for whole-utterance. The other half fails — the targeted arm is
+*less* intelligible than leaving the audio untouched, on the one arm whose WER should
+have improved almost mechanically, since the replacement is synthesized from the
+reference transcript.
+
+The per-utterance split diagnoses it. The 8 utterances with nothing flagged are an
+exact no-op (**+0.000** WER, identical SIM), so the damage is splicing, not difficulty.
+And damage scales with **how much** is replaced (`corr = +0.675`), not with how many
+seams (`corr = +0.109`) — so the crossfades are fine and the fragments are the problem.
+The same synthesizer scores 0.045 producing a *whole* utterance; two words generated in
+isolation get no surrounding context, so their prosody and duration do not fit the gap.
+Next iteration: synthesize the whole utterance, then splice in only the corrected region.
 
 **ASR confidence does not detect synthetic speech.** Holding the transcribed word
 *correct* — so accuracy can't explain the result — real and synthetic confidence
