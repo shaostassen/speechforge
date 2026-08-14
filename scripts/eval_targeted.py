@@ -135,6 +135,11 @@ def main() -> None:
                                      compute_type="int8")
 
     # Word-level reliability comes from the other project, policy and all.
+    # Word timestamps are OFF by default there and are what the whole selector
+    # depends on: without them speechlens returns no per-word scores rather than
+    # guessing, so this study would skip every utterance and report n=0.
+    from speechlens.asr import RobustnessConfig
+    cfg = RobustnessConfig(word_timestamps=True)
     lens = SpeechLens(model_size=args.asr_model, device="cpu",
                       compute_type="int8")
     print(f"tts: {tts.describe()}\nvc : {vc.describe()}\nenc: {enc.describe()}\n")
@@ -158,7 +163,10 @@ def main() -> None:
             other_audio, other_sr, _ = held[(j + 1) % len(held)]
             e_other = enc(other_audio, other_sr) if len(held) > 1 else None
 
-            res = lens.analyze(audio, language="en", policy="auto")
+            # word_timestamps defaults to False, and without it speechlens returns
+            # no per-word scores at all — correctly refusing to invent them, which
+            # would have silently skipped every utterance in this study.
+            res = lens.analyze(audio, language="en", cfg=cfg, policy="auto")
             words = [w for s in res.segments for w in (s.words or [])]
             if not words or "reliability" not in (words[0] if words else {}):
                 print("  no per-word reliability available; skipping utterance")
