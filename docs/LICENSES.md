@@ -12,6 +12,19 @@ So: every model is recorded here with **both** licences, and anything that canno
 used in a public portfolio project is listed with the reason rather than quietly
 omitted. Audited 2026-08-07.
 
+## This project's own licence
+
+**MIT** (`LICENSE`), same as the SpeechLens package it depends on.
+
+Nothing in the dependency set constrains that choice, which is the point of the audit
+below. Chatterbox is MIT on code *and* weights, CosyVoice 2 is Apache-2.0 on both, and
+the one copyleft dependency — Piper, `GPL-3.0-or-later` since the MIT repo was archived
+— is **invoked as a subprocess rather than imported**, so no GPL code is linked into
+this package and none is installed unless you ask for the `piper` extra.
+
+The models this project *drives* keep their own terms regardless, and so do their
+weights. An MIT licence here covers the harness, not the checkpoints it loads.
+
 ## In use
 
 | Model | Code | Weights | Role |
