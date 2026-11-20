@@ -323,6 +323,22 @@ pip install --index-url https://download.pytorch.org/whl/cpu torch==2.6.0 torcha
 pip install -e ".[chatterbox]"
 ```
 
+The diffusion backend, StyleTTS 2, is not on PyPI. It needs a clone of the MIT repo,
+the LibriTTS checkpoint from Hugging Face, and `espeak-ng`; its GPL-3.0 phonemizer is run
+as a subprocess, never imported (see [`docs/LICENSES.md`](docs/LICENSES.md)):
+
+```bash
+sudo apt install espeak-ng
+pip install -e ".[styletts2]"            # after the CPU torch line above
+python -m nltk.downloader punkt_tab
+git clone https://github.com/yl4579/StyleTTS2 ~/StyleTTS2
+mkdir -p ~/StyleTTS2/Models/LibriTTS && cd ~/StyleTTS2/Models/LibriTTS
+for f in config.yml epochs_2nd_00020.pth; do
+  curl -LO https://huggingface.co/yl4579/StyleTTS2-LibriTTS/resolve/main/Models/LibriTTS/$f
+done
+export STYLETTS2_REPO=~/StyleTTS2
+```
+
 The core install stays torch-free on purpose: you should be able to score a directory of
 wav files without a TTS stack. Backends pin conflicting torch and transformers versions,
 so they're optional extras and imported lazily — `speechforge.synth` does not import
