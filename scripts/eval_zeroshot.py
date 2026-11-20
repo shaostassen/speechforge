@@ -60,6 +60,15 @@ def hardware_label() -> str:
     return f"{cpu or platform.machine()} ({platform.system()})"
 
 
+def _parse_number(value: str):
+    for cast in (int, float):
+        try:
+            return cast(value)
+        except ValueError:
+            pass
+    return value
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -74,6 +83,11 @@ def main() -> None:
                         "for an evaluation")
     p.add_argument("--cfg-weight", type=float, default=None,
                    help="override classifier-free-guidance weight (default 0.5)")
+    p.add_argument("--gen", action="append", default=[], metavar="KEY=VALUE",
+                   help="any other backend setting, repeatable, e.g. --gen "
+                        "alpha=0 --gen beta=0 for StyleTTS 2. Values parse as "
+                        "numbers where they can. They reach the backend's "
+                        "describe(), and so the provenance banner")
     p.add_argument("--mos", action="store_true",
                    help="also predict MOS (UTMOS). A smoke alarm for broken "
                         "audio, not a ranking signal \u2014 it correlates poorly "
@@ -135,6 +149,11 @@ def main() -> None:
         gen["temperature"] = args.temperature
     if args.cfg_weight is not None:
         gen["cfg_weight"] = args.cfg_weight
+    for item in args.gen:
+        key, sep, value = item.partition("=")
+        if not sep or not key:
+            raise SystemExit(f"--gen expects KEY=VALUE, got {item!r}")
+        gen[key] = _parse_number(value)
     backend = load_backend(args.backend, device="cpu", **gen)
     backend.set_threads(args.threads)
     print(f"backend: {backend.describe()}  sr={backend.sample_rate}")
