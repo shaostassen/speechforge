@@ -12,7 +12,7 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and eight studies have results. 190 tests pass offline with no weights and no network.
+and eight studies have results. 198 tests pass offline with no weights and no network.
 
 Three cloning backends are wired up — Chatterbox and CosyVoice 2, both autoregressive,
 and **StyleTTS 2, a non-autoregressive model whose voice comes from a diffusion

@@ -50,6 +50,10 @@ class GroundTruthMissing(RuntimeError):
     """Raised when a table would render without its ground-truth row."""
 
 
+class ScorerUnavailable(RuntimeError):
+    """Raised when a scorer the run asked for cannot be loaded."""
+
+
 @dataclass
 class SystemScores:
     name: str
@@ -201,6 +205,26 @@ def score_intelligibility(transcribe, pairs: Sequence[tuple]) -> float:
     return wer(" ".join(refs), " ".join(hyps))
 
 
+def require_scorer(what: str, load, opt_out: str):
+    """Load a scorer the run asked for, or stop the run with ``ScorerUnavailable``.
+
+    The trap: a column that comes back blank still renders. The table, the
+    provenance banner and the exit code all look like a finished run, and the
+    gap is found later, by whoever reads the log closely enough. This harness
+    used to warn and carry on; a speaker-encoder download blocked by the network
+    then let a study run on with no SIM column, and it was caught only by
+    reading the log mid-run. So a requested scorer is either measured or the run
+    stops before any synthesis, and leaving a column out is a decision made up
+    front — ``opt_out`` says how, and goes in the error.
+    """
+    try:
+        return load()
+    except Exception as exc:
+        raise ScorerUnavailable(
+            f"{what} failed to load ({type(exc).__name__}: {exc}). Fix that, "
+            f"or {opt_out} to run without it.") from exc
+
+
 def whisper_transcriber(model_size: str = "large-v3", device: str = "auto",
                         compute_type: str = "auto", language: str = "en"):
     """A ``(audio, sr) -> str`` backed by speechlens.
@@ -236,9 +260,9 @@ def mos_predictor(device: str = "cpu"):
     It is useful for one thing: catching output that is broken in a way WER does
     not see — buzzing, truncation, wrong speaking rate.
 
-    Returns a callable ``(audio, sr) -> float`` or raises, so a caller can treat
-    unavailability as a blank column rather than a failure. Loaded through
-    torch.hub, which needs network on first use.
+    Returns a callable ``(audio, sr) -> float`` or raises. A caller that asked
+    for MOS should load it through ``require_scorer`` rather than blank the
+    column. Loaded through torch.hub, which needs network on first use.
     """
     import torch
 
