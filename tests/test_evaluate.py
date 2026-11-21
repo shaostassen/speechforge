@@ -278,3 +278,44 @@ def test_require_scorer_catches_import_failures_too():
     with pytest.raises(ScorerUnavailable, match="ImportError"):
         require_scorer("second ASR", missing, "drop --second-asr")
 
+
+# --- the prosody block ----------------------------------------------------------
+
+def _table(**synth):
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, n_utterances=10,
+                                    pitch_range_st=6.0, pitch_gap_st=0.8,
+                                    words_per_s=2.7, jump_fraction=0.001))
+    t.add(SystemScores("m", wer=0.03, n_utterances=10, **synth))
+    return t
+
+
+def test_no_prosody_block_unless_prosody_was_measured():
+    # Every table rendered before prosody existed must render as it did.
+    t = EvalTable()
+    t.set_ground_truth(SystemScores("ground truth", wer=0.02, n_utterances=10))
+    t.add(SystemScores("m", wer=0.03, n_utterances=10))
+    assert "pitch range" not in t.render()
+
+
+def test_prosody_block_reads_against_the_ground_truth_row():
+    out = _table(pitch_range_st=4.5, pitch_gap_st=1.2, words_per_s=2.9,
+                 jump_fraction=0.002).render()
+    block = out[out.index("pitch range"):]
+    assert "6.00" in block and "4.50" in block      # human row and system row
+    assert block.index("ground truth") < block.index("4.50")
+    assert "read every row against this" in block
+    assert "unreliable" not in block
+
+
+def test_prosody_flags_a_broken_pitch_track():
+    out = _table(pitch_range_st=9.0, pitch_gap_st=1.0, words_per_s=2.8,
+                 jump_fraction=0.08).render()
+    assert "pitch tracking unreliable" in out
+
+
+def test_prosody_to_dict_round_trips_the_fields():
+    d = SystemScores("m", pitch_range_st=5.0, words_per_s=3.0).to_dict()
+    assert d["pitch_range_st"] == 5.0 and d["words_per_s"] == 3.0
+    assert d["pitch_gap_st"] is None
+

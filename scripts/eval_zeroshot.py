@@ -38,6 +38,7 @@ from speechforge.evaluate import (EvalTable, ScorerUnavailable,  # noqa: E402
                                   mos_predictor, require_scorer,
                                   score_intelligibility, score_naturalness,
                                   sim_o, whisper_transcriber)
+from speechforge.prosody import pitch_gap_st, prosody_scorer  # noqa: E402
 from speechforge.synth import clone, load_backend  # noqa: E402
 from speechforge.text import apply_case  # noqa: E402
 
@@ -59,6 +60,10 @@ def hardware_label() -> str:
     except Exception:
         cpu = ""
     return f"{cpu or platform.machine()} ({platform.system()})"
+
+
+def _round(v, p=3):
+    return None if v is None or v != v else round(float(v), p)
 
 
 def _parse_number(value: str):
@@ -96,6 +101,12 @@ def main() -> None:
     p.add_argument("--second-asr", action="store_true",
                    help="also score with HuBERT-CTC. Scoring TTS only with "
                         "Whisper measures partly Whisper's own tail")
+    p.add_argument("--prosody", action="store_true",
+                   help="also measure prosody: pitch range, pitch level against "
+                        "the held-out recording, speaking rate, each beside the "
+                        "same measurement on the real recordings. Needs the "
+                        "[prosody] extra; see speechforge/prosody.py for what it "
+                        "does and does not capture")
     p.add_argument("--no-sim", action="store_true",
                    help="skip speaker similarity. Without it, a speaker encoder "
                         "that fails to load stops the run before any synthesis "
@@ -191,11 +202,19 @@ def main() -> None:
         transcribe2 = require_scorer("second ASR", ctc_transcriber,
                                      "drop --second-asr")
         print("second ASR: facebook/hubert-large-ls960-ft (CTC)")
+
+    measure_prosody = None
+    if args.prosody:
+        measure_prosody = require_scorer("prosody (pYIN)", prosody_scorer,
+                                         "drop --prosody")
+        print("prosody: pYIN F0 (librosa) — pitch range, pitch gap, words/s")
     print()
 
     synth_pairs, real_pairs, reports = [], [], []
     synth_sims, real_sims = [], []
+    pros_rows = []          # one per synthesized utterance, when --prosody
     out_dir = Path(args.out_dir) if args.out_dir else None
+    real_cache = {}
     if out_dir:
         out_dir.mkdir(parents=True, exist_ok=True)
 
@@ -240,6 +259,29 @@ def main() -> None:
                     real_sims.append(sim_o(encoder, other[0], other[1],
                                            ho_audio, ho_sr))
 
+            if measure_prosody is not None:
+                # Real recordings are measured once each and reused: every
+                # held-out clip is both a target here and, for its neighbour,
+                # the "other recording" of the pitch-gap ground truth.
+                def real_prosody(k):
+                    key = (spk, k)
+                    if key not in real_cache:
+                        a, s, t = held[k]
+                        real_cache[key] = measure_prosody(a, s, t)
+                    return real_cache[key]
+
+                syn = measure_prosody(wav, sr, text)
+                real = real_prosody(j)
+                other_p = real_prosody((j + 1) % len(held)) if len(held) > 1 else None
+                pros_rows.append({
+                    "synth": syn, "real": real,
+                    "gap_synth": pitch_gap_st(syn.median_f0_hz, real.median_f0_hz),
+                    # Ground truth for the gap: another real recording of the
+                    # same speaker, as for SIM-o.
+                    "gap_real": (pitch_gap_st(other_p.median_f0_hz, real.median_f0_hz)
+                                 if other_p is not None else float("nan")),
+                })
+
     if args.per_utterance:
         # Decompose the aggregate. Whisper only, since the point is the shape of
         # the error distribution rather than a second opinion on its level.
@@ -247,9 +289,9 @@ def main() -> None:
 
         from speechlens.metrics import wer as _wer
         rows = []
-        for (swav, ssr, text), (rwav, rsr, _t), rep in zip(
-                synth_pairs, real_pairs, reports):
-            rows.append({
+        for i, ((swav, ssr, text), (rwav, rsr, _t), rep) in enumerate(zip(
+                synth_pairs, real_pairs, reports)):
+            row = {
                 "words": len(text.split()),
                 "ref_s": rep["duration_s"],
                 "ref_original_s": rep["original_duration_s"],
@@ -257,11 +299,28 @@ def main() -> None:
                 "real_audio_s": round(len(rwav) / rsr, 2),
                 "wer_synth": round(_wer(text, transcribe(swav, ssr)), 4),
                 "wer_real": round(_wer(text, transcribe(rwav, rsr)), 4),
-            })
+            }
+            if pros_rows:
+                pr = pros_rows[i]
+                row.update({"prosody_synth": pr["synth"].to_dict(),
+                            "prosody_real": pr["real"].to_dict(),
+                            "pitch_gap_synth": _round(pr["gap_synth"]),
+                            "pitch_gap_real": _round(pr["gap_real"])})
+            rows.append(row)
         Path(args.per_utterance).write_text(json.dumps(rows, indent=2))
         print(f"per-utterance detail -> {args.per_utterance}")
 
     print("\nscoring...")
+
+    def pmean(side, field):
+        vals = [getattr(r[side], field) for r in pros_rows]
+        vals = [v for v in vals if v is not None and v == v]
+        return float(np.mean(vals)) if vals else None
+
+    def gmean(key):
+        vals = [r[key] for r in pros_rows if r[key] == r[key]]
+        return float(np.mean(vals)) if vals else None
+
     table = EvalTable(corpus=f"{args.corpus} (held-out)",
                       hardware=hardware_label())
     table.set_ground_truth(SystemScores(
@@ -273,7 +332,11 @@ def main() -> None:
         mos=(score_naturalness(predict_mos, [(a, s) for a, s, _t in real_pairs])
              if predict_mos else None),
         n_utterances=len(real_pairs),
-        notes="real recordings, scored identically"))
+        notes="real recordings, scored identically",
+        pitch_range_st=pmean("real", "pitch_range_st"),
+        pitch_gap_st=gmean("gap_real"),
+        words_per_s=pmean("real", "words_per_s"),
+        jump_fraction=pmean("real", "jump_fraction")))
     table.add(SystemScores(
         name=args.backend,
         wer=score_intelligibility(transcribe, synth_pairs),
@@ -282,7 +345,11 @@ def main() -> None:
         sim_o=float(np.nanmean(synth_sims)) if synth_sims else None,
         mos=(score_naturalness(predict_mos, [(a, s) for a, s, _t in synth_pairs])
              if predict_mos else None),
-        n_utterances=len(synth_pairs)))
+        n_utterances=len(synth_pairs),
+        pitch_range_st=pmean("synth", "pitch_range_st"),
+        pitch_gap_st=gmean("gap_synth"),
+        words_per_s=pmean("synth", "words_per_s"),
+        jump_fraction=pmean("synth", "jump_fraction")))
 
     print()
     print(table.render())

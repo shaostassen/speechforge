@@ -1437,3 +1437,150 @@ the within-backend ratio is compared, as before.
 **The fix is the same either way.** Sentence case removes the spelled-out initialisms:
 espeak reads `it`, and a sentence-initial `It`, as a word. `--text-case sentence` was
 already the recommendation; this adds a second, independent reason for it.
+
+---
+
+# Study — 2026-11-21 — prosody, the axis the diffusion ablation could not see: diffusion flattens pitch, and varies it between seeds
+
+The diffusion ablation above ended on "this harness has no naturalness or prosody
+metric". This adds one — `speechforge/prosody.py`, `eval_zeroshot.py --prosody` — and
+uses it on the question it was missing for.
+
+| | |
+|---|---|
+| hardware | Intel Xeon @ 2.30 GHz, 4 threads, CPU — **a different host** from the 2.10 GHz runs above |
+| package | `librosa` 1.0.1 (pYIN, the harness's tracker); `pyworld` 0.3.5 (WORLD's Harvest — the cross-check only, a dev dependency) |
+| corpus | LibriSpeech test-clean, 12 speakers × 5 — **n = 60**; sentence case; seeds 1234 and 1235 |
+| arms | the diffusion ablation's own: off (`alpha = beta = 0`), default (0.3 / 0.7), full (1 / 1), each on both seeds |
+| raw logs | `diffusion_prosody_xeon.txt`, `per_utterance_diffusion_prosody.json`, `prosody_checks_xeon.txt`, `diffusion_prosody_truth_f0.npz`; the first tracker's run: `diffusion_prosody_first_tracker_xeon.txt`, `per_utterance_diffusion_prosody_first_tracker.json` |
+
+**Same audio as the published WER and SIM.** The script refuses to report unless every
+synthesized length matches the diffusion ablation's arm — and all **360 of 360** do,
+on a different CPU. With diffusion on, a clip's length depends on the sampled style
+vector, so equal lengths mean equal samples; sample values can still differ at
+floating-point rounding across hosts, which a length check cannot see.
+
+## What the harness measures now
+
+Per utterance, beside the same measurement on the speaker's real recording of the same
+text:
+
+- **pitch range** — 10th-to-90th percentile of F0 within the utterance, in semitones, so
+  register cancels. A monotone voice approaches 0. The target is the human row, not a
+  direction.
+- **pitch gap** — semitones between the clone's median F0 and the held-out recording's:
+  the speaker's register. Its ground truth is another recording of the same speaker, as
+  for SIM-o.
+- **words / s** — over the speech span, with the reference-preparation silence rule.
+- **jumps** — the share of 10 ms steps over 9 semitones: tracker errors, not prosody,
+  flagged above 4%.
+
+It renders as a separate block under the main table, only when `--prosody` is passed,
+so every earlier table renders unchanged. A requested prosody scorer that cannot load
+stops the run, like every other scorer.
+
+## The first tracker failed, and the model supplied the truth to show it
+
+Pitch trackers do not fail symmetrically on real and synthetic speech, and an octave
+error reads as livelier intonation — so the range is a percentile range rather than a
+standard deviation. That defence has a limit, and its own test found it: the first
+version claimed the range was unaffected below 10% bad frames. Measured, 2% of frames
+an octave off raise a standard deviation 32% and the range 4%; at 5%, 62% against 12%;
+at 10% both break. Hence the `jumps` column.
+
+Then the tracker itself failed. On a 4-utterance smoke run, pYIN over a fixed 50–500 Hz
+range read two renditions with **identical** pitch contours as **15.98 and 5.70
+semitones** of range. More than a tenth of one rendition's voiced frames sat exactly at
+the 50 Hz search floor, an octave under the speaker, and the vocoder's noise decided
+which frames fell there. The jump detector missed it: the pinned frames sat across
+unvoiced gaps, never adjacent to a correct one.
+
+**For synthetic audio the true pitch is known.** StyleTTS 2's vocoder drives its harmonic
+source with the F0 contour its predictor outputs, so `diffusion_prosody.py` saves that
+contour beside every clip — reading it leaves the audio byte-identical — and
+`prosody_checks.py` scores trackers against it. With diffusion off, the contour is also
+identical across seeds (60 of 60, as arrays), which gives a second test with a known
+answer of zero. Four candidates, fixed before the full run was analysed:
+
+| tracker | GPE | voices unvoiced frames | range error vs truth (mean / mean abs.) | utterances off > 2 st | noise floor, identical contours | median F0 error |
+|---|---|---|---|---|---|---|
+| pYIN, 50–500 Hz *(first version)* | 1.19% | 6.6% | +0.67 / 1.06 | 18 / 360 | 0.53 st | 0.38 st |
+| **pYIN, two-pass** | **0.54%** | **1.9%** | **+0.04 / 0.59** | **8 / 360** | **0.12 st** | 0.42 st |
+| Harvest, 50–500 Hz | 7.92% | 38.9% | +3.82 / 3.83 | 121 / 360 | 0.65 st | 0.24 st |
+| Harvest, two-pass | 5.71% | 35.0% | +1.38 / 1.46 | 17 / 360 | 0.43 st | 0.24 st |
+
+GPE: frames voiced in both whose F0 is off by more than 20%. Two-pass: a first pass at
+50–500 Hz, then a search between 0.75 × Q1 and 1.5 × Q3 of what it found.
+
+**The harness now uses two-pass pYIN.** Its range is unbiased against truth to 0.04 st,
+it rarely invents pitch, and its noise floor is a quarter of the first version's.
+Harvest voices over a third of the frames the vocoder leaves silent, which inflates its
+ranges; it stays as the cross-check, the way HuBERT stays beside Whisper. Harvest is
+better on median F0, by 0.2 st — small against the 2.6 st between two recordings of one
+speaker.
+
+**What the check cannot cover: real speech, which has no truth contour.** There, 3.9%
+of voiced frames sit at the adaptive floor — creak the tracker cannot follow — and the
+two tracker families agree on a *single* real utterance's range only loosely
+(r = +0.32), while agreeing on the mean over 60 within 0.55 st (9.52 against 8.97). Both
+separate two recordings of one speaker from recordings of two speakers by pitch gap
+(P = 0.85 and 0.93). Read the prosody columns as means, which is how the table reports
+them.
+
+## What diffusion does to prosody
+
+| arm | **true range** (model's contour) | true vs off | pYIN range | pYIN vs the speakers' own reading | pitch gap | words / s |
+|---|---|---|---|---|---|---|
+| ground truth (real) | — | | **9.52** | | 2.65 | 2.85 |
+| **diffusion off** | 7.72 | *control* | 7.90 | −1.63 (35 lower / 25 higher, p = 0.25) | 2.26 | 2.64 |
+| off, seed + 1 | 7.72 | identical | 7.94 | −1.58 (35 / 25, p = 0.25) | 2.23 | 2.64 |
+| **default** | 6.60 | **−1.13** (48 / 12, p = 3e-6) | 6.69 | **−2.84** (41 / 19, p = 0.006) | 2.30 | 2.74 |
+| default, seed + 1 | 6.12 | **−1.60** (52 / 8, p = 5e-9) | 5.92 | **−3.60** (49 / 11, p = 8e-7) | 2.04 | 2.74 |
+| **full** | 6.28 | **−1.45** (46 / 14, p = 4e-5) | 6.37 | **−3.16** (44 / 16, p = 4e-4) | 2.55 | 2.77 |
+| full, seed + 1 | 5.70 | **−2.03** (50 / 10, p = 2e-7) | 5.53 | **−3.99** (53 / 7, p = 8e-10) | 2.03 | 2.86 |
+
+Ranges in semitones; lower / higher count utterances; sign tests. The pYIN column sits
+within ±0.22 st of the true range on every arm, so the differences between arms survive
+measurement.
+
+**Diffusion makes StyleTTS 2 flatter, not livelier.** On the contour the model actually
+produced, default diffusion narrows the pitch range by 1.1–1.6 semitones against
+diffusion off, on 48–52 of 60 utterances; full diffusion by 1.5–2.0. Against the speakers
+themselves, diffusion off is not distinguishable from their own reading (−1.6 st under
+pYIN, +1.2 under Harvest, both n.s.), and both diffusion settings are flatter than the
+speakers under both trackers (pYIN −2.8 to −4.0, Harvest −1.6 to −2.6, every p < 0.01).
+So diffusion moves the prosody *away* from the human row.
+
+**What diffusion adds is variety between seeds.** With diffusion off the contour is
+identical on both seeds; with it on, never. Two seeds' renditions of one utterance
+differ in pitch level by **1.15 st** (default) and **1.67 st** (full), in length by 2.6%
+and 3.7%, and in pitch range by only 0.5–0.7 st. The variety is mostly *where* the voice
+sits and how fast it goes, not how much it moves.
+
+**Speaking rate moves toward the real reading** — 2.64 words/s with diffusion off,
+2.74–2.86 with it, against 2.85 for the speakers — the 7% slow-down the ablation saw as
+duration, now as rate.
+
+**The identity loss at full diffusion is not a register shift.** The full-diffusion arm
+on seed + 1 lost 0.031 SIM in the ablation; its pitch gap here is 2.03 st, inside the
+human row's 2.65. Whatever moved the voice away from the speaker was timbre — the half
+of the style vector `alpha` controls — not pitch.
+
+**The first tracker would have doubled the effect.** Under fixed-range pYIN, default
+diffusion read as 2.25 st flatter than off (`diffusion_prosody_first_tracker_xeon.txt`);
+the truth is 1.13. Fixed-range pYIN misreads diffusion-off audio more often (GPE 1.7%
+there against 0.9% on default), which inflated the control. The direction survived; the
+size did not.
+
+## What this does not establish
+
+**Flatter is not the same as less natural.** A p10–p90 range is one statistic of
+intonation; no listener heard these clips, and nothing here measures whether the
+intonation fits the sentence.
+
+**Why diffusion flattens is not tested.** Two seeds, one model, read speech, n = 60.
+
+**The comparison with the speakers rests on a tracker.** For synthetic audio the truth
+contour settles the arm differences; for real speech it does not exist, and the two
+trackers disagree on the sign of diffusion-off's difference from the speakers. Only the
+diffusion settings' difference from the speakers holds under both.

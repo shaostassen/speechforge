@@ -96,6 +96,7 @@ def test_a_working_encoder_still_runs(script, monkeypatch):
 @pytest.mark.parametrize("flag, loader, name", [
     ("--second-asr", "ctc_transcriber", "second ASR"),
     ("--mos", "mos_predictor", "MOS predictor"),
+    ("--prosody", "prosody_scorer", "prosody"),
 ])
 def test_a_requested_optional_scorer_that_fails_stops_the_run(
         script, monkeypatch, flag, loader, name):
@@ -105,3 +106,43 @@ def test_a_requested_optional_scorer_that_fails_stops_the_run(
     with pytest.raises(ScorerUnavailable, match=f"drop {flag}") as err:
         run(flag)
     assert name in str(err.value)
+
+
+# --- prosody, end to end ----------------------------------------------------------
+
+def _voice(f0_hz, seconds=1.5, sr=16000):
+    t = np.arange(int(seconds * sr)) / sr
+    y = sum(np.sin(2 * np.pi * k * f0_hz * t) / k for k in range(1, 9))
+    return (0.3 * y / np.max(np.abs(y))).astype(np.float32)
+
+
+@pytest.mark.skipif(importlib.util.find_spec("librosa") is None
+                    or importlib.util.find_spec("speechlens") is None,
+                    reason="needs librosa (prosody) and speechlens (WER)")
+def test_prosody_block_puts_a_wrong_register_next_to_the_human_row(
+        script, monkeypatch, capsys):
+    # The speaker reads at 120 Hz in every real recording; the clone comes out
+    # an octave up. The gap column must say 12 semitones for the clone and ~0
+    # for the human row (another recording of the same speaker).
+    mod, run = script
+    real = [(_voice(120.0), 16000, "ONE TWO THREE")] * 3
+    monkeypatch.setattr(mod.corpora, "load", lambda *a, **k: {"spk": real})
+    monkeypatch.setattr(mod, "clone",
+                        lambda *a, **k: (_voice(240.0), 16000,
+                                         {"warnings": [], "duration_s": 1.5,
+                                          "original_duration_s": 1.5}))
+    run("--no-sim", "--prosody")
+    out = capsys.readouterr().out
+    lines = out.splitlines()
+    head = next(i for i, line in enumerate(lines)
+                if line.split()[:1] == ["prosody"] and "pitch gap" in line)
+    block = lines[head:]
+    gt_line = next(line for line in block if "ground truth" in line)
+    clone_line = next(line for line in block if line.strip().startswith("chatterbox"))
+
+    def gap(line):   # columns: name n range gap words/s jumps
+        return float(line.split("<-")[0].split()[-3])
+
+    assert gap(gt_line) == pytest.approx(0.0, abs=0.2)
+    assert gap(clone_line) == pytest.approx(12.0, abs=0.3)
+

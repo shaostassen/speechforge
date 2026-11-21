@@ -63,12 +63,31 @@ class SystemScores:
     mos: Optional[float] = None
     n_utterances: int = 0
     notes: str = ""
+    # Prosody (speechforge.prosody): per-utterance means.
+    pitch_range_st: Optional[float] = None
+    pitch_gap_st: Optional[float] = None
+    words_per_s: Optional[float] = None
+    jump_fraction: Optional[float] = None   # tracker diagnostic, not prosody
 
     def to_dict(self) -> dict:
         return {"name": self.name, "wer": self.wer,
                 "wer_second": self.wer_second, "sim_o": self.sim_o,
                 "mos": self.mos, "n_utterances": self.n_utterances,
-                "notes": self.notes}
+                "notes": self.notes, "pitch_range_st": self.pitch_range_st,
+                "pitch_gap_st": self.pitch_gap_st,
+                "words_per_s": self.words_per_s,
+                "jump_fraction": self.jump_fraction}
+
+    def has_prosody(self) -> bool:
+        return any(v is not None for v in (self.pitch_range_st, self.pitch_gap_st,
+                                           self.words_per_s))
+
+
+# Pitch-tracking errors start to distort the pitch range past this share of
+# octave-sized frame steps. Each wrong frame is a jump in and a jump out, so
+# 4% of steps is ~2% of frames, where the range already reads ~4% high (and at
+# 5% of frames, 12% high — tests/test_prosody.py).
+JUMP_WARN = 0.04
 
 
 @dataclass
@@ -143,7 +162,45 @@ class EvalTable:
                          f"{PUBLISHED_SIM_CEILING[0]:.2f}-"
                          f"{PUBLISHED_SIM_CEILING[1]:.2f} seen in papers, which "
                          f"used a different encoder.")
+        if gt.has_prosody() or any(r.has_prosody() for r in self.rows):
+            lines += [""] + self._render_prosody()
         return "\n".join(lines)
+
+    def _render_prosody(self) -> List[str]:
+        # A separate block, shown only when prosody was measured, so every table
+        # rendered before it existed renders exactly as it did.
+        head = (f"{'prosody':>22} {'n':>5} {'pitch range':>12} {'pitch gap':>10} "
+                f"{'words/s':>8} {'jumps':>7}")
+        lines = [head, "-" * len(head)]
+
+        def fmt(s: SystemScores) -> str:
+            def n(v, w, p):
+                return f"{v:>{w}.{p}f}" if v is not None else f"{'—':>{w}}"
+            jumps = (f"{100 * s.jump_fraction:>6.2f}%" if s.jump_fraction is not None
+                     else f"{'—':>7}")
+            return (f"{s.name:>22} {s.n_utterances:>5} {n(s.pitch_range_st, 12, 2)} "
+                    f"{n(s.pitch_gap_st, 10, 2)} {n(s.words_per_s, 8, 2)} {jumps}")
+
+        gt = self.ground_truth
+        lines.append(fmt(gt) + "   <- read every row against this")
+        for r in self.rows:
+            line = fmt(r)
+            if r.jump_fraction is not None and r.jump_fraction > JUMP_WARN:
+                line += ("   (pitch tracking unreliable on this audio: "
+                         "check before reading the pitch columns)")
+            lines.append(line)
+        lines += [
+            "",
+            "  pitch range: p10-p90 of F0 within an utterance, semitones. Below the",
+            "    ground truth is flatter than the speakers, above is livelier; the",
+            "    target is the human row, not a direction.",
+            "  pitch gap: semitones between median F0 and the held-out recording's.",
+            "    The ground-truth row is another recording of the same speaker.",
+            "  words/s: over the speech span, leading and trailing silence trimmed.",
+            "  jumps: share of 10 ms steps over 9 semitones — tracker errors, not",
+            f"    prosody. Flagged above {100 * JUMP_WARN:.0f}%.",
+        ]
+        return lines
 
 
 def cosine(a: Sequence[float], b: Sequence[float]) -> float:
