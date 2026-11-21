@@ -56,6 +56,11 @@ styletts2 = [
 # Speaker similarity and predicted MOS both need torch.
 similarity = ["torch>=2.0", "torchaudio>=2.0", "transformers>=4.40"]
 
+# Prosody (pitch range, pitch level, speaking rate): pYIN from librosa (ISC), no
+# torch. scripts/prosody_checks.py also cross-checks against WORLD's Harvest via
+# pyworld (MIT; WORLD is modified-BSD), a dev-only dependency it imports itself.
+prosody = ["librosa>=0.10"]
+
 [tool.setuptools.packages.find]
 include = ["speechforge*"]
 
