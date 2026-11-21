@@ -51,6 +51,7 @@ def test_correct_only_drops_the_wrong_words():
     assert len(correct_only(samples)) == 2
 
 
+@needs_speechlens
 def test_contrast_uses_only_correct_words():
     # A wrong word with an extreme confidence must not move the result, or the
     # study collapses into a restatement of "synthetic speech has higher WER".

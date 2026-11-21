@@ -33,6 +33,7 @@ weights. An MIT licence here covers the harness, not the checkpoints it loads.
 | **CosyVoice 2** (0.5B) | Apache-2.0 | **Apache-2.0** | Second backend — quality comparison |
 | **Piper** (`piper-tts` ≥1.3) | **GPL-3.0-or-later** | per-voice, mostly CC BY 4.0 | Non-LLM control for the text-presentation audit |
 | **kNN-VC** | MIT | MIT | Training-free, explainable VC baseline |
+| **StyleTTS 2** (LibriTTS checkpoint) | MIT | **no licence — usage terms only**, see below | Diffusion backend: style diffusion, non-autoregressive |
 
 Chatterbox is the only family found with permissive *weights* and a vendor claim of
 better-than-realtime CPU synthesis. CosyVoice 2 has the best licence-to-quality ratio
@@ -68,6 +69,55 @@ Two notes on Chatterbox that are easy to miss:
   `device` with a hardcoded repo id, and Nano ships an incompatible file layout. Its
   MIT weights are real; the loader is the obstacle.
 
+## StyleTTS 2 — usable here, but the weakest weights licence in this table
+
+Audited 2026-11-20 from the README, the `LICENSE` file, the Hugging Face card
+(`yl4579/StyleTTS2-LibriTTS`) and issue #37, where the terms were argued out.
+
+- **Code: MIT** (`LICENSE`, and the author in #37: "The codebase itself is MIT").
+- **Weights: no licence of any kind is declared.** The HF card has no README and no
+  `license` field; #37 is titled "Possibly misleading license info", and a reply there
+  points out that the copyright default is all rights reserved and asks for an explicit
+  grant. None was given. What exists is a **usage condition** in the README: "Before
+  using these pre-trained models, you agree to inform the listeners that the speech
+  samples are synthesized by the pre-trained models, unless you have the permission
+  to use the voice you synthesize."
+- **When it binds is ambiguous, and the two readings disagree for this project.** The
+  README narrows it to voices "NOT in the training set, i.e., your reference speakers
+  are not from any open access dataset". The author's reason in #37 is the first half:
+  LibriTTS is CC BY 4.0, "so anyone has the right to use the voices inside the training
+  set", and the rule exists because "the model can also synthesize in voices not seen
+  during training". LibriSpeech test-clean speakers are **from an open-access dataset**
+  (exempt on the second reading) and **not in the training set** (bound on the first).
+- **Commercial use is not addressed** — asked in #37 in 2025, unanswered.
+
+How this repo complies: it takes the conservative reading and treats the rule as
+binding. It publishes numbers, not audio; any synthesized sample published from it
+must be labelled as synthesized. The weights are downloaded by the user from Hugging
+Face and never redistributed here. That makes it usable for this project's
+evaluation work. It does **not** make the checkpoint shippable in a product — for
+that it is behind Chatterbox (MIT weights) and CosyVoice 2 (Apache-2.0), and would
+need the author's explicit grant first.
+
+Two dependencies, handled like Piper's:
+
+- **`phonemizer` is GPL-3.0-or-later**, verified from its PyPI classifiers. Upstream's
+  own README says inference "depends on a GPL-licensed package, so it is not included
+  directly in this repository". `StyleTTS2Backend` therefore **runs phonemizer's own
+  `phonemize` CLI as a subprocess** and never imports it, and it is only installed by
+  the `styletts2` extra. The CLI output was checked byte-for-byte against upstream's
+  library call on all 2,620 LibriSpeech test-clean transcripts in both presentations:
+  zero mismatches. `espeak-ng` behind it is GPL-3.0 too, and is a system binary.
+- **The MIT `styletts2` package on PyPI was not used.** It avoids the GPL dependency by
+  phonemizing with gruut instead, and the authors warn of "lower quality due to
+  mismatch between phonemizer and gruut": the model was trained on espeak phonemes.
+  It also pins 2023-era `huggingface-hub`, `accelerate` and `langchain`.
+
+The text aligner, pitch extractor and PL-BERT that inference needs ship inside the MIT
+repo under `Utils/`. The checkpoint used in every recorded run is
+`epochs_2nd_00020.pth`, SHA-256 `1164ffe1…57dca0a`, which matches the LFS object id
+Hugging Face publishes for it.
+
 ## Excluded, and why
 
 | Model | Problem |
@@ -92,7 +142,19 @@ README. The main checkpoint is Emilia-trained, so assume CC-BY-NC until told oth
 There is also a `ZipVoice-LibriTTS` checkpoint, and LibriTTS is CC BY 4.0, so that
 variant is *plausibly* clean — unconfirmed.
 
-**Action:** open an issue on the repo asking (a) the weights licence and (b) whether the
+**Re-checked 2026-11-20 — half answered.** The HF card gained a licence section
+(last modified 2026-10-10): "Our code is released under the Apache 2.0 License. The
+pre-trained model is licensed under the CC-BY-NC due to constraints from its training
+data (Emilia)." So (a) is settled for the Emilia checkpoints: **CC-BY-NC, excluded.**
+(b) is not. The repo now also hosts `zipvoice_libritts` and `zipvoice_distill_libritts`,
+trained on LibriTTS alone, and the sentence speaks of "the pre-trained model" in the
+singular while giving Emilia as the reason. Read strictly, it covers every checkpoint;
+read by its stated reason, it covers none of the LibriTTS ones. The card's metadata
+still has no `license` field. Under the standing rule below, ambiguity is not a grant,
+so ZipVoice stays out — which is why the diffusion backend here is StyleTTS 2 rather
+than the better-fitting ZipVoice-LibriTTS.
+
+**Action (still open):** open an issue on the repo asking (a) the weights licence and (b) whether the
 LibriTTS checkpoint escapes the Emilia constraint. Revisit this table with the answer.
 The repo has also been quiet since 2025-12.
 

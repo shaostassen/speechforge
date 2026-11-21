@@ -1,0 +1,38 @@
+study=styletts2_checks:parity  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  date=2026-11-21
+cmd: python scripts/styletts2_checks.py parity --threads 4
+
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+177
+reference: /root/.cache/speechforge/LibriSpeech/test-clean/1221/135767/1221-135767-0014.flac
+
+           setting                       text    shipped vs upstream (off)       upstream on vs off
+   a=0.3 b=0.7 n=5 'StyleTTS 2 is a text to '                  max|diff| 0          max|diff| 0.003
+   a=0.3 b=0.7 n=5 'HE HOPED THERE WOULD BE '                  max|diff| 0        max|diff| 0.00413
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+   a=0.3 b=0.7 n=5 'He said "quite so," and '                  max|diff| 0        max|diff| 0.00143
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+   a=0.0 b=0.0 n=5 'StyleTTS 2 is a text to '                  max|diff| 0         max|diff| 0.0109
+   a=0.0 b=0.0 n=5 'HE HOPED THERE WOULD BE '                  max|diff| 0       max|diff| 0.000715
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+   a=0.0 b=0.0 n=5 'He said "quite so," and '                  max|diff| 0        max|diff| 0.00061
+  a=1.0 b=1.0 n=10 'StyleTTS 2 is a text to '                  max|diff| 0        max|diff| 0.00426
+  a=1.0 b=1.0 n=10 'HE HOPED THERE WOULD BE '                  max|diff| 0        max|diff| 0.00423
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+hiː sˈɛd `` kwˈaɪt sˈoʊ , '' ænd lˈɛft .
+  a=1.0 b=1.0 n=10 'He said "quite so," and '                  max|diff| 0        max|diff| 0.00173
+
+shipped backend vs upstream, same oneDNN setting: worst max|diff| = 0  (bit-exact)

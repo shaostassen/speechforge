@@ -10,8 +10,9 @@ import math
 import numpy as np
 import pytest
 
-from speechforge.evaluate import (EvalTable, GroundTruthMissing, SystemScores,
-                                  cosine, score_intelligibility, sim_o)
+from speechforge.evaluate import (EvalTable, GroundTruthMissing,
+                                  ScorerUnavailable, SystemScores, cosine,
+                                  require_scorer, score_intelligibility, sim_o)
 
 
 # --- cosine -----------------------------------------------------------------
@@ -244,3 +245,36 @@ def test_mos_column_still_renders_when_unavailable():
     t.add(SystemScores("m", wer=0.03, mos=None, n_utterances=10))
     out = t.render()
     assert "—" in out and "0.00" not in out
+
+
+# --- a requested scorer is measured or the run stops -------------------------
+
+def test_require_scorer_returns_what_loaded():
+    sentinel = object()
+    assert require_scorer("speaker encoder", lambda: sentinel, "pass --no-sim") is sentinel
+
+
+def test_require_scorer_refuses_rather_than_blanking():
+    # The old behaviour printed a warning and returned nothing, and the table
+    # still rendered — with an empty column that looked like a finished run.
+    def blocked():
+        raise OSError("403 from cas-server.example")
+
+    with pytest.raises(ScorerUnavailable) as err:
+        require_scorer("speaker encoder", blocked, "pass --no-sim")
+    msg = str(err.value)
+    assert "speaker encoder" in msg            # which scorer
+    assert "OSError" in msg and "403" in msg   # why
+    assert "pass --no-sim" in msg              # how to run without it on purpose
+    assert isinstance(err.value.__cause__, OSError)
+
+
+def test_require_scorer_catches_import_failures_too():
+    # A missing extra surfaces as ImportError at load time; that is the same
+    # blank column and gets the same refusal.
+    def missing():
+        raise ImportError("No module named 'torch'")
+
+    with pytest.raises(ScorerUnavailable, match="ImportError"):
+        require_scorer("second ASR", missing, "drop --second-asr")
+

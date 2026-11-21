@@ -1,0 +1,10 @@
+aligned 60 rows to their transcripts (speaker and word count match on every row)
+
+words espeak spells out in capitals, in these 60 transcripts: ['IT']
+
+mean per-utterance WER, split by whether the raw text contains a spelled-out word:
+    has a spelled word  n=13  raw 0.096  sentence 0.030  delta -0.067  better/worse 8/0  sign p=0.00781
+       no spelled word  n=47  raw 0.030  sentence 0.020  delta -0.010  better/worse 8/2  sign p=0.109
+                   all  n=60  raw 0.044  sentence 0.022  delta -0.022  better/worse 16/2  sign p=0.00131
+
+corr(spelled words, sentence - raw WER) = -0.351

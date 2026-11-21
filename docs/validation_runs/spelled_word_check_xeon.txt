@@ -1,0 +1,78 @@
+study=spelled_word_check  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  backend=styletts2  asr=large-v3  seed=1234  date=2026-11-21
+cmd: python scripts/spelled_word_check.py /home/user/sf-runs/per_utterance_present_styletts2.json --threads 4
+
+spelled-out words: ['IT']
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+
+1089  raw WER 0.375 (study 0.375, reproduced)  spelled in context 1/1  errors 3, at the spelled word 2
+  ref: stuff IT into you his belly counselled him
+  hyp: stuff i d into you his belly counseled him
+  heard as: ['i d']
+
+1188  raw WER 0.100 (study 0.100, reproduced)  spelled in context 1/1  errors 3, at the spelled word 0
+  ref: IT is the head of a parrot with a little flower in his beak from a picture of carpaccio s one of his series of the life of saint george
+  hyp: it is the head of a parrot with a little flower in his beak from a picture of carpaxios one of his series of the life of st george
+  heard as: ['it']
+
+1221  raw WER 0.057 (study 0.057, reproduced)  spelled in context 2/2  errors 2, at the spelled word 1
+  ref: the child had a native grace which does not invariably co exist with faultless beauty its attire however simple always impressed the beholder as if IT were the very garb that precisely became IT best
+  hyp: the child had a native grace which does not invariably co exist with faultless beauty its attire however simple always impressed the beholder as if it were the very garb that precisely became
+  heard as: ['it', '(deleted)']
+
+1580  raw WER 0.000 (study 0.000, reproduced)  spelled in context 0/1  errors 0, at the spelled word 0
+  ref: i had always known him to be restless in his manner but on this particular occasion he was in such a state of uncontrollable agitation that IT was clear something very unusual had occurred
+  hyp: i had always known him to be restless in his manner but on this particular occasion he was in such a state of uncontrollable agitation that it was clear something very unusual had occurred
+  heard as: ['it']
+
+1580  raw WER 0.071 (study 0.071, reproduced)  spelled in context 1/1  errors 1, at the spelled word 1
+  ref: i had to read IT over carefully as the text must be absolutely correct
+  hyp: i had to read id over carefully as the text must be absolutely correct
+  heard as: ['id']
+
+2094  raw WER 0.143 (study 0.143, reproduced)  spelled in context 1/1  errors 3, at the spelled word 2
+  ref: but the windows are patched with wooden panes and the door i think is like the gate IT is never opened
+  hyp: but the windows are patched with wooden panes and the door i think is like the gate eye he has never opened
+  heard as: ['eye he']
+
+2094  raw WER 0.048 (study 0.048, reproduced)  spelled in context 1/1  errors 2, at the spelled word 2
+  ref: for IT is a solid heavy handsome door and must once have been in the habit of shutting with a sonorous bang behind a liveried lackey who had just seen his master and mistress off the grounds in a carriage and pair
+  hyp: for aight he is a solid heavy handsome door and must once have been in the habit of shutting with a sonorous bang behind a liveried lackey who had just seen his master and mistress off the grounds in a carriage and pair
+  heard as: ['aight he']
+
+2094  raw WER 0.000 (study 0.000, reproduced)  spelled in context 1/1  errors 0, at the spelled word 0
+  ref: a large open fireplace with rusty dogs in IT and a bare boarded floor at the far end fleeces of wool stacked up in the middle of the floor some empty corn bags
+  hyp: a large open fireplace with rusty dogs in it and a bare boarded floor at the far end fleeces of wool stacked up in the middle of the floor some empty corn bags
+  heard as: ['it']
+
+2300  raw WER 0.121 (study 0.121, reproduced)  spelled in context 1/1  errors 4, at the spelled word 2
+  ref: the london plant was less temporary but not permanent supplying before IT was torn out no fewer than three thousand lamps in hotels churches stores and dwellings in the vicinity of holborn viaduct
+  hyp: the london plant was less temporary but not permanent supplying before i d was torn out no fewer than three thousand lamps in hotels churches stores and dwellings in the vicinity of holborn viaduct thank you
+  heard as: ['i d']
+
+2300  raw WER 0.105 (study 0.105, reproduced)  spelled in context 2/2  errors 4, at the spelled word 0
+  ref: the dynamo electric machine though small was robust for under all the varying speeds of water power and the vicissitudes of the plant to which IT belonged IT continued in active use until eighteen ninety nine seventeen years
+  hyp: the dynamo electric machine though small was robust for under all the varying speeds of water power and the vicissitudes of the plant to which it belonged it continued in active use until 1899 17 years
+  heard as: ['it', 'it']
+
+2300  raw WER 0.000 (study 0.000, reproduced)  spelled in context 2/2  errors 0, at the spelled word 0
+  ref: why if we erect a station at the falls IT is a great economy to get IT up to the city
+  hyp: why if we erect a station at the falls it is a great economy to get it up to the city
+  heard as: ['it', 'it']
+
+237  raw WER 0.067 (study 0.067, reproduced)  spelled in context 1/1  errors 2, at the spelled word 1
+  ref: then dear said missus whitney you must be kinder to her than ever think what IT would be for one of you to be away from home even among friends
+  hyp: then dear said mrs whitney you must be kinder to her than ever think what i it would be for one of you to be away from home even among friends
+  heard as: ['i it']
+
+237  raw WER 0.167 (study 0.167, reproduced)  spelled in context 2/2  errors 4, at the spelled word 4
+  ref: somehow of all the days when the home feeling was the strongest this day IT seemed as if she could bear IT no longer
+  hyp: somehow of all the days when the home feeling was the strongest this day i d seemed as if she could bear i d no longer
+  heard as: ['i d', 'i d']
+
+==================================================================
+13 utterances with a spelled-out word; 13/13 reproduce the study's raw-caps WER exactly
+occurrences of a spelled-out word: 17; spelled by espeak in context: 16; heard as something other than the word: 9
+raw-caps word errors in these utterances: 28; at a spelled word: 15 (54%)

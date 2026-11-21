@@ -1,0 +1,39 @@
+study=text_presentation  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  backend=styletts2  corpus=librispeech  asr=large-v3  seed=1234  date=2026-11-21
+cmd: python scripts/text_presentation.py --backend styletts2 --corpus librispeech --speakers 12 --utterances 5 --asr-model large-v3 --threads 4 --seed 1234 --per-utterance /home/user/sf-runs/per_utterance_present_styletts2.json
+
+speakers: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+backend: styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]  sr=24000  needs_reference_text=False
+
+1089: 5 held-out
+1188: 5 held-out
+121: 5 held-out
+1221: 5 held-out
+1284: 5 held-out
+1320: 5 held-out
+1580: 5 held-out
+1995: 5 held-out
+2094: 5 held-out
+2300: 5 held-out
+237: 5 held-out
+260: 5 held-out
+
+per-utterance rows -> /home/user/sf-runs/per_utterance_present_styletts2.json
+
+==================================================================
+TEXT PRESENTATION — styletts2 on librispeech, n=60
+==================================================================
+  presentation      WER   dur ratio
+    real audio    0.020        1.00   <- must not move between arms
+           raw    0.044        0.89
+      sentence    0.022        1.02
+
+sentence case − raw caps: -0.022 WER  (2.0x better)
+improved on 16/60 utterances, worse on 2
+
+The real-audio row is the control: it reads no text, so if it differs
+between arms the difference is not presentation.

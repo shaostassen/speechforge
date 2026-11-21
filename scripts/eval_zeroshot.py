@@ -33,8 +33,9 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from speechforge import corpora  # noqa: E402
-from speechforge.evaluate import (EvalTable, SystemScores,  # noqa: E402
-                                  ctc_transcriber, mos_predictor,
+from speechforge.evaluate import (EvalTable, ScorerUnavailable,  # noqa: E402
+                                  SystemScores, ctc_transcriber,
+                                  mos_predictor, require_scorer,
                                   score_intelligibility, score_naturalness,
                                   sim_o, whisper_transcriber)
 from speechforge.synth import clone, load_backend  # noqa: E402
@@ -60,6 +61,15 @@ def hardware_label() -> str:
     return f"{cpu or platform.machine()} ({platform.system()})"
 
 
+def _parse_number(value: str):
+    for cast in (int, float):
+        try:
+            return cast(value)
+        except ValueError:
+            pass
+    return value
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
@@ -74,6 +84,11 @@ def main() -> None:
                         "for an evaluation")
     p.add_argument("--cfg-weight", type=float, default=None,
                    help="override classifier-free-guidance weight (default 0.5)")
+    p.add_argument("--gen", action="append", default=[], metavar="KEY=VALUE",
+                   help="any other backend setting, repeatable, e.g. --gen "
+                        "alpha=0 --gen beta=0 for StyleTTS 2. Values parse as "
+                        "numbers where they can. They reach the backend's "
+                        "describe(), and so the provenance banner")
     p.add_argument("--mos", action="store_true",
                    help="also predict MOS (UTMOS). A smoke alarm for broken "
                         "audio, not a ranking signal \u2014 it correlates poorly "
@@ -81,6 +96,11 @@ def main() -> None:
     p.add_argument("--second-asr", action="store_true",
                    help="also score with HuBERT-CTC. Scoring TTS only with "
                         "Whisper measures partly Whisper's own tail")
+    p.add_argument("--no-sim", action="store_true",
+                   help="skip speaker similarity. Without it, a speaker encoder "
+                        "that fails to load stops the run before any synthesis "
+                        "— as does any scorer asked for with --mos or "
+                        "--second-asr — rather than leaving its column blank")
     p.add_argument("--asr-model", default="small",
                    help="large-v3 for publishable numbers; small to iterate")
     p.add_argument("--speakers", type=int, default=2)
@@ -135,35 +155,42 @@ def main() -> None:
         gen["temperature"] = args.temperature
     if args.cfg_weight is not None:
         gen["cfg_weight"] = args.cfg_weight
+    for item in args.gen:
+        key, sep, value = item.partition("=")
+        if not sep or not key:
+            raise SystemExit(f"--gen expects KEY=VALUE, got {item!r}")
+        gen[key] = _parse_number(value)
     backend = load_backend(args.backend, device="cpu", **gen)
     backend.set_threads(args.threads)
     print(f"backend: {backend.describe()}  sr={backend.sample_rate}")
 
-    encoder = None
-    try:
+    # Every scorer is loaded before any synthesis, and one that was asked for
+    # and fails stops the run (require_scorer): a blank column in a finished
+    # table is easy to miss, a failed run is not.
+    def _encoder():
         from speechforge.similarity import load_encoder
-        encoder = load_encoder()
+        return load_encoder()
+
+    encoder = None
+    if args.no_sim:
+        print("speaker encoder: off (--no-sim); SIM column will be blank")
+    else:
+        encoder = require_scorer("speaker encoder", _encoder, "pass --no-sim")
         print(f"speaker encoder: {encoder.describe()}")
-    except Exception as exc:
-        print(f"speaker encoder unavailable ({exc}); SIM column will be blank")
 
     transcribe = whisper_transcriber(model_size=args.asr_model, device="cpu",
                                      compute_type="int8")
     predict_mos = None
     if args.mos:
-        try:
-            predict_mos = mos_predictor()
-            print("naturalness: UTMOS (SpeechMOS) — sanity check only")
-        except Exception as exc:
-            print(f"MOS predictor unavailable ({exc}); MOS will be blank")
+        predict_mos = require_scorer("MOS predictor", mos_predictor,
+                                     "drop --mos")
+        print("naturalness: UTMOS (SpeechMOS) — sanity check only")
 
     transcribe2 = None
     if args.second_asr:
-        try:
-            transcribe2 = ctc_transcriber()
-            print("second ASR: facebook/hubert-large-ls960-ft (CTC)")
-        except Exception as exc:
-            print(f"second ASR unavailable ({exc}); WER-2 will be blank")
+        transcribe2 = require_scorer("second ASR", ctc_transcriber,
+                                     "drop --second-asr")
+        print("second ASR: facebook/hubert-large-ls960-ft (CTC)")
     print()
 
     synth_pairs, real_pairs, reports = [], [], []
@@ -262,4 +289,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except ScorerUnavailable as exc:
+        raise SystemExit(f"error: {exc}")

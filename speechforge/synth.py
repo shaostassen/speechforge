@@ -338,8 +338,12 @@ class PiperBackend:
                 f"GPL-3.0 CLI via subprocess)")
 
 
+# StyleTTS 2 lives in its own module: it carries an inference loop, a restricted
+# checkpoint loader and a GPL subprocess boundary. Importing it is torch-free.
+from speechforge.backends.styletts2 import StyleTTS2Backend  # noqa: E402
+
 BACKENDS = {"chatterbox": ChatterboxBackend, "cosyvoice2": CosyVoice2Backend,
-            "piper": PiperBackend}
+            "piper": PiperBackend, "styletts2": StyleTTS2Backend}
 
 
 def load_backend(name: str, device: str = "cpu", **gen_kwargs) -> Backend:

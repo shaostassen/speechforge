@@ -1,0 +1,11 @@
+study=styletts2_checks:memory  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  date=2026-11-21
+cmd: python scripts/styletts2_checks.py memory --utterances 24 --threads 4
+
+Each setting runs in a fresh process: RSS is per-process state, and a shared process
+would carry the first run's growth into the second.
+
+  oneDNN  after load      @4      @8     @12     @16     @20     @24     live tensors    RTF
+      on      2001MB    2497    3597    4097    4475    5257    5707    1648 -> 1648    1.008
+     off      2001MB    2125    2329    2447    2423    2331    2393    1648 -> 1648    0.917
+
+growth over 24 utterances: oneDNN on +3706 MB, off +392 MB (RSS in MB at each mark)

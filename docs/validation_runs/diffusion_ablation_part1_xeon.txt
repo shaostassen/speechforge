@@ -1,0 +1,39 @@
+study=diffusion_ablation  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  backend=styletts2  corpus=librispeech  asr=large-v3  seed=1234  text_case=sentence  date=2026-11-21
+cmd: python scripts/diffusion_ablation.py --corpus librispeech --speakers 12 --utterances 5 --asr-model large-v3 --threads 4 --seed 1234 --text-case sentence --per-utterance /home/user/sf-runs/per_utterance_diffusion_ablation.json
+
+speakers: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+  1089: reference 10.4s
+  1188: reference 10.7s
+  121: reference 8.5s
+  1221: reference 12.4s
+  1284: reference 8.1s
+  1320: reference 13.5s
+  1580: reference 8.9s
+  1995: reference 9.5s
+  2094: reference 22.6s
+  2300: reference 5.1s
+  237: reference 13.3s
+  260: reference 7.0s
+
+speaker encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/functional.py:5962: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+ground truth scored: 60 utterances
+
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+[no diffusion] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.0, beta=0.0, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/functional.py:5962: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+[default] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
+[full diffusion] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=1.0, beta=1.0, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
+[default, 10 steps] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=10, embedding_scale=1.0]  ref_cap=30.0s
+[no diffusion, seed+1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.0, beta=0.0, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
+[default, seed+1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
+[full diffusion, seed+1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=1.0, beta=1.0, diffusion_steps=5, embedding_scale=1.0]  ref_cap=30.0s
