@@ -1150,3 +1150,290 @@ which words the learner actually mispronounced, which EdAcc does not carry — t
 "ground truth is impossible by construction" limit `golden.py` documents. Low ASR
 confidence marks hard-to-recognise words, and mispronunciation is only one of the
 causes; this study measures the cost of acting on that signal, not its accuracy.
+
+---
+
+# Run — 2026-11-20 — StyleTTS 2, a diffusion backend: on the ground-truth row for WER, lowest SIM of the three
+
+| field | value |
+|---|---|
+| hardware | Intel Xeon @ 2.10 GHz, **4 threads**, Linux x86_64, no GPU — **not the 9950X** the earlier rows ran on |
+| package | `torch` 2.6.0+cpu, `transformers` 4.49.0, `yl4579/StyleTTS2` @ `5cedc71`, phonemizer 3.6.0 CLI, espeak-ng 1.51 |
+| model | `yl4579/StyleTTS2-LibriTTS` `epochs_2nd_00020.pth`, SHA-256 `1164ffe1…57dca0a` (matches the published LFS id) |
+| settings | upstream's LibriTTS demo values: `alpha=0.3`, `beta=0.7`, `diffusion_steps=5`, `embedding_scale=1.0`; reference cap 30 s (truncated nothing — longest reference 22.6 s) |
+| protocol | identical to the Chatterbox and CosyVoice 2 rows: LibriSpeech test-clean, 12 speakers × 5 held-out, seed 1234, sentence case |
+| ASR / encoder | `faster-whisper large-v3` int8 + `hubert-large-ls960-ft` / `wavlm-base-plus-sv` |
+| raw logs | `eval_styletts2_libri_cased_xeon.txt`, `per_utterance_styletts2_libri_cased.json` |
+
+| system | hardware | reference cap | WER | WER-2 | SIM-o |
+|---|---|---|---|---|---|
+| ground truth | 9950X | — | 0.021 | 0.016 | 0.964 |
+| ground truth | **Xeon** | — | **0.019** | 0.016 | 0.964 |
+| chatterbox | 9950X | 20 s | 0.022 | 0.022 | 0.949 |
+| cosyvoice2 | 9950X | none | 0.036 | 0.034 | 0.958 |
+| **styletts2** | **Xeon** | 30 s | **0.019** | **0.015** | **0.931** |
+
+**On the ground-truth row for intelligibility, under both ASRs** — and, unlike the
+EdAcc rows that crossed below it, there is no reason here to distrust that: this is
+read speech with verbatim-clean transcripts, so a system matching it is matching it.
+**And the lowest speaker similarity of the three backends**, 0.033 under the ceiling
+against 0.015 for Chatterbox and 0.006 for CosyVoice 2. That gap is not seed luck: a
+second seed in the ablation below gives **0.926**, so StyleTTS 2 sits 0.033–0.038 under
+the ceiling, and its seed spread (0.005) is a quarter of its distance to Chatterbox.
+What separates the three is again a trade-off, now with a third point on it:
+StyleTTS 2 buys the best intelligibility with the weakest identity.
+
+A plausible reason, **not tested here**: StyleTTS 2 compresses the reference into a
+single 256-d style vector pooled over its whole length, while Chatterbox and
+CosyVoice 2 condition on the reference as a sequence — speech tokens and mel frames.
+One global vector has less room for a voice. It is also the oldest of the three
+(NeurIPS 2023), and its multi-speaker checkpoint was trained on LibriTTS
+train-clean-460 alone, about 245 hours.
+
+**No over-generation, as the architecture predicts.** Durations come from a predictor
+in one pass, so the output length is fixed before any audio exists. Duration ratio
+averages 1.02 with a maximum of 1.26; nothing approaches CosyVoice 2's 2.42×. 45 of 60
+utterances have zero errors and none exceeds a WER of 0.2.
+
+## The ground-truth row moved, by one utterance, and that bounds cross-machine reads
+
+Same 60 utterances, same Whisper checkpoint, same int8 compute type: the real-audio WER
+is 0.021 on the 9950X and **0.019** on this Xeon. Per utterance, exactly **one of 60**
+differs — a 48-word clip on which the 9950X's Whisper made 3 errors and this one made
+none. CTranslate2's int8 kernels are CPU-specific, and that is enough to move a
+transcript. HuBERT (0.016) and SIM-o (0.964) reproduce to three decimals.
+
+So a WER difference of ~0.002 between rows from *different machines* can be ASR noise
+rather than a system difference. The 0.003 between StyleTTS 2 and Chatterbox is the
+same size as that shift: it is not a ranking, and this write-up does not make one.
+Everything compared within one table below is from one machine and one process.
+
+## What was checked before any number was taken
+
+The backend is not upstream's code, so the first job was showing it computes the same
+thing — and three of the checks failed first, which is why they are checks.
+
+- **Bit-exact against upstream.** Upstream's loaders and the inference function from
+  its LibriTTS demo notebook, run side by side with the backend at three diffusion
+  settings × three texts: **max |difference| = 0** on all nine
+  (`styletts2_parity_xeon.txt`).
+- **The GPL boundary costs nothing.** phonemizer is GPL-3.0, so the backend runs its
+  `phonemize` CLI as a subprocess. Byte-identical to upstream's library call on **all
+  2,620** LibriSpeech test-clean transcripts in both presentations
+  (`styletts2_phonemizer_xeon.txt`). The first version of the wrapper failed its own
+  test: the CLI **silently drops empty input lines**, which would shift every later
+  text onto the wrong phonemes. A line-count check refused rather than misaligning;
+  `--preserve-empty-lines` fixes it.
+- **A checkpoint torch 2.6 will not load safely.** The text aligner's pickle uses a
+  `POP` opcode that the `weights_only` unpickler does not implement, so no allowlist
+  rescues it — the stock alternative is `weights_only=False`, which executes the file.
+  It was disassembled with `pickletools` first (tensors, containers, and pickled
+  `AdamW`, `OneCycleLR` and `getattr` training state) and is loaded by a restricted
+  unpickler that builds the first two and stubs the third.
+- **No silent partial loads.** Upstream loads PL-BERT with `strict=False`. A renamed
+  parameter in a newer `transformers` would leave random weights in place and the
+  model would still talk. Every load here fails on any missing or unexpected key.
+- **A memory leak that killed a run.** With oneDNN on, resident memory grew 150–200 MB
+  per synthesis without bound — 2.0 → 5.7 GB over 24 utterances — while the number and
+  size of live tensors stayed exactly constant. It needs varying input shapes (one
+  repeated shape plateaus) and survives `malloc_trim`, a fixed mmap threshold, a single
+  malloc arena and `ONEDNN_PRIMITIVE_CACHE_CAPACITY=0`; it disappears with oneDNN off.
+  Every utterance has a new length, so the first headline run was OOM-killed. oneDNN
+  is now off inside the backend only, by context manager — the global flag would change
+  the evaluation encoders' numerics in the same process. Parity holds under the same
+  setting; the fix itself moves samples by at most 0.011 and changed no output length.
+  Measured alone on the machine, 24 utterances, each setting in a fresh process
+  (`styletts2_memory_xeon.txt`):
+
+  | oneDNN | RSS after load | after 8 | after 24 | live tensors | RTF |
+  |---|---|---|---|---|---|
+  | on | 2,001 MB | 3,597 MB | **5,707 MB** (+3,706) | 1648 → 1648 | 1.008 |
+  | **off** | 2,001 MB | 2,329 MB | **2,393 MB** (+392, flat after ~8) | 1648 → 1648 | **0.917** |
+
+  **The fix costs no speed** — oneDNN off was 9% *faster* on this run. An informal
+  reading during the leak hunt had suggested oneDNN on was faster; this controlled
+  comparison supersedes it.
+
+## Reproduced three times, once across a container restart
+
+The default setting was synthesized and scored in three separate processes: this
+headline run, the `default` arm of the diffusion ablation, and the sentence-case arm of
+the text-presentation study — the last two either side of a container restart. Per
+utterance, all **60 of 60** agree on WER, synthesized duration and the real-audio WER
+in all three (the headline file stores values rounded; the two unrounded files match
+exactly). So the default-setting audio is the same in all three studies, and the seed
+fixes the output on this machine, decoder noise included.
+
+---
+
+# Study — 2026-11-21 — what the diffusion in StyleTTS 2 does: nothing WER or SIM can see, except at full strength, where identity becomes a draw
+
+StyleTTS 2's diffusion does not generate audio. It samples one 256-d **style vector**
+— 128 dimensions of timbre ("acoustic") and 128 of prosody — conditioned on the text
+and the reference, and inference blends that sample with the reference's own style:
+`alpha` sets how much of the timbre half comes from the sample, `beta` how much of the
+prosody half. At `alpha = beta = 0` the sampler still runs but its output is discarded:
+the voice is the reference's style vector alone, so that arm is diffusion **off**.
+
+| | |
+|---|---|
+| hardware | Intel Xeon @ 2.10 GHz, 4 threads, CPU — the same machine and settings as the headline row |
+| corpus | LibriSpeech test-clean, 12 speakers × 5 — **n = 60**, identical in every arm; seed 1234; sentence case |
+| ASR / encoder | `faster-whisper large-v3` int8 / `wavlm-base-plus-sv` |
+| raw logs | `diffusion_ablation_xeon.txt`, `per_utterance_diffusion_ablation.json`. A container restart cut the run after six arms; it resumed from its checkpoint, so those six print there as "done in a previous run" and their own output is in `diffusion_ablation_part1_xeon.txt`. (An earlier attempt, before checkpointing existed, was lost to a restart outright; nothing from it is used.) |
+
+| arm | `alpha` / `beta` | steps | WER | SIM-o | duration ratio (mean / max) | dWER vs off | better / worse | p | dSIM vs off | higher / lower | p |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| ground truth | — | — | 0.019 | 0.964 | 1.00 | | | | | | |
+| **diffusion off** | 0 / 0 | 5 | 0.016 | 0.924 | **1.07 / 1.40** | *control* | | | | | |
+| off, seed + 1 | 0 / 0 | 5 | 0.020 | 0.924 | 1.07 / 1.40 | +0.003 | 1 / 3 | 0.63 | −0.000 | 29 / 31 | 0.90 |
+| **default** | 0.3 / 0.7 | 5 | 0.019 | 0.931 | 1.02 / 1.26 | +0.002 | 3 / 5 | 0.73 | +0.007 | 35 / 25 | 0.25 |
+| default, seed + 1 | 0.3 / 0.7 | 5 | 0.014 | 0.926 | 1.02 / 1.24 | −0.002 | 3 / 2 | 1 | +0.002 | 27 / 33 | 0.52 |
+| default, 10 steps | 0.3 / 0.7 | 10 | 0.023 | 0.926 | 1.01 / 1.23 | +0.006 | 2 / 8 | 0.11 | +0.002 | 28 / 32 | 0.70 |
+| default, 10 s reference cap | 0.3 / 0.7 | 5 | 0.022 | 0.931 | 1.02 / 1.26 | +0.005 | 3 / 6 | 0.51 | +0.007 | 37 / 23 | 0.09 |
+| **full diffusion** | 1 / 1 | 5 | 0.022 | 0.920 | 1.00 / 1.24 | +0.005 | 4 / 7 | 0.55 | −0.004 | 29 / 31 | 0.90 |
+| **full diffusion, seed + 1** | 1 / 1 | 5 | 0.024 | **0.893** | 0.98 / 1.20 | +0.007 | 5 / 11 | 0.21 | **−0.031** | **14 / 46** | **4e-5** |
+
+Corpus-level WER; better / worse and higher / lower count utterances against the
+diffusion-off arm at seed 1234 (for the seed + 1 rows too), ties dropped; p is a
+two-sided exact sign test.
+
+**Intelligibility: no setting differs significantly from diffusion off, and every
+difference is seed-sized.** The seed alone, with every setting held, moves corpus WER
+by 0.002–0.005 and changes the WER of 4–9 of the 60 utterances. Turning diffusion on,
+doubling its steps or running it at full strength moves it by 0.002–0.007 from the
+control, and the smallest p is 0.11.
+
+**Identity: the default blend gains nothing measurable, and full diffusion makes the
+voice a draw.** The default is +0.007 SIM on one seed and +0.002 on the other, neither
+significant. Full diffusion is −0.004 on one seed and **−0.031 on the other, worse on
+46 of 60 utterances** (p = 4 × 10⁻⁵). At `alpha = 1` the timbre half of the style
+vector is entirely sampled, so how close the voice lands to the reference depends on
+the sample; the default's `alpha = 0.3` keeps 70% of the reference's own timbre, and
+that is what holds identity steady across seeds. Diffusion off is the most stable of
+all: SIM is 0.924 on both seeds. The decoder's own randomness — its random phases,
+which change 4 of 60 transcripts — leaves mean identity where it was.
+
+**Speaking rate is the one thing diffusion visibly changes.** With diffusion off, the
+output runs **7% longer than the speaker's real reading** of the same text (mean 1.07,
+longest 1.40), and identically so on both seeds, because with the reference's prosody
+vector the duration predictor is deterministic. Blending in sampled prosody brings
+that to 1.02 (default) and 1.00 (full). That is the prosody half doing what it is for,
+and it does not register in WER or SIM-o because neither measures prosody.
+
+**Ten diffusion steps instead of five changes nothing** (+0.006 WER, 2 / 8, p = 0.11;
++0.002 SIM).
+
+**A 10 s reference cap costs StyleTTS 2 nothing measurable.** On the 30 utterances
+whose reference exceeds 10 s, capping it moves WER 0.018 → 0.023 and SIM 0.936 →
+0.935. The same cap cost CosyVoice 2 5.9× in WER, by cutting its reference mid-phrase
+and sending the autoregressive decoder into over-generation; StyleTTS 2 pools the
+reference into one vector and sets durations in one pass, so a mid-phrase cut has
+nothing to run away with. Its 30 s default is therefore not load-bearing — but it was
+chosen to truncate nothing, and nothing here says capping helps either.
+
+## What this does not establish
+
+**"The diffusion does nothing" is not the conclusion.** It is that the diffusion does
+nothing *these two metrics* can see, at n = 60, on read speech, over two seeds. The
+StyleTTS 2 paper's case for diffusion is naturalness and prosodic variety, measured by
+listeners; this harness has no naturalness or prosody metric, and the one prosodic
+quantity it records — duration — is exactly where diffusion shows up.
+
+**Two seeds bound the spread; they do not measure it.** The full-diffusion result says
+identity at `alpha = 1` *can* drop by 0.031 on a seed, not how often.
+
+---
+
+# Study — 2026-11-21 — a second non-autoregressive model *is* hit by raw capitals, through its phonemizer
+
+The 2026-08-14 study named its own gap — "A second non-AR model would strengthen this
+considerably" — because its one non-autoregressive model, Piper, was not measurably
+hurt by raw `ALL CAPS` input, and the effect was read as specific to autoregressive TTS. StyleTTS 2
+is that second model, and a better test than Piper — it clones, so it is doing the same
+task as Chatterbox. Same script, same paired design: each utterance synthesized twice
+with the same seed, only the case of the input differing.
+
+| | |
+|---|---|
+| hardware | Intel Xeon @ 2.10 GHz, 4 threads, CPU |
+| corpus | LibriSpeech test-clean, 12 speakers × 5 — **n = 60**, identical in both arms; seed 1234 |
+| ASR | `faster-whisper large-v3` int8 |
+| raw logs | `present_styletts2_librispeech_xeon.txt`, `per_utterance_present_styletts2.json`, `present_mechanism_styletts2_xeon.txt`, `spelled_word_check_xeon.txt` |
+
+| backend | architecture | input | raw `CAPS` | sentence | ratio | improved / worse / same | sign test |
+|---|---|---|---|---|---|---|---|
+| chatterbox *(9950X)* | autoregressive (T3) | text tokens | 0.109 | 0.025 | 4.4× | 37 / 4 / 19 | p = 1e-7 |
+| piper *(9950X)* | non-autoregressive (VITS) | espeak-ng phonemes | 0.051 | 0.036 | 1.4× | 12 / 7 / 41 | p = 0.36 |
+| **styletts2** *(Xeon)* | non-autoregressive (style diffusion) | espeak-ng phonemes | **0.044** | **0.022** | **2.0×** | **16 / 2 / 42** | **p = 0.001** |
+
+Mean per-utterance WER, as in the 2026-08-14 table — which is why the sentence-case
+figure reads 0.022 here and 0.019 (corpus-level) in the headline: the same audio, 60 of
+60 utterances identical. The real-audio control reads 0.020 on this scale.
+
+**StyleTTS 2 is hit, and significantly**: 16 utterances improve in sentence case, 2
+worsen. The reading that the effect is specific to autoregressive TTS — in that study
+and, until this change, in the README — does not survive its own stated caveat: one
+non-AR model was not a family, and the second one breaks the pattern.
+
+**But not by over-generation.** Raw-caps output is *shorter* than sentence case in **59
+of 60** utterances, by 13% on average (duration ratio 0.89 against 1.02), nothing
+exceeds 1.11× the real reading, and the length change is unrelated to the WER change
+(`corr = −0.14`). A one-pass duration predictor cannot run on, as the architecture
+predicts; whatever reaches StyleTTS 2 is a different mechanism from the one in
+CosyVoice 2.
+
+## The mechanism, predicted before the run
+
+StyleTTS 2 reads phonemes, so case can only reach it through espeak-ng, and espeak does
+treat capitals differently: on all 2,620 test-clean transcripts, raw caps change the
+phonemes of 57% (`styletts2_phonemizer_xeon.txt`). Counted word by word, the commonest
+change is a function word losing its weak form (`TO` as /tuː/ rather than /tə/, 1,118
+times), then stress shifts (`I`, `NOT`); and one kind is an unambiguous error: short
+words **spelled out as initialisms** — `IT` read as "I.T." (491 times), `US` as "U.S."
+(58). So `scripts/presentation_mechanism.py` was written and committed
+*before this study ran* with one prediction: if the effect lives in the front end, the
+damage concentrates in the utterances that contain a spelled-out word. A word counts as
+spelled out if its caps phonemes equal its letters read one by one and differ from its
+lower-case reading; no word list. In these 60 transcripts that finds one word, `IT`.
+
+| utterances | n | raw `CAPS` | sentence | delta | improved / worse | sign test |
+|---|---|---|---|---|---|---|
+| **contain `IT`** | 13 | **0.096** | 0.030 | **−0.067** | **8 / 0** | **p = 0.008** |
+| do not | 47 | 0.030 | 0.020 | −0.010 | 8 / 2 | p = 0.11 |
+| all | 60 | 0.044 | 0.022 | −0.022 | 16 / 2 | p = 0.001 |
+
+**The prediction holds.** The 13 utterances with a spelled-out word — 22% of the
+sample — carry two-thirds of the total improvement, and every one of them that changes
+gets better. In the other 47 the remaining difference is a seventh the size per
+utterance and not distinguishable from chance at this n; weak forms and stress may
+account for it, but this run cannot say.
+
+**And the errors are at the word.** `scripts/spelled_word_check.py` re-synthesizes
+those 13 utterances in raw caps — all 13 reproduce the study's WER exactly — and looks
+inside them:
+
+- espeak spells `IT` out **in context**, not only in isolation, at **16 of its 17**
+  occurrences, counted in the phonemes the backend actually synthesized;
+- Whisper hears **9 of the 17** as something other than "it" — "i d", "id", "eye he",
+  "aight he", "i it", or nothing;
+- those positions hold **15 of the 28** raw-caps errors in these utterances (54%),
+  counting the word and insertions directly beside it only. A neighbour pulled into
+  the error — "IT is" heard as "eye he has" — is not counted, so that is a floor.
+
+The other 8 spelled occurrences come back as "it": Whisper's language model repairs
+"eye-tee" from context. So on this mechanism WER undercounts what was synthesized.
+
+## What this does not establish
+
+**Why Piper escaped.** Piper also reads espeak-ng phonemes, so "phoneme input" alone
+does not explain why one non-AR model is hit and the other is not. Piper's front end
+(`piper-phonemize`) was not compared with the phonemizer CLI here, and its 12 / 7 is
+not evidence of *no* effect, only of none measurable at n = 60.
+
+**Cross-machine absolute WERs.** The Chatterbox and Piper rows ran on the 9950X; only
+the within-backend ratio is compared, as before.
+
+**The fix is the same either way.** Sentence case removes the spelled-out initialisms:
+espeak reads `it`, and a sentence-initial `It`, as a word. `--text-case sentence` was
+already the recommendation; this adds a second, independent reason for it.

@@ -12,14 +12,16 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and six studies have results. 155 tests pass offline with no weights and no network.
+and eight studies have results. 190 tests pass offline with no weights and no network.
 
-Two backends are wired up (Chatterbox, CosyVoice 2) and, with each at a *measured*
-reference cap, both land essentially on the ground-truth row — so what is reported
-between them is a trade-off, not a ranking. The largest studies run at n=60-72 across 12
-speakers on two corpora, and their main product so far has been **seven measurement
-errors of mine that the harness caught**, two of which had already been written up as
-findings before being refuted. Everything measured is in
+Three cloning backends are wired up — Chatterbox and CosyVoice 2, both autoregressive,
+and **StyleTTS 2, a non-autoregressive model whose voice comes from a diffusion
+sampler** — and, with each at a *measured* reference cap, all three land essentially on
+the ground-truth row for intelligibility, so what is reported between them is a
+trade-off, not a ranking. The largest studies run at n=60-72 across 12 speakers on two
+corpora, and their main product so far has been **nine measurement errors of mine that
+the harness caught**, three of which had already been written up as findings before
+being refuted. Everything measured is in
 [`docs/VALIDATION.md`](docs/VALIDATION.md) with raw logs; model licences and exclusions
 are in [`docs/LICENSES.md`](docs/LICENSES.md).
 
@@ -91,23 +93,33 @@ Chatterbox 0.090 WER and CosyVoice 2 0.213. Identical treatment, unequal handica
 `--text-case` makes the choice explicit and recorded, defaulting to `raw` so earlier
 numbers stay comparable.
 
-**And the effect looks specific to autoregressive TTS.** A paired study — same
-utterance, same seed, only the input's case differing — across two architectures:
+**The effect is not specific to autoregressive TTS — I said it was, and the second
+non-autoregressive model refuted it.** A paired study — same utterance, same seed, only
+the input's case differing — across three architectures:
 
 | backend | architecture | raw `CAPS` | sentence | ratio | sign test |
 |---|---|---|---|---|---|
 | chatterbox | autoregressive | 0.109 | **0.025** | **4.4×** | **p = 1e-7** |
 | piper | non-autoregressive (VITS) | 0.051 | 0.036 | 1.4× | p = 0.36 |
+| **styletts2** | non-autoregressive (style diffusion) | 0.044 | **0.022** | **2.0×** | **p = 0.001** |
 
-Chatterbox improves on 37 of 60 utterances against 4 that worsen; Piper's 12-vs-7 is
-indistinguishable from chance. The mechanism tracks the architecture: **over-generation
-appears only in autoregressive models and only on raw capitals** — 2/60 for Chatterbox
-raw, 0/60 cased, 0/60 for Piper either way, and 13/60 for CosyVoice 2 at up to 2.42×
-duration. An AR decoder conditions on its own output and can run away; VITS emits in
-one pass and structurally cannot.
+With two models this README read the pattern as architectural: Chatterbox hit (37
+better, 4 worse), Piper not (12 vs 7, chance), and **over-generation appearing only in
+autoregressive models and only on raw capitals** — 2/60 for Chatterbox raw, 0/60 cased,
+0/60 for Piper, 13/60 for CosyVoice 2 at up to 2.42× duration. It carried the caveat
+that one non-AR model is not a family. StyleTTS 2 — non-autoregressive, and unlike Piper
+a cloning model — is hit significantly (16 better, 2 worse) **without** over-generating:
+its raw-caps output is *shorter* in 59 of 60 utterances.
 
-Caveat kept in view: one non-AR model is not a family, and Piper doesn't clone, so only
-the within-backend ratio is a fair comparison.
+The over-generation half stands: no non-AR model has run on. What reaches StyleTTS 2 is
+its phonemizer. espeak-ng reads some short words in capitals as initialisms — `IT` as
+"I.T." — and a prediction committed before the run held: the 13 utterances containing
+one carry **two-thirds of the improvement** (8 better, 0 worse, p = 0.008); the other 47
+show a seventh of the effect per utterance, indistinguishable from chance. Inside those
+13, espeak spells 16 of the 17 `IT`s out in context and Whisper writes 9 of them as
+something else — "i d", "eye he" — the rest repaired by its language model. So raw
+capitals damage at least two architectures through two different paths, and sentence
+case fixes both.
 
 **The second backend's "10× worse" was also my configuration.** CosyVoice 2 first
 measured 0.212 against Chatterbox's 0.022 — and I declined to publish that ranking
@@ -130,10 +142,34 @@ measured rather than borrowed:
 | ground truth | — | 0.021 | 0.016 | **0.964** |
 | chatterbox | 20 s (measured optimum) | **0.022** | **0.022** | 0.949 |
 | cosyvoice2 | no truncation | 0.036 | 0.034 | **0.958** |
+| styletts2 *(Xeon; its ground truth: 0.019 / 0.016 / 0.964)* | 30 s (truncates nothing) | **0.019** | **0.015** | 0.931 |
 
-Both sit essentially on the ground-truth row. What is left is a trade-off, not a
-ranking: Chatterbox lower WER, CosyVoice 2 higher similarity and nearer the SIM
-ceiling. One corpus, one language, n=60.
+All sit essentially on the ground-truth row. What is left is a trade-off, not a
+ranking: Chatterbox and StyleTTS 2 lower WER, CosyVoice 2 higher similarity and nearer
+the SIM ceiling, StyleTTS 2 furthest from it (0.926 on a second seed). The StyleTTS 2
+row ran on a different machine, whose Whisper moved the ground-truth WER by one
+utterance — so WER gaps of ~0.002 across machines are not a ranking. One corpus, one
+language, n=60.
+
+**StyleTTS 2's diffusion does nothing WER or SIM can see — except, at full strength,
+cost identity.** The diffusion samples a style vector (timbre half, prosody half) that
+inference blends with the reference's own. An ablation at n=60 against diffusion off:
+
+| arm | WER | SIM-o | duration vs real |
+|---|---|---|---|
+| diffusion off | 0.016 / 0.020 | 0.924 / 0.924 | 1.07 |
+| default blend (`alpha=0.3`, `beta=0.7`) | 0.019 / 0.014 | 0.931 / 0.926 | 1.02 |
+| full diffusion (`alpha=beta=1`) | 0.022 / 0.024 | 0.920 / **0.893** | 1.00 |
+
+*(two seeds each)*. No arm moves WER significantly; every difference is seed-sized
+(smallest p = 0.11).
+The default gains no significant similarity. Full diffusion makes the voice a draw: on
+one seed it is fine, on the next it is **worse on 46 of 60 utterances** (p = 4e-5) —
+which is what the default's `alpha=0.3`, keeping 70% of the reference's timbre, is
+there to prevent. The one consistent effect is speaking rate: without diffusion the
+output runs 7% longer than the real reading. Neither metric measures prosody, which is
+where the model's authors make their case for diffusion — so this is "nothing visible
+to this harness", not "nothing".
 
 That cap is the **fourth** constant taken from documentation rather than measured that
 turned out not to transfer — after the published SIM ceiling, the vendor RTF claim, and
@@ -256,6 +292,18 @@ measure, never for a number that gets written down.** A "consistent ~0.05 SIM ga
 (n=12) inverted at n=60. A probe putting CosyVoice 2 at 0.048 in sentence case (n=9)
 measured 0.212 at n=60 — right about the direction, 4.4× wrong about the size. Both
 were directionally useful and quantitatively worthless.
+
+Two more came with the third backend:
+
+- **An invariance read off the code instead of measured.** With `alpha = beta = 0`
+  StyleTTS 2 discards the sampled style, so I wrote that its output no longer depended
+  on the seed. Two seeds then differed by up to 0.18 on a ±1 waveform: the HiFi-GAN
+  decoder draws random phases and noise of its own. The ablation's noise-floor arm
+  exists because of it — decoder noise alone changes 4 of 60 transcripts.
+- **A mechanism generalised from one model.** The text-presentation effect was written
+  up as autoregressive-only on the strength of one non-AR null result, under a caveat
+  that one model is not a family. The second non-AR model is hit at p = 0.001, through
+  its phonemizer. The caveat was right and the headline it qualified was not.
 
 The sharpest one has its own shape: **a similarity comparison where one side shares a
 pipeline, a waveform, or a recording session with the thing being scored reads high for
