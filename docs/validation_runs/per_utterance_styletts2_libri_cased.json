@@ -1,0 +1,542 @@
+[
+  {
+    "words": 8,
+    "ref_s": 9.54,
+    "ref_original_s": 10.44,
+    "audio_s": 3.35,
+    "real_audio_s": 3.27,
+    "wer_synth": 0.125,
+    "wer_real": 0.125
+  },
+  {
+    "words": 18,
+    "ref_s": 9.54,
+    "ref_original_s": 10.44,
+    "audio_s": 7.05,
+    "real_audio_s": 6.62,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 7,
+    "ref_s": 9.54,
+    "ref_original_s": 10.44,
+    "audio_s": 3.0,
+    "real_audio_s": 2.68,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 11,
+    "ref_s": 9.54,
+    "ref_original_s": 10.44,
+    "audio_s": 4.77,
+    "real_audio_s": 5.22,
+    "wer_synth": 0.1818,
+    "wer_real": 0.0909
+  },
+  {
+    "words": 22,
+    "ref_s": 9.54,
+    "ref_original_s": 10.44,
+    "audio_s": 9.17,
+    "real_audio_s": 9.63,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 10.7,
+    "ref_original_s": 10.72,
+    "audio_s": 10.17,
+    "real_audio_s": 9.04,
+    "wer_synth": 0.1111,
+    "wer_real": 0.0
+  },
+  {
+    "words": 45,
+    "ref_s": 10.7,
+    "ref_original_s": 10.72,
+    "audio_s": 20.67,
+    "real_audio_s": 17.96,
+    "wer_synth": 0.0,
+    "wer_real": 0.0444
+  },
+  {
+    "words": 32,
+    "ref_s": 10.7,
+    "ref_original_s": 10.72,
+    "audio_s": 14.75,
+    "real_audio_s": 12.61,
+    "wer_synth": 0.0,
+    "wer_real": 0.0625
+  },
+  {
+    "words": 32,
+    "ref_s": 10.7,
+    "ref_original_s": 10.72,
+    "audio_s": 12.47,
+    "real_audio_s": 10.65,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 29,
+    "ref_s": 10.7,
+    "ref_original_s": 10.72,
+    "audio_s": 10.37,
+    "real_audio_s": 8.56,
+    "wer_synth": 0.1,
+    "wer_real": 0.0333
+  },
+  {
+    "words": 8,
+    "ref_s": 7.72,
+    "ref_original_s": 8.46,
+    "audio_s": 4.02,
+    "real_audio_s": 5.92,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 5,
+    "ref_s": 7.72,
+    "ref_original_s": 8.46,
+    "audio_s": 2.57,
+    "real_audio_s": 4.41,
+    "wer_synth": 0.2,
+    "wer_real": 0.0
+  },
+  {
+    "words": 14,
+    "ref_s": 7.72,
+    "ref_original_s": 8.46,
+    "audio_s": 5.2,
+    "real_audio_s": 6.75,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 8,
+    "ref_s": 7.72,
+    "ref_original_s": 8.46,
+    "audio_s": 3.2,
+    "real_audio_s": 4.02,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 7,
+    "ref_s": 7.72,
+    "ref_original_s": 8.46,
+    "audio_s": 3.4,
+    "real_audio_s": 3.9,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 48,
+    "ref_s": 12.44,
+    "ref_original_s": 12.44,
+    "audio_s": 17.52,
+    "real_audio_s": 16.71,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 11,
+    "ref_s": 12.44,
+    "ref_original_s": 12.44,
+    "audio_s": 5.47,
+    "real_audio_s": 4.83,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 35,
+    "ref_s": 12.44,
+    "ref_original_s": 12.44,
+    "audio_s": 14.45,
+    "real_audio_s": 13.72,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 12.44,
+    "ref_original_s": 12.44,
+    "audio_s": 8.1,
+    "real_audio_s": 7.44,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 45,
+    "ref_s": 12.44,
+    "ref_original_s": 12.44,
+    "audio_s": 17.85,
+    "real_audio_s": 16.64,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 26,
+    "ref_s": 8.02,
+    "ref_original_s": 8.12,
+    "audio_s": 8.87,
+    "real_audio_s": 7.75,
+    "wer_synth": 0.0,
+    "wer_real": 0.0385
+  },
+  {
+    "words": 21,
+    "ref_s": 8.02,
+    "ref_original_s": 8.12,
+    "audio_s": 8.32,
+    "real_audio_s": 7.68,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 8.02,
+    "ref_original_s": 8.12,
+    "audio_s": 5.72,
+    "real_audio_s": 4.83,
+    "wer_synth": 0.0,
+    "wer_real": 0.1111
+  },
+  {
+    "words": 14,
+    "ref_s": 8.02,
+    "ref_original_s": 8.12,
+    "audio_s": 5.4,
+    "real_audio_s": 4.29,
+    "wer_synth": 0.0714,
+    "wer_real": 0.0714
+  },
+  {
+    "words": 21,
+    "ref_s": 8.02,
+    "ref_original_s": 8.12,
+    "audio_s": 7.45,
+    "real_audio_s": 6.55,
+    "wer_synth": 0.0952,
+    "wer_real": 0.0952
+  },
+  {
+    "words": 30,
+    "ref_s": 12.88,
+    "ref_original_s": 13.48,
+    "audio_s": 10.72,
+    "real_audio_s": 9.52,
+    "wer_synth": 0.0333,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 12.88,
+    "ref_original_s": 13.48,
+    "audio_s": 7.67,
+    "real_audio_s": 7.46,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 26,
+    "ref_s": 12.88,
+    "ref_original_s": 13.48,
+    "audio_s": 10.85,
+    "real_audio_s": 9.87,
+    "wer_synth": 0.0,
+    "wer_real": 0.0385
+  },
+  {
+    "words": 15,
+    "ref_s": 12.88,
+    "ref_original_s": 13.48,
+    "audio_s": 6.92,
+    "real_audio_s": 6.42,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 21,
+    "ref_s": 12.88,
+    "ref_original_s": 13.48,
+    "audio_s": 7.25,
+    "real_audio_s": 5.92,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 34,
+    "ref_s": 8.2,
+    "ref_original_s": 8.94,
+    "audio_s": 12.6,
+    "real_audio_s": 10.26,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 8.2,
+    "ref_original_s": 8.94,
+    "audio_s": 6.97,
+    "real_audio_s": 6.13,
+    "wer_synth": 0.0,
+    "wer_real": 0.1053
+  },
+  {
+    "words": 14,
+    "ref_s": 8.2,
+    "ref_original_s": 8.94,
+    "audio_s": 6.6,
+    "real_audio_s": 6.55,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 14,
+    "ref_s": 8.2,
+    "ref_original_s": 8.94,
+    "audio_s": 5.37,
+    "real_audio_s": 4.51,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 8,
+    "ref_s": 8.2,
+    "ref_original_s": 8.94,
+    "audio_s": 3.05,
+    "real_audio_s": 2.75,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 27,
+    "ref_s": 8.76,
+    "ref_original_s": 9.48,
+    "audio_s": 10.47,
+    "real_audio_s": 10.17,
+    "wer_synth": 0.0741,
+    "wer_real": 0.0
+  },
+  {
+    "words": 12,
+    "ref_s": 8.76,
+    "ref_original_s": 9.48,
+    "audio_s": 5.37,
+    "real_audio_s": 4.61,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 6,
+    "ref_s": 8.76,
+    "ref_original_s": 9.48,
+    "audio_s": 3.55,
+    "real_audio_s": 3.09,
+    "wer_synth": 0.0,
+    "wer_real": 0.1667
+  },
+  {
+    "words": 6,
+    "ref_s": 8.76,
+    "ref_original_s": 9.48,
+    "audio_s": 3.05,
+    "real_audio_s": 3.04,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 8,
+    "ref_s": 8.76,
+    "ref_original_s": 9.48,
+    "audio_s": 4.12,
+    "real_audio_s": 5.12,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 21,
+    "ref_s": 22.56,
+    "ref_original_s": 22.57,
+    "audio_s": 7.57,
+    "real_audio_s": 8.03,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 42,
+    "ref_s": 22.56,
+    "ref_original_s": 22.57,
+    "audio_s": 15.05,
+    "real_audio_s": 15.52,
+    "wer_synth": 0.0238,
+    "wer_real": 0.0714
+  },
+  {
+    "words": 33,
+    "ref_s": 22.56,
+    "ref_original_s": 22.57,
+    "audio_s": 12.6,
+    "real_audio_s": 14.68,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 7,
+    "ref_s": 22.56,
+    "ref_original_s": 22.57,
+    "audio_s": 2.82,
+    "real_audio_s": 2.64,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 20,
+    "ref_s": 22.56,
+    "ref_original_s": 22.57,
+    "audio_s": 8.95,
+    "real_audio_s": 9.09,
+    "wer_synth": 0.05,
+    "wer_real": 0.05
+  },
+  {
+    "words": 33,
+    "ref_s": 4.72,
+    "ref_original_s": 5.08,
+    "audio_s": 12.3,
+    "real_audio_s": 14.63,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 36,
+    "ref_s": 4.72,
+    "ref_original_s": 5.08,
+    "audio_s": 10.95,
+    "real_audio_s": 13.12,
+    "wer_synth": 0.0278,
+    "wer_real": 0.0
+  },
+  {
+    "words": 38,
+    "ref_s": 4.72,
+    "ref_original_s": 5.08,
+    "audio_s": 14.12,
+    "real_audio_s": 16.76,
+    "wer_synth": 0.1053,
+    "wer_real": 0.0
+  },
+  {
+    "words": 44,
+    "ref_s": 4.72,
+    "ref_original_s": 5.08,
+    "audio_s": 17.9,
+    "real_audio_s": 19.91,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 21,
+    "ref_s": 4.72,
+    "ref_original_s": 5.08,
+    "audio_s": 6.07,
+    "real_audio_s": 6.9,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 37,
+    "ref_s": 12.5,
+    "ref_original_s": 13.29,
+    "audio_s": 11.97,
+    "real_audio_s": 11.96,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 30,
+    "ref_s": 12.5,
+    "ref_original_s": 13.29,
+    "audio_s": 8.57,
+    "real_audio_s": 8.92,
+    "wer_synth": 0.0333,
+    "wer_real": 0.1
+  },
+  {
+    "words": 24,
+    "ref_s": 12.5,
+    "ref_original_s": 13.29,
+    "audio_s": 7.3,
+    "real_audio_s": 6.56,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 10,
+    "ref_s": 12.5,
+    "ref_original_s": 13.29,
+    "audio_s": 3.62,
+    "real_audio_s": 3.29,
+    "wer_synth": 0.1,
+    "wer_real": 0.0
+  },
+  {
+    "words": 18,
+    "ref_s": 12.5,
+    "ref_original_s": 13.29,
+    "audio_s": 6.5,
+    "real_audio_s": 6.51,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 5,
+    "ref_s": 6.24,
+    "ref_original_s": 7.04,
+    "audio_s": 3.3,
+    "real_audio_s": 3.07,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 29,
+    "ref_s": 6.24,
+    "ref_original_s": 7.04,
+    "audio_s": 9.55,
+    "real_audio_s": 9.98,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 17,
+    "ref_s": 6.24,
+    "ref_original_s": 7.04,
+    "audio_s": 6.67,
+    "real_audio_s": 7.37,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 8,
+    "ref_s": 6.24,
+    "ref_original_s": 7.04,
+    "audio_s": 3.17,
+    "real_audio_s": 3.46,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  },
+  {
+    "words": 16,
+    "ref_s": 6.24,
+    "ref_original_s": 7.04,
+    "audio_s": 5.15,
+    "real_audio_s": 4.81,
+    "wer_synth": 0.0,
+    "wer_real": 0.0
+  }
+]

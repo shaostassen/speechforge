@@ -1,0 +1,22 @@
+study=styletts2_checks:phonemizer  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz  date=2026-11-20
+cmd: python scripts/styletts2_checks.py phonemizer
+
+phonemizer 3.6.0  |  eSpeak NG text-to-speech: 1.51  Data at: /usr/lib/x86_64-linux-gnu/espeak-ng-data
+library call (upstream): EspeakBackend(language='en-us', preserve_punctuation=True, with_stress=True).phonemize([text])
+CLI call (speechforge):  phonemize -q -l en-us -b espeak --preserve-punctuation --with-stress --preserve-empty-lines
+
+     raw: 2620 transcripts, 0 mismatches
+sentence: 2620 transcripts, 0 mismatches
+
+raw vs sentence case: phonemes identical apart from the final stop in 1117/2620 (42.6%); different in 1503
+most frequent word-level differences (raw -> sentence), same-length transcripts only:
+    945           tuː -> tə
+    419            aɪ -> ˈaɪ
+    356       ˌaɪtˈiː -> ɪt
+    233         nˈɑːt -> nˌɑːt
+    173           tuː -> tʊ
+    135       ˌaɪtˈiː -> ɪɾ
+     73          hˈæz -> hɐz
+     58       jˌuːˈɛs -> ˌʌs
+     29          ˈɪts -> ɪts
+      5        ˌɛlˈeɪ -> lˌæ

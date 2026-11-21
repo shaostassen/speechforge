@@ -1,0 +1,81 @@
+study=eval_zeroshot  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz (Linux)  backend=styletts2  asr=large-v3  seed=1234  text_case=sentence  date=2026-11-20
+cmd: python scripts/eval_zeroshot.py --backend styletts2 --corpus librispeech --speakers 12 --utterances 5 --asr-model large-v3 --second-asr --threads 4 --seed 1234 --text-case sentence --per-utterance /home/user/sf-runs/per_utterance_styletts2_libri_cased.json
+
+corpus=librispeech  speakers=12  5 held-out utterances each
+speaker ids: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+backend: styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]  sr=24000
+speaker encoder: microsoft/wavlm-base-plus-sv @ 16000 Hz
+second ASR: facebook/hubert-large-ls960-ft (CTC)
+
+speaker 1089: cloning from 10.4s, 5 held-out
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/functional.py:5962: UserWarning: Support for mismatched key_padding_mask and attn_mask is deprecated. Use same type for both instead.
+  warnings.warn(
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+  ref warnings: ['trimmed 0.34s of trailing near-silence']
+speaker 1188: cloning from 10.7s, 5 held-out
+speaker 121: cloning from 8.5s, 5 held-out
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+  ref warnings: ['trimmed 0.52s of trailing near-silence']
+speaker 1221: cloning from 12.4s, 5 held-out
+speaker 1284: cloning from 8.1s, 5 held-out
+speaker 1320: cloning from 13.5s, 5 held-out
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+speaker 1580: cloning from 8.9s, 5 held-out
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+  ref warnings: ['trimmed 0.54s of trailing near-silence']
+speaker 1995: cloning from 9.5s, 5 held-out
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+  ref warnings: ['trimmed 0.45s of trailing near-silence']
+speaker 2094: cloning from 22.6s, 5 held-out
+  ref warnings: ['reference is clipping; distortion will be cloned']
+  ref warnings: ['reference is clipping; distortion will be cloned']
+  ref warnings: ['reference is clipping; distortion will be cloned']
+  ref warnings: ['reference is clipping; distortion will be cloned']
+  ref warnings: ['reference is clipping; distortion will be cloned']
+speaker 2300: cloning from 5.1s, 5 held-out
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+  ref warnings: ['trimmed 0.36s of trailing near-silence']
+speaker 237: cloning from 13.3s, 5 held-out
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+  ref warnings: ['trimmed 0.51s of trailing near-silence']
+speaker 260: cloning from 7.0s, 5 held-out
+per-utterance detail -> /home/user/sf-runs/per_utterance_styletts2_libri_cased.json
+
+scoring...
+
+corpus=librispeech (held-out)  hardware=Intel(R) Xeon(R) Processor @ 2.10GHz (Linux)
+                system     n     WER   WER-2   SIM-o   MOS*
+-----------------------------------------------------------
+          ground truth    60   0.019   0.016   0.964      —   <- read every row against this
+             styletts2    60   0.019   0.015   0.931      —
+
+* MOS is a predicted proxy, reported as a sanity check only — it correlates
+  poorly at system level and cannot rank systems.
+  SIM-o is encoder-specific. The ceiling here is the ground-truth row (0.964), not the 0.69-0.76 seen in papers, which used a different encoder.

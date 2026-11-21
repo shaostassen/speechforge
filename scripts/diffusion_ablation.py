@@ -154,23 +154,54 @@ def main() -> None:
                                      compute_type="int8")
 
     # Real audio, scored once: the ground-truth row.
-    items = []
-    for spk, utts in speakers.items():
-        ref_audio, ref_sr, _ = utts[0]
-        held = utts[1:]
-        for j, (ho, ho_sr, text) in enumerate(held):
-            other = held[(j + 1) % len(held)]
-            items.append({"speaker": spk, "j": j, "text": text,
-                          "ref_s": len(ref_audio) / ref_sr,
-                          "real_audio_s": len(ho) / ho_sr,
-                          "hyp_real": transcribe(ho, ho_sr),
-                          "sim_real": sim_o(encoder, other[0], other[1], ho, ho_sr)})
+    # A run is ~2 h on a small box and has already been lost once to a container
+    # restart, so finished work is checkpointed and a re-run resumes from it —
+    # but only when everything that determines a number is identical.
+    ckpt = Path(args.per_utterance + ".partial")
+    config = {k: getattr(args, k) for k in
+              ("corpus", "speakers", "utterances", "asr_model", "seed", "text_case")}
+    config["speaker_ids"] = list(speakers)
+    state = {"config": config, "items": None, "rows": {}}
+    if ckpt.is_file():
+        saved = json.loads(ckpt.read_text())
+        if saved.get("config") == config:
+            state = saved
+            print(f"resuming from {ckpt}: ground truth "
+                  f"{'done' if state['items'] else 'pending'}, arms done: "
+                  f"{list(state['rows']) or 'none'}\n", flush=True)
+        else:
+            raise SystemExit(f"{ckpt} was written by a different configuration; "
+                             f"move it aside rather than mixing runs")
+
+    def save():
+        tmp = ckpt.with_suffix(".tmp")
+        tmp.write_text(json.dumps(state))
+        tmp.replace(ckpt)          # atomic: a kill mid-write cannot corrupt it
+
+    items = state["items"]
+    if items is None:
+        items = []
+        for spk, utts in speakers.items():
+            ref_audio, ref_sr, _ = utts[0]
+            held = utts[1:]
+            for j, (ho, ho_sr, text) in enumerate(held):
+                other = held[(j + 1) % len(held)]
+                items.append({"speaker": spk, "j": j, "text": text,
+                              "ref_s": len(ref_audio) / ref_sr,
+                              "real_audio_s": len(ho) / ho_sr,
+                              "hyp_real": transcribe(ho, ho_sr),
+                              "sim_real": sim_o(encoder, other[0], other[1], ho, ho_sr)})
+        state["items"] = items
+        save()
     print(f"ground truth scored: {len(items)} utterances\n", flush=True)
 
     import gc
 
-    rows = {}
+    rows = state["rows"]
     for name, settings, seed_off, cap in arms:
+        if name in rows:
+            print(f"[{name}] done in a previous run, skipped", flush=True)
+            continue
         backend = StyleTTS2Backend(device="cpu", **settings)
         backend.set_threads(args.threads)
         print(f"[{name}] {backend.describe()}  ref_cap={cap or backend.ref_seconds}s",
@@ -196,12 +227,14 @@ def main() -> None:
                     "dropped": info["dropped_symbols"]})
                 k += 1
         rows[name] = arm_rows
+        save()
         # One model in memory at a time: this process also holds Whisper
         # large-v3 and WavLM, and the box it was written on has 16 GB.
         del backend
         gc.collect()
 
     out_rows = []
+    rows = {a[0]: rows[a[0]] for a in arms}  # arm order, whatever order they ran in
     for name, rs in rows.items():
         for r in rs:
             out_rows.append({**r, "wer": wer(r["text"], r["hyp"]),
