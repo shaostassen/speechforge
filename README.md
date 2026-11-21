@@ -12,14 +12,16 @@ in every table.
 ## Status
 
 Working end to end, on a small scale. Cloning runs, the evaluation harness scores it,
-and eight studies have results. 198 tests pass offline with no weights and no network.
+and nine studies have results. 223 tests pass offline with no weights and no network.
+Scores cover intelligibility (two ASRs), speaker similarity and — since the latest
+study — prosody, each against a ground-truth row of real speech.
 
 Three cloning backends are wired up — Chatterbox and CosyVoice 2, both autoregressive,
 and **StyleTTS 2, a non-autoregressive model whose voice comes from a diffusion
 sampler** — and, with each at a *measured* reference cap, all three land essentially on
 the ground-truth row for intelligibility, so what is reported between them is a
 trade-off, not a ranking. The largest studies run at n=60-72 across 12 speakers on two
-corpora, and their main product so far has been **nine measurement errors of mine that
+corpora, and their main product so far has been **ten measurement errors of mine that
 the harness caught**, three of which had already been written up as findings before
 being refuted. Everything measured is in
 [`docs/VALIDATION.md`](docs/VALIDATION.md) with raw logs; model licences and exclusions
@@ -168,8 +170,30 @@ one seed it is fine, on the next it is **worse on 46 of 60 utterances** (p = 4e-
 which is what the default's `alpha=0.3`, keeping 70% of the reference's timbre, is
 there to prevent. The one consistent effect is speaking rate: without diffusion the
 output runs 7% longer than the real reading. Neither metric measures prosody, which is
-where the model's authors make their case for diffusion — so this is "nothing visible
+where the model's authors make their case for diffusion — so this was "nothing visible
 to this harness", not "nothing".
+
+**So the harness now measures prosody, and diffusion turns out to flatten it.**
+`--prosody` adds pitch range (p10–p90 of F0, semitones), pitch level against the
+held-out recording, and speaking rate, each beside the real speakers' row. For
+StyleTTS 2 the true pitch is known — its vocoder is driven by the contour its predictor
+outputs — so the pitch tracker was chosen by scoring candidates against that truth, not
+by reputation (the first one failed; see below). On the same 60 utterances and the same
+audio the ablation scored:
+
+| arm | true pitch range | vs diffusion off | vs the speakers (tracker) | seed-to-seed: pitch level / length |
+|---|---|---|---|---|
+| real speakers | — | | 9.52 st | |
+| diffusion off | 7.72 st | | −1.6 (n.s.) | identical |
+| default blend | 6.60 / 6.12 st | **−1.1 / −1.6** (48, 52 of 60 flatter) | **−2.8 / −3.6** | 1.15 st / 2.6% |
+| full diffusion | 6.28 / 5.70 st | **−1.5 / −2.0** | **−3.2 / −4.0** | 1.67 st / 3.7% |
+
+Diffusion makes the intonation *narrower* and moves it away from the speakers' own
+range; what it adds is variety between seeds — in where the voice sits and how fast it
+goes, which with diffusion off does not change at all — and a speaking rate closer to
+the real reading. The full-diffusion identity loss is not a register shift (pitch level
+stays inside the same-speaker band), so it is timbre. Flatter is not "less natural": no
+listener heard these, and appropriateness of intonation is not measured.
 
 That cap is the **fourth** constant taken from documentation rather than measured that
 turned out not to transfer — after the published SIM ceiling, the vendor RTF claim, and
@@ -293,7 +317,7 @@ measure, never for a number that gets written down.** A "consistent ~0.05 SIM ga
 measured 0.212 at n=60 — right about the direction, 4.4× wrong about the size. Both
 were directionally useful and quantitatively worthless.
 
-Two more came with the third backend:
+Three more came with the third backend:
 
 - **An invariance read off the code instead of measured.** With `alpha = beta = 0`
   StyleTTS 2 discards the sampled style, so I wrote that its output no longer depended
@@ -304,6 +328,13 @@ Two more came with the third backend:
   up as autoregressive-only on the strength of one non-AR null result, under a caveat
   that one model is not a family. The second non-AR model is hit at p = 0.001, through
   its phonemizer. The caveat was right and the headline it qualified was not.
+- **A pitch tracker trusted on audio it had never been checked on.** pYIN over a fixed
+  50–500 Hz range read two renditions with *identical* pitch contours as 15.98 and 5.70
+  semitones of range, pinning creaky frames at its 50 Hz floor; it would have reported
+  diffusion's flattening at twice its true size. The model's own F0 contour exposed it,
+  and a speaker-adaptive two-pass search brought range error against truth to 0.04 st.
+  The same check corrected my docstring: the percentile range resists a few octave
+  errors (4% movement at 2% bad frames, against 32% for a standard deviation), not 10%.
 
 The sharpest one has its own shape: **a similarity comparison where one side shares a
 pipeline, a waveform, or a recording session with the thing being scored reads high for
@@ -364,6 +395,7 @@ run records *why* a clone was poor instead of leaving you to guess afterwards.
 python3 -m venv .venv && source .venv/bin/activate
 pip install -e ".[dev]"                 # core: reference pipeline + tests, no torch
 pip install -e ".[eval]"                # + speechlens (ASR, WER, calibration)
+pip install -e ".[prosody]"             # + librosa: --prosody (pitch range, level, rate)
 
 # A synthesis backend. On a machine with no GPU, force CPU wheels or pip pulls
 # ~2.5 GB of unusable CUDA libraries:

@@ -7,8 +7,9 @@ need librosa (skipped without it).
 import numpy as np
 import pytest
 
-from speechforge.prosody import (MIN_VOICED, jump_fraction, measure,
-                                 pitch_gap_st, semitones, summarize_f0)
+from speechforge.prosody import (FMAX, FMIN, MIN_VOICED, adaptive_range,
+                                 jump_fraction, measure, pitch_gap_st,
+                                 semitones, summarize_f0)
 
 HAVE_LIBROSA = True
 try:
@@ -94,6 +95,26 @@ def test_jump_fraction_ignores_unvoiced_gaps():
     f0 = np.array([150.0, np.nan, 300.0, 300.0])   # no adjacent voiced pair jumps
     assert jump_fraction(f0) == 0.0
     assert np.isnan(jump_fraction(np.full(5, np.nan)))
+
+
+def test_second_pass_range_follows_the_speaker():
+    # A low voice: the second pass starts at 0.75 x Q1, well clear of the 50 Hz
+    # first-pass floor where creaky frames used to be pinned an octave down.
+    f0 = np.r_[np.full(50, 90.0), np.full(50, 110.0)]
+    lo, hi = adaptive_range(f0)
+    assert lo == pytest.approx(0.75 * 90.0)
+    assert hi == pytest.approx(1.5 * 110.0)
+
+
+def test_second_pass_range_is_bounded_both_ways():
+    assert adaptive_range(np.full(100, 55.0))[0] == FMIN       # never below the floor
+    # The first pass reports at most FMAX, so the ceiling tops out at 1.5 x FMAX.
+    assert adaptive_range(np.full(100, FMAX))[1] == pytest.approx(1.5 * FMAX)
+    assert adaptive_range(np.full(100, 480.0))[1] == pytest.approx(720.0)
+
+
+def test_no_second_pass_without_enough_voicing():
+    assert adaptive_range(np.full(MIN_VOICED - 1, 120.0)) is None
 
 
 def test_pitch_gap_is_symmetric_and_nan_safe():

@@ -4,10 +4,13 @@
 The diffusion ablation (scripts/diffusion_ablation.py) found no setting that
 moves WER or SIM-o beyond seed noise, and one effect on duration, and could say
 no more because the harness had no prosody measure. This measures the prosody
-of the *same audio*: the same arms, seeds and utterances reproduce that study's
-output exactly, which is checked sample-count by sample-count against its
-per-utterance file (--check-against), so every number here describes audio
-whose WER and SIM are already published.
+of the *same audio*: the same arms, seeds and utterances, checked
+sample-count by sample-count against that study's per-utterance file
+(--check-against). With diffusion on, a clip's length depends on the sampled
+style vector, so equal lengths on every clip mean equal samples; across two
+CPUs the sample values can still differ at floating-point rounding, which the
+length check cannot see. Up to that, these numbers describe the audio whose
+WER and SIM are already published.
 
 Per arm, against the ground-truth row and paired per utterance:
   pitch range, pitch gap and words/s (speechforge.prosody), each against the
@@ -16,11 +19,14 @@ Per setting, the variety the StyleTTS 2 authors claim for diffusion:
   seed diversity — how far two seeds' renditions of one utterance differ in
   length, pitch range and pitch level.
 
-Two pitch trackers, as the harness uses two ASRs: pYIN (the harness's) and
-WORLD's Harvest (pyworld, a dev-only dependency). An effect only one tracker
-sees is not reported as an effect. The script also measures the trackers
-themselves — agreement on real and on synthetic audio, octave-jump rates, and
-whether the pitch gap separates same-speaker from different-speaker pairs.
+Three readings of every synthesized clip's pitch: the harness's tracker
+(two-pass pYIN), a cross-check from another family (WORLD's Harvest, same
+two-pass range rule; pyworld is a dev-only dependency), and the truth — the
+F0 contour the model itself drove its vocoder with (below). Real speech has
+only the first two. An effect the trackers disagree on is not reported as one,
+and for synthetic audio the truth decides. scripts/prosody_checks.py is where
+the tracker was chosen; this script reports, per arm, how far it sits from
+truth, so a tracker error that differs between arms would show here.
 
 Synthesized audio is written to --audio-dir as 16-bit WAV and reused when
 present, so a restart costs only the arm in progress, and the analysis can be
@@ -55,8 +61,8 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from speechforge import corpora  # noqa: E402
-from speechforge.prosody import (TARGET_SR, measure, pitch_gap_st,  # noqa: E402
-                                 semitones)
+from speechforge.prosody import (FMAX, FMIN, adaptive_range, measure,  # noqa: E402
+                                 pitch_gap_st, semitones, summarize_f0)
 from speechforge.synth import clone  # noqa: E402
 from speechforge.text import apply_case  # noqa: E402
 
@@ -96,12 +102,32 @@ def sign_test(pos: int, neg: int) -> float:
 
 
 def harvest_track(y, sr):
-    """WORLD's Harvest F0 at the same 10 ms hop, NaN where unvoiced."""
+    """WORLD's Harvest at the same 10 ms hop and the same two-pass range rule
+    as the harness's pYIN, NaN where unvoiced."""
     import pyworld
 
-    f0, _t = pyworld.harvest(np.asarray(y, dtype=np.float64), sr,
-                             f0_floor=50.0, f0_ceil=500.0, frame_period=10.0)
-    return np.where(f0 > 0, f0, np.nan)
+    def run(lo, hi):
+        f0, _t = pyworld.harvest(np.asarray(y, dtype=np.float64), sr,
+                                 f0_floor=lo, f0_ceil=hi, frame_period=10.0)
+        return np.where(f0 > 0, f0, np.nan)
+    first = run(FMIN, FMAX)
+    rng = adaptive_range(first)
+    return first if rng is None else run(*rng)
+
+
+def _measure_job(job):
+    """One clip: both trackers, and the truth contour for a synthesized one."""
+    kind, payload, text = job
+    truth, audio_s = None, None
+    if kind == "real":
+        audio, sr = payload
+    else:
+        import soundfile as sf
+        audio, sr = sf.read(payload, dtype="float32")
+        audio_s = len(audio) / sr
+        f0 = np.load(str(Path(payload).with_suffix(".f0.npy")))
+        truth = summarize_f0(np.where(f0 >= FMIN, f0, np.nan))
+    return {**measure_both(audio, sr, text), "audio_s": audio_s, "truth": truth}
 
 
 def measure_both(audio, sr, text):
@@ -138,6 +164,8 @@ def main() -> None:
     p.add_argument("--speakers", type=int, default=12)
     p.add_argument("--utterances", type=int, default=5)
     p.add_argument("--threads", type=int, default=4)
+    p.add_argument("--workers", type=int, default=4,
+                   help="processes for measurement (synthesis is sequential)")
     p.add_argument("--seed", type=int, default=1234)
     p.add_argument("--text-case", choices=["raw", "sentence"], default="sentence")
     args = p.parse_args()
@@ -148,8 +176,11 @@ def main() -> None:
     print(f"cmd: python {shlex.join(sys.argv)}\n")
     import librosa
     import pyworld
-    print(f"trackers: pYIN (librosa {librosa.__version__}), "
-          f"Harvest (pyworld {getattr(pyworld, '__version__', '?')})\n")
+    print(f"trackers: pYIN two-pass (librosa {librosa.__version__}, the harness's), "
+          f"Harvest two-pass (pyworld {getattr(pyworld, '__version__', '?')}, "
+          f"cross-check); truth: the model's own F0 contour\n")
+    from multiprocessing import get_context
+    pool = get_context("fork").Pool(args.workers)
 
     speakers = corpora.load("librispeech", args.speakers, args.utterances)
     spk_ids = list(speakers)
@@ -164,7 +195,8 @@ def main() -> None:
 
     # --- real recordings: targets, same-speaker and different-speaker pairs --
     print("measuring real recordings...", flush=True)
-    real = [measure_both(it["audio"], it["sr"], it["text"]) for it in items]
+    real = pool.map(_measure_job, [("real", (it["audio"], it["sr"]), it["text"])
+                                   for it in items])
     index = {(it["speaker"], it["j"]): k for k, it in enumerate(items)}
 
     def other_same(k):          # another recording of the same speaker
@@ -219,12 +251,8 @@ def main() -> None:
             gc.collect()
         else:
             print(f"[{arm}] all {n} reused from {d}", flush=True)
-        rows = []
-        for k, pth in enumerate(paths):
-            wav, sr = sf.read(str(pth), dtype="float32")
-            rows.append({"audio_s": len(wav) / sr,
-                         **measure_both(wav, sr, items[k]["text"])})
-        synth[arm] = rows
+        synth[arm] = pool.map(_measure_job, [("synth", str(pth), items[k]["text"])
+                                             for k, pth in enumerate(paths)])
         print(f"[{arm}] measured", flush=True)
 
     # --- same audio as the published WER/SIM? ----------------------------------
@@ -249,7 +277,10 @@ def main() -> None:
         row = {"speaker": it["speaker"], "j": it["j"], "words": len(it["text"].split()),
                "real": {t: real[k][t].to_dict() for t in TRACKERS}}
         for arm, *_ in ARMS:
+            tm, trg = synth[arm][k]["truth"]
             row[arm] = {"audio_s": synth[arm][k]["audio_s"],
+                        "truth": {"median_f0_hz": None if tm != tm else round(tm, 1),
+                                  "pitch_range_st": None if trg != trg else round(trg, 3)},
                         **{t: synth[arm][k][t].to_dict() for t in TRACKERS}}
         out.append(row)
     Path(args.per_utterance).write_text(json.dumps(out, indent=1))
@@ -329,6 +360,31 @@ def main() -> None:
         print("  gap: |median F0 - the held-out recording's|, st; ground truth = another "
               "recording.")
 
+    # --- truth: the contour the vocoder was driven with ------------------------------
+    print("\n" + "=" * 92)
+    print("TRUTH — the model's own F0 contour (synthesized audio only; no tracker)")
+    print("=" * 92)
+    t_off = np.array([r["truth"][1] for r in synth[CONTROL]])
+    print(f"{'arm':>24} {'range':>6}   {'vs off: d range':>15} {'+/-':>7} {'p':>9}"
+          f"   {'tracker - truth: pYIN':>21} {'Harvest':>8}")
+    for arm, name, *_ in ARMS:
+        tr = np.array([r["truth"][1] for r in synth[arm]])
+        line = f"{name:>24} {np.nanmean(tr):>6.2f}   "
+        if arm != CONTROL:
+            d, up, down, pv = paired(tr, t_off)
+            line += f"{d:>+15.2f} {f'{up}/{down}':>7} {pv:>9.2g}   "
+        else:
+            line += f"{'':>15} {'':>7} {'':>9}   "
+        err = {t: mean([r[t].pitch_range_st - r["truth"][1] for r in synth[arm]])
+               for t in TRACKERS}
+        line += f"{err['pyin']:>+21.2f} {err['harvest']:>+8.2f}"
+        print(line)
+    print("  range: p10-p90 of the predicted contour over frames >= 50 Hz, semitones. "
+          "'tracker - truth'")
+    print("  is each tracker's mean error on that arm: equal across arms means the arm "
+          "differences above")
+    print("  survive measurement.")
+
     # --- seed diversity -------------------------------------------------------------
     print("\n" + "=" * 92)
     print("SEED DIVERSITY — two seeds' renditions of the same utterance")
@@ -347,6 +403,16 @@ def main() -> None:
             print(f"{label:>24}  length differs {100 * dlen.mean():5.2f}% "
                   f"(identical on {ident}/{n})   |d range| {dr.mean():.2f} st   "
                   f"|d median F0| {dm.mean():.2f} st")
+    print("[truth]")
+    for label, a, b in SETTINGS:
+        tr = [abs(x["truth"][1] - y["truth"][1]) for x, y in zip(synth[a], synth[b])]
+        tm = [pitch_gap_st(x["truth"][0], y["truth"][0]) for x, y in zip(synth[a], synth[b])]
+        same = sum(np.array_equal(np.load(str(audio_dir / a / f"{k:02d}_{it['speaker']}_{it['j']}.f0.npy")),
+                                  np.load(str(audio_dir / b / f"{k:02d}_{it['speaker']}_{it['j']}.f0.npy")))
+                   for k, it in enumerate(items))
+        print(f"{label:>24}  contour identical on {same}/{n}   |d range| {mean(tr):.2f} st   "
+              f"|d median F0| {mean(tm):.2f} st")
+    pool.close()
 
 
 if __name__ == "__main__":

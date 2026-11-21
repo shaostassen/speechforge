@@ -1,0 +1,35 @@
+study=prosody_checks:tracker  hardware=Intel(R) Xeon(R) Processor @ 2.30GHz  date=2026-11-21
+cmd: python scripts/prosody_checks.py --audio-dir /home/user/sf-runs/prosody/audio --workers 4
+librosa 1.0.1, pyworld 0.3.5
+
+420 clips: 60 real, 360 synthesized (off, off_s1, default, default_s1, full, full_s1); 4 workers
+
+================================================================================================
+AGAINST TRUTH — synthesized clips, the model's own F0 contour (n=360)
+================================================================================================
+  tracker     GPE   fine  recall  false-v  |d med|  d range |d range|  >2 st   GPE by arm
+     pyin   1.19%   0.42   79.2%     6.6%     0.38    +0.67      1.06     18   off 1.7  off_s1 1.7  default 0.9  default_s1 1.0  full 1.2  full_s1 0.8
+    pyin2   0.54%   0.38   70.6%     1.9%     0.42    +0.04      0.59      8   off 0.7  off_s1 0.7  default 0.4  default_s1 0.5  full 0.5  full_s1 0.5
+  harvest   7.92%   0.52   95.7%    38.9%     0.24    +3.82      3.83    121   off 9.0  off_s1 8.7  default 7.9  default_s1 8.4  full 7.1  full_s1 6.3
+ harvest2   5.71%   0.52   94.5%    35.0%     0.24    +1.38      1.46     17   off 7.4  off_s1 7.5  default 5.0  default_s1 5.0  full 5.1  full_s1 4.2
+
+  truth: median F0 and p10-p90 range of the predicted contour over frames >= 50 Hz; mean range 6.69 st.
+  GPE: frames voiced in both with error > 20%. fine: mean |st| error on the rest. recall: truth-voiced
+  frames the tracker voices. false-v: frames the vocoder leaves unvoiced (F0 <= 10 Hz) that it voices.
+  d med / d range: per utterance, tracker minus truth, semitones; >2 st: utterances whose range is off by more.
+
+================================================================================================
+NOISE FLOOR — diffusion off, two seeds: identical F0 contour (n=60 pairs)
+================================================================================================
+     pyin  |d range| mean 0.53 st, 90th pct 0.26, > 2 st on 2/60;  |d median| 0.11 st;  pinned at floor 1.08%
+    pyin2  |d range| mean 0.12 st, 90th pct 0.23, > 2 st on 1/60;  |d median| 0.06 st;  pinned at floor 1.39%
+  harvest  |d range| mean 0.65 st, 90th pct 1.44, > 2 st on 5/60;  |d median| 0.12 st;  pinned at floor 0.17%
+ harvest2  |d range| mean 0.43 st, 90th pct 0.37, > 2 st on 1/60;  |d median| 0.11 st;  pinned at floor 0.17%
+
+================================================================================================
+REAL SPEECH — no truth contour (n=60)
+================================================================================================
+     pyin  range 10.19 st;  pinned 2.78%;  pitch gap: same speaker 2.46, different 6.01, P(same<diff) 0.851;  vs harvest: |d median| 0.38 st, range corr +0.071
+    pyin2  range 9.52 st;  pinned 3.89%;  pitch gap: same speaker 2.65, different 6.09, P(same<diff) 0.846;  vs harvest2: |d median| 0.41 st, range corr +0.323
+  harvest  range 12.67 st;  pinned 0.10%;  pitch gap: same speaker 1.49, different 5.56, P(same<diff) 0.909;  vs pyin: |d median| 0.38 st, range corr +0.071
+ harvest2  range 8.97 st;  pinned 0.23%;  pitch gap: same speaker 1.48, different 5.76, P(same<diff) 0.930;  vs pyin2: |d median| 0.41 st, range corr +0.323

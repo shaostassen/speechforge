@@ -1,0 +1,86 @@
+study=diffusion_prosody  hardware=Intel(R) Xeon(R) Processor @ 2.30GHz  backend=styletts2  corpus=librispeech  seed=1234  text_case=sentence  date=2026-11-21
+cmd: python scripts/diffusion_prosody.py --audio-dir /home/user/sf-runs/prosody/audio --check-against docs/validation_runs/per_utterance_diffusion_ablation.json --per-utterance /home/user/sf-runs/prosody/per_utterance_diffusion_prosody_v1.json --threads 4
+
+trackers: pYIN (librosa 1.0.1), Harvest (pyworld 0.3.5)
+
+speakers: ['1089', '1188', '121', '1221', '1284', '1320', '1580', '1995', '2094', '2300', '237', '260']
+60 held-out utterances
+
+measuring real recordings...
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/utils/weight_norm.py:143: FutureWarning: `torch.nn.utils.weight_norm` is deprecated in favor of `torch.nn.utils.parametrizations.weight_norm`.
+  WeightNorm.apply(module, name, dim)
+/home/user/.venv-sf/lib/python3.12/site-packages/torch/nn/modules/rnn.py:123: UserWarning: dropout option adds dropout after all but last recurrent layer, so non-zero dropout expects num_layers greater than 1, but got dropout=0.2 and num_layers=1
+  warnings.warn(
+[off] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.0, beta=0.0, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[off] measured
+[off_s1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.0, beta=0.0, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[off_s1] measured
+[default] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[default] measured
+[default_s1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=0.3, beta=0.7, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[default_s1] measured
+[full] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=1.0, beta=1.0, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[full] measured
+[full_s1] styletts2 LibriTTS (style diffusion, ADPM2, non-autoregressive; phonemizer GPL-3.0 CLI via subprocess) [alpha=1.0, beta=1.0, diffusion_steps=5, embedding_scale=1.0]: synthesizing 60/60
+[full_s1] measured
+
+[off] synthesized length identical to the published 'no diffusion' arm on 60/60 utterances
+[off_s1] synthesized length identical to the published 'no diffusion, seed+1' arm on 60/60 utterances
+[default] synthesized length identical to the published 'default' arm on 60/60 utterances
+[default_s1] synthesized length identical to the published 'default, seed+1' arm on 60/60 utterances
+[full] synthesized length identical to the published 'full diffusion' arm on 60/60 utterances
+[full_s1] synthesized length identical to the published 'full diffusion, seed+1' arm on 60/60 utterances
+
+per-utterance rows -> /home/user/sf-runs/prosody/per_utterance_diffusion_prosody_v1.json
+
+============================================================================================
+TRACKERS — pYIN against Harvest, and the pitch gap's own scale
+============================================================================================
+          real  n=60   median F0 |pYIN-Harvest|: median 0.38 st, 95th pct 2.19 st, > 6 st: 1
+                pitch range: pYIN 10.19 st, Harvest 12.67 st, corr +0.071;  octave jumps: pYIN 0.00%, Harvest 0.36%
+   synthesized  n=360  median F0 |pYIN-Harvest|: median 0.25 st, 95th pct 1.38 st, > 6 st: 1
+                pitch range: pYIN 7.36 st, Harvest 10.51 st, corr +0.192;  octave jumps: pYIN 0.00%, Harvest 0.48%
+pitch gap pyin  same speaker 2.46 st (n=60), different speaker 6.01 st (n=60); P(same < different) = 0.851
+pitch gap harvest  same speaker 1.49 st (n=60), different speaker 5.56 st (n=60); P(same < different) = 0.909
+
+============================================================================================
+PROSODY (pYIN) — styletts2 on librispeech, n=60, sentence case
+============================================================================================
+                     arm  range  vs real: d     +/-       p     gap  words/s   vs off: d range     +/-       p
+            ground truth  10.19                                2.46     2.85   <- read every row against this
+            no diffusion   9.27       -0.92   27/33    0.52    2.10     2.64
+    no diffusion, seed+1   9.38       -0.81   27/33    0.52    2.18     2.64             +0.11   19/22    0.76
+                 default   7.03       -3.17   16/44 0.00039    2.25     2.74             -2.25    9/51 3.1e-08
+         default, seed+1   6.30       -3.89   11/49 7.6e-07    1.95     2.74             -2.97    4/56 9.1e-13
+          full diffusion   6.50       -3.69   16/44 0.00039    2.45     2.77             -2.77   11/49 7.6e-07
+  full diffusion, seed+1   5.67       -4.52   10/50 1.6e-07    1.95     2.86             -3.60    6/54 9.7e-11
+  range: p10-p90 of F0, semitones. 'vs real' pairs each clone with the speaker's own
+  reading of the same text (+ = livelier); 'vs off' with diffusion off at seed 1234.
+  gap: |median F0 - the held-out recording's|, st; ground truth = another recording.
+
+============================================================================================
+PROSODY (Harvest) — styletts2 on librispeech, n=60, sentence case
+============================================================================================
+                     arm  range  vs real: d     +/-       p     gap  words/s   vs off: d range     +/-       p
+            ground truth  12.67                                1.49     2.85   <- read every row against this
+            no diffusion  13.79       +1.12   31/29     0.9    1.40     2.64
+    no diffusion, seed+1  13.86       +1.19   33/27    0.52    1.40     2.64             +0.07   28/32     0.7
+                 default  10.36       -2.31   15/45 0.00013    1.70     2.74             -3.42    4/56 9.1e-13
+         default, seed+1  10.29       -2.38   12/48 3.2e-06    1.31     2.74             -3.49    8/52 5.2e-09
+          full diffusion   7.81       -4.87   13/47 1.2e-05    1.93     2.77             -5.98    5/55   1e-11
+  full diffusion, seed+1   6.94       -5.74    8/52 5.2e-09    1.40     2.86             -6.85    2/58 3.2e-15
+  range: p10-p90 of F0, semitones. 'vs real' pairs each clone with the speaker's own
+  reading of the same text (+ = livelier); 'vs off' with diffusion off at seed 1234.
+  gap: |median F0 - the held-out recording's|, st; ground truth = another recording.
+
+============================================================================================
+SEED DIVERSITY — two seeds' renditions of the same utterance
+============================================================================================
+[pYIN]
+            no diffusion  length differs  0.00% (identical on 60/60)   |d range| 0.53 st   |d median F0| 0.11 st
+                 default  length differs  2.60% (identical on 2/60)   |d range| 1.08 st   |d median F0| 1.22 st
+          full diffusion  length differs  3.73% (identical on 1/60)   |d range| 0.86 st   |d median F0| 1.68 st
+[Harvest]
+            no diffusion  length differs  0.00% (identical on 60/60)   |d range| 0.65 st   |d median F0| 0.12 st
+                 default  length differs  2.60% (identical on 2/60)   |d range| 0.89 st   |d median F0| 1.13 st
+          full diffusion  length differs  3.73% (identical on 1/60)   |d range| 0.98 st   |d median F0| 1.67 st

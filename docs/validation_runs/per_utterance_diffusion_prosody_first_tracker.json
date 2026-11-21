@@ -1,0 +1,8222 @@
+[
+ {
+  "speaker": "1089",
+  "j": 0,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 80.8,
+    "pitch_range_st": 4.68,
+    "voiced_fraction": 0.44,
+    "jump_fraction": 0.0,
+    "speech_s": 2.76,
+    "words_per_s": 2.899
+   },
+   "harvest": {
+    "median_f0_hz": 80.0,
+    "pitch_range_st": 9.161,
+    "voiced_fraction": 0.798,
+    "jump_fraction": 0.0,
+    "speech_s": 2.76,
+    "words_per_s": 2.899
+   }
+  },
+  "off": {
+   "audio_s": 3.6479166666666667,
+   "pyin": {
+    "median_f0_hz": 97.2,
+    "pitch_range_st": 8.67,
+    "voiced_fraction": 0.688,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 2.581
+   },
+   "harvest": {
+    "median_f0_hz": 93.1,
+    "pitch_range_st": 13.354,
+    "voiced_fraction": 0.871,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 2.581
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.6479166666666667,
+   "pyin": {
+    "median_f0_hz": 97.2,
+    "pitch_range_st": 8.7,
+    "voiced_fraction": 0.685,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 2.581
+   },
+   "harvest": {
+    "median_f0_hz": 93.9,
+    "pitch_range_st": 13.272,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 2.581
+   }
+  },
+  "default": {
+   "audio_s": 3.347916666666667,
+   "pyin": {
+    "median_f0_hz": 91.7,
+    "pitch_range_st": 5.74,
+    "voiced_fraction": 0.721,
+    "jump_fraction": 0.0,
+    "speech_s": 2.86,
+    "words_per_s": 2.797
+   },
+   "harvest": {
+    "median_f0_hz": 92.4,
+    "pitch_range_st": 7.807,
+    "voiced_fraction": 0.864,
+    "jump_fraction": 0.0,
+    "speech_s": 2.86,
+    "words_per_s": 2.797
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.497916666666667,
+   "pyin": {
+    "median_f0_hz": 98.3,
+    "pitch_range_st": 4.58,
+    "voiced_fraction": 0.641,
+    "jump_fraction": 0.0,
+    "speech_s": 3.0,
+    "words_per_s": 2.667
+   },
+   "harvest": {
+    "median_f0_hz": 97.2,
+    "pitch_range_st": 8.708,
+    "voiced_fraction": 0.834,
+    "jump_fraction": 0.0041,
+    "speech_s": 3.0,
+    "words_per_s": 2.667
+   }
+  },
+  "full": {
+   "audio_s": 3.222916666666667,
+   "pyin": {
+    "median_f0_hz": 93.3,
+    "pitch_range_st": 4.81,
+    "voiced_fraction": 0.645,
+    "jump_fraction": 0.0,
+    "speech_s": 2.78,
+    "words_per_s": 2.878
+   },
+   "harvest": {
+    "median_f0_hz": 93.0,
+    "pitch_range_st": 6.965,
+    "voiced_fraction": 0.828,
+    "jump_fraction": 0.0,
+    "speech_s": 2.78,
+    "words_per_s": 2.878
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.247916666666667,
+   "pyin": {
+    "median_f0_hz": 106.6,
+    "pitch_range_st": 4.7,
+    "voiced_fraction": 0.716,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.92
+   },
+   "harvest": {
+    "median_f0_hz": 106.5,
+    "pitch_range_st": 5.783,
+    "voiced_fraction": 0.84,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.92
+   }
+  }
+ },
+ {
+  "speaker": "1089",
+  "j": 1,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 92.8,
+    "pitch_range_st": 4.53,
+    "voiced_fraction": 0.747,
+    "jump_fraction": 0.0,
+    "speech_s": 5.72,
+    "words_per_s": 3.147
+   },
+   "harvest": {
+    "median_f0_hz": 90.8,
+    "pitch_range_st": 6.425,
+    "voiced_fraction": 0.89,
+    "jump_fraction": 0.0,
+    "speech_s": 5.72,
+    "words_per_s": 3.147
+   }
+  },
+  "off": {
+   "audio_s": 7.272916666666666,
+   "pyin": {
+    "median_f0_hz": 93.3,
+    "pitch_range_st": 6.08,
+    "voiced_fraction": 0.582,
+    "jump_fraction": 0.0,
+    "speech_s": 6.72,
+    "words_per_s": 2.679
+   },
+   "harvest": {
+    "median_f0_hz": 92.2,
+    "pitch_range_st": 9.008,
+    "voiced_fraction": 0.796,
+    "jump_fraction": 0.0,
+    "speech_s": 6.72,
+    "words_per_s": 2.679
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.272916666666666,
+   "pyin": {
+    "median_f0_hz": 93.3,
+    "pitch_range_st": 5.98,
+    "voiced_fraction": 0.582,
+    "jump_fraction": 0.0,
+    "speech_s": 6.72,
+    "words_per_s": 2.679
+   },
+   "harvest": {
+    "median_f0_hz": 91.9,
+    "pitch_range_st": 9.216,
+    "voiced_fraction": 0.804,
+    "jump_fraction": 0.0,
+    "speech_s": 6.72,
+    "words_per_s": 2.679
+   }
+  },
+  "default": {
+   "audio_s": 7.047916666666667,
+   "pyin": {
+    "median_f0_hz": 95.5,
+    "pitch_range_st": 5.04,
+    "voiced_fraction": 0.579,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 2.769
+   },
+   "harvest": {
+    "median_f0_hz": 94.7,
+    "pitch_range_st": 7.977,
+    "voiced_fraction": 0.808,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 2.769
+   }
+  },
+  "default_s1": {
+   "audio_s": 6.897916666666666,
+   "pyin": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 4.5,
+    "voiced_fraction": 0.634,
+    "jump_fraction": 0.0,
+    "speech_s": 6.38,
+    "words_per_s": 2.821
+   },
+   "harvest": {
+    "median_f0_hz": 101.6,
+    "pitch_range_st": 7.627,
+    "voiced_fraction": 0.79,
+    "jump_fraction": 0.0,
+    "speech_s": 6.38,
+    "words_per_s": 2.821
+   }
+  },
+  "full": {
+   "audio_s": 6.972916666666666,
+   "pyin": {
+    "median_f0_hz": 96.6,
+    "pitch_range_st": 6.17,
+    "voiced_fraction": 0.635,
+    "jump_fraction": 0.0,
+    "speech_s": 6.48,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 96.7,
+    "pitch_range_st": 6.666,
+    "voiced_fraction": 0.814,
+    "jump_fraction": 0.0,
+    "speech_s": 6.48,
+    "words_per_s": 2.778
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.747916666666667,
+   "pyin": {
+    "median_f0_hz": 107.2,
+    "pitch_range_st": 5.91,
+    "voiced_fraction": 0.672,
+    "jump_fraction": 0.0,
+    "speech_s": 6.24,
+    "words_per_s": 2.885
+   },
+   "harvest": {
+    "median_f0_hz": 105.9,
+    "pitch_range_st": 7.325,
+    "voiced_fraction": 0.795,
+    "jump_fraction": 0.0,
+    "speech_s": 6.24,
+    "words_per_s": 2.885
+   }
+  }
+ },
+ {
+  "speaker": "1089",
+  "j": 2,
+  "words": 7,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 14.66,
+    "voiced_fraction": 0.871,
+    "jump_fraction": 0.0,
+    "speech_s": 2.0,
+    "words_per_s": 3.5
+   },
+   "harvest": {
+    "median_f0_hz": 170.7,
+    "pitch_range_st": 14.727,
+    "voiced_fraction": 0.955,
+    "jump_fraction": 0.0,
+    "speech_s": 2.0,
+    "words_per_s": 3.5
+   }
+  },
+  "off": {
+   "audio_s": 3.222916666666667,
+   "pyin": {
+    "median_f0_hz": 96.6,
+    "pitch_range_st": 10.59,
+    "voiced_fraction": 0.647,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.555
+   },
+   "harvest": {
+    "median_f0_hz": 96.2,
+    "pitch_range_st": 12.085,
+    "voiced_fraction": 0.931,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.555
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.222916666666667,
+   "pyin": {
+    "median_f0_hz": 96.6,
+    "pitch_range_st": 10.62,
+    "voiced_fraction": 0.647,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.555
+   },
+   "harvest": {
+    "median_f0_hz": 96.3,
+    "pitch_range_st": 11.893,
+    "voiced_fraction": 0.909,
+    "jump_fraction": 0.0,
+    "speech_s": 2.74,
+    "words_per_s": 2.555
+   }
+  },
+  "default": {
+   "audio_s": 2.997916666666667,
+   "pyin": {
+    "median_f0_hz": 94.4,
+    "pitch_range_st": 5.68,
+    "voiced_fraction": 0.723,
+    "jump_fraction": 0.0,
+    "speech_s": 2.52,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 96.1,
+    "pitch_range_st": 7.355,
+    "voiced_fraction": 0.937,
+    "jump_fraction": 0.0,
+    "speech_s": 2.52,
+    "words_per_s": 2.778
+   }
+  },
+  "default_s1": {
+   "audio_s": 2.972916666666667,
+   "pyin": {
+    "median_f0_hz": 99.4,
+    "pitch_range_st": 5.19,
+    "voiced_fraction": 0.845,
+    "jump_fraction": 0.0,
+    "speech_s": 2.5,
+    "words_per_s": 2.8
+   },
+   "harvest": {
+    "median_f0_hz": 98.8,
+    "pitch_range_st": 6.125,
+    "voiced_fraction": 0.944,
+    "jump_fraction": 0.0,
+    "speech_s": 2.5,
+    "words_per_s": 2.8
+   }
+  },
+  "full": {
+   "audio_s": 2.7979166666666666,
+   "pyin": {
+    "median_f0_hz": 98.9,
+    "pitch_range_st": 4.82,
+    "voiced_fraction": 0.915,
+    "jump_fraction": 0.0,
+    "speech_s": 2.34,
+    "words_per_s": 2.991
+   },
+   "harvest": {
+    "median_f0_hz": 99.7,
+    "pitch_range_st": 6.312,
+    "voiced_fraction": 0.979,
+    "jump_fraction": 0.0,
+    "speech_s": 2.34,
+    "words_per_s": 2.991
+   }
+  },
+  "full_s1": {
+   "audio_s": 2.7729166666666667,
+   "pyin": {
+    "median_f0_hz": 107.8,
+    "pitch_range_st": 5.0,
+    "voiced_fraction": 0.913,
+    "jump_fraction": 0.0,
+    "speech_s": 2.28,
+    "words_per_s": 3.07
+   },
+   "harvest": {
+    "median_f0_hz": 107.5,
+    "pitch_range_st": 5.666,
+    "voiced_fraction": 0.939,
+    "jump_fraction": 0.0,
+    "speech_s": 2.28,
+    "words_per_s": 3.07
+   }
+  }
+ },
+ {
+  "speaker": "1089",
+  "j": 3,
+  "words": 11,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 112.2,
+    "pitch_range_st": 19.16,
+    "voiced_fraction": 0.61,
+    "jump_fraction": 0.0,
+    "speech_s": 4.96,
+    "words_per_s": 2.218
+   },
+   "harvest": {
+    "median_f0_hz": 110.6,
+    "pitch_range_st": 18.937,
+    "voiced_fraction": 0.95,
+    "jump_fraction": 0.0086,
+    "speech_s": 4.96,
+    "words_per_s": 2.218
+   }
+  },
+  "off": {
+   "audio_s": 4.997916666666667,
+   "pyin": {
+    "median_f0_hz": 92.2,
+    "pitch_range_st": 8.81,
+    "voiced_fraction": 0.649,
+    "jump_fraction": 0.0,
+    "speech_s": 4.46,
+    "words_per_s": 2.466
+   },
+   "harvest": {
+    "median_f0_hz": 93.8,
+    "pitch_range_st": 10.823,
+    "voiced_fraction": 0.861,
+    "jump_fraction": 0.0,
+    "speech_s": 4.46,
+    "words_per_s": 2.466
+   }
+  },
+  "off_s1": {
+   "audio_s": 4.997916666666667,
+   "pyin": {
+    "median_f0_hz": 91.7,
+    "pitch_range_st": 9.06,
+    "voiced_fraction": 0.655,
+    "jump_fraction": 0.0,
+    "speech_s": 4.46,
+    "words_per_s": 2.466
+   },
+   "harvest": {
+    "median_f0_hz": 92.6,
+    "pitch_range_st": 12.105,
+    "voiced_fraction": 0.906,
+    "jump_fraction": 0.0025,
+    "speech_s": 4.46,
+    "words_per_s": 2.466
+   }
+  },
+  "default": {
+   "audio_s": 4.772916666666666,
+   "pyin": {
+    "median_f0_hz": 91.7,
+    "pitch_range_st": 5.86,
+    "voiced_fraction": 0.691,
+    "jump_fraction": 0.0,
+    "speech_s": 4.26,
+    "words_per_s": 2.582
+   },
+   "harvest": {
+    "median_f0_hz": 92.1,
+    "pitch_range_st": 7.072,
+    "voiced_fraction": 0.852,
+    "jump_fraction": 0.0,
+    "speech_s": 4.26,
+    "words_per_s": 2.582
+   }
+  },
+  "default_s1": {
+   "audio_s": 4.847916666666666,
+   "pyin": {
+    "median_f0_hz": 98.3,
+    "pitch_range_st": 5.16,
+    "voiced_fraction": 0.727,
+    "jump_fraction": 0.0,
+    "speech_s": 4.32,
+    "words_per_s": 2.546
+   },
+   "harvest": {
+    "median_f0_hz": 100.6,
+    "pitch_range_st": 6.425,
+    "voiced_fraction": 0.824,
+    "jump_fraction": 0.0,
+    "speech_s": 4.32,
+    "words_per_s": 2.546
+   }
+  },
+  "full": {
+   "audio_s": 4.697916666666667,
+   "pyin": {
+    "median_f0_hz": 93.8,
+    "pitch_range_st": 6.0,
+    "voiced_fraction": 0.784,
+    "jump_fraction": 0.0,
+    "speech_s": 4.2,
+    "words_per_s": 2.619
+   },
+   "harvest": {
+    "median_f0_hz": 93.6,
+    "pitch_range_st": 6.424,
+    "voiced_fraction": 0.857,
+    "jump_fraction": 0.0,
+    "speech_s": 4.2,
+    "words_per_s": 2.619
+   }
+  },
+  "full_s1": {
+   "audio_s": 4.747916666666667,
+   "pyin": {
+    "median_f0_hz": 108.4,
+    "pitch_range_st": 5.1,
+    "voiced_fraction": 0.8,
+    "jump_fraction": 0.0,
+    "speech_s": 4.2,
+    "words_per_s": 2.619
+   },
+   "harvest": {
+    "median_f0_hz": 107.6,
+    "pitch_range_st": 5.59,
+    "voiced_fraction": 0.817,
+    "jump_fraction": 0.0,
+    "speech_s": 4.2,
+    "words_per_s": 2.619
+   }
+  }
+ },
+ {
+  "speaker": "1089",
+  "j": 4,
+  "words": 22,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 97.7,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.786,
+    "jump_fraction": 0.0,
+    "speech_s": 8.82,
+    "words_per_s": 2.494
+   },
+   "harvest": {
+    "median_f0_hz": 95.5,
+    "pitch_range_st": 11.905,
+    "voiced_fraction": 0.911,
+    "jump_fraction": 0.0,
+    "speech_s": 8.82,
+    "words_per_s": 2.494
+   }
+  },
+  "off": {
+   "audio_s": 9.247916666666667,
+   "pyin": {
+    "median_f0_hz": 91.7,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.61,
+    "jump_fraction": 0.0,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   },
+   "harvest": {
+    "median_f0_hz": 90.0,
+    "pitch_range_st": 11.909,
+    "voiced_fraction": 0.814,
+    "jump_fraction": 0.0,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   }
+  },
+  "off_s1": {
+   "audio_s": 9.247916666666667,
+   "pyin": {
+    "median_f0_hz": 92.0,
+    "pitch_range_st": 7.73,
+    "voiced_fraction": 0.606,
+    "jump_fraction": 0.0,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   },
+   "harvest": {
+    "median_f0_hz": 90.3,
+    "pitch_range_st": 12.088,
+    "voiced_fraction": 0.827,
+    "jump_fraction": 0.0014,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   }
+  },
+  "default": {
+   "audio_s": 9.172916666666667,
+   "pyin": {
+    "median_f0_hz": 94.9,
+    "pitch_range_st": 6.85,
+    "voiced_fraction": 0.714,
+    "jump_fraction": 0.0,
+    "speech_s": 8.62,
+    "words_per_s": 2.552
+   },
+   "harvest": {
+    "median_f0_hz": 94.6,
+    "pitch_range_st": 6.978,
+    "voiced_fraction": 0.81,
+    "jump_fraction": 0.0,
+    "speech_s": 8.62,
+    "words_per_s": 2.552
+   }
+  },
+  "default_s1": {
+   "audio_s": 9.272916666666667,
+   "pyin": {
+    "median_f0_hz": 101.7,
+    "pitch_range_st": 6.4,
+    "voiced_fraction": 0.724,
+    "jump_fraction": 0.0,
+    "speech_s": 8.78,
+    "words_per_s": 2.506
+   },
+   "harvest": {
+    "median_f0_hz": 101.0,
+    "pitch_range_st": 7.471,
+    "voiced_fraction": 0.836,
+    "jump_fraction": 0.0,
+    "speech_s": 8.78,
+    "words_per_s": 2.506
+   }
+  },
+  "full": {
+   "audio_s": 9.097916666666666,
+   "pyin": {
+    "median_f0_hz": 96.6,
+    "pitch_range_st": 6.71,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0,
+    "speech_s": 8.62,
+    "words_per_s": 2.552
+   },
+   "harvest": {
+    "median_f0_hz": 96.5,
+    "pitch_range_st": 6.893,
+    "voiced_fraction": 0.863,
+    "jump_fraction": 0.0,
+    "speech_s": 8.62,
+    "words_per_s": 2.552
+   }
+  },
+  "full_s1": {
+   "audio_s": 9.172916666666667,
+   "pyin": {
+    "median_f0_hz": 108.4,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.731,
+    "jump_fraction": 0.0,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   },
+   "harvest": {
+    "median_f0_hz": 108.2,
+    "pitch_range_st": 6.144,
+    "voiced_fraction": 0.812,
+    "jump_fraction": 0.0,
+    "speech_s": 8.7,
+    "words_per_s": 2.529
+   }
+  }
+ },
+ {
+  "speaker": "1188",
+  "j": 0,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 105.3,
+    "pitch_range_st": 4.5,
+    "voiced_fraction": 0.428,
+    "jump_fraction": 0.0,
+    "speech_s": 9.04,
+    "words_per_s": 1.991
+   },
+   "harvest": {
+    "median_f0_hz": 101.6,
+    "pitch_range_st": 9.773,
+    "voiced_fraction": 0.613,
+    "jump_fraction": 0.0,
+    "speech_s": 9.04,
+    "words_per_s": 1.991
+   }
+  },
+  "off": {
+   "audio_s": 11.697916666666666,
+   "pyin": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 15.98,
+    "voiced_fraction": 0.558,
+    "jump_fraction": 0.0,
+    "speech_s": 11.34,
+    "words_per_s": 1.587
+   },
+   "harvest": {
+    "median_f0_hz": 101.4,
+    "pitch_range_st": 13.43,
+    "voiced_fraction": 0.711,
+    "jump_fraction": 0.0,
+    "speech_s": 11.34,
+    "words_per_s": 1.587
+   }
+  },
+  "off_s1": {
+   "audio_s": 11.697916666666666,
+   "pyin": {
+    "median_f0_hz": 102.6,
+    "pitch_range_st": 5.7,
+    "voiced_fraction": 0.543,
+    "jump_fraction": 0.0,
+    "speech_s": 11.34,
+    "words_per_s": 1.587
+   },
+   "harvest": {
+    "median_f0_hz": 100.3,
+    "pitch_range_st": 13.374,
+    "voiced_fraction": 0.696,
+    "jump_fraction": 0.0,
+    "speech_s": 11.34,
+    "words_per_s": 1.587
+   }
+  },
+  "default": {
+   "audio_s": 10.172916666666667,
+   "pyin": {
+    "median_f0_hz": 100.0,
+    "pitch_range_st": 6.5,
+    "voiced_fraction": 0.634,
+    "jump_fraction": 0.0,
+    "speech_s": 9.78,
+    "words_per_s": 1.84
+   },
+   "harvest": {
+    "median_f0_hz": 101.1,
+    "pitch_range_st": 7.103,
+    "voiced_fraction": 0.715,
+    "jump_fraction": 0.0,
+    "speech_s": 9.78,
+    "words_per_s": 1.84
+   }
+  },
+  "default_s1": {
+   "audio_s": 9.922916666666667,
+   "pyin": {
+    "median_f0_hz": 107.8,
+    "pitch_range_st": 16.68,
+    "voiced_fraction": 0.613,
+    "jump_fraction": 0.0,
+    "speech_s": 9.5,
+    "words_per_s": 1.895
+   },
+   "harvest": {
+    "median_f0_hz": 108.1,
+    "pitch_range_st": 6.842,
+    "voiced_fraction": 0.709,
+    "jump_fraction": 0.0015,
+    "speech_s": 9.5,
+    "words_per_s": 1.895
+   }
+  },
+  "full": {
+   "audio_s": 9.472916666666666,
+   "pyin": {
+    "median_f0_hz": 101.2,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.625,
+    "jump_fraction": 0.0,
+    "speech_s": 9.06,
+    "words_per_s": 1.987
+   },
+   "harvest": {
+    "median_f0_hz": 101.9,
+    "pitch_range_st": 7.384,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0,
+    "speech_s": 9.06,
+    "words_per_s": 1.987
+   }
+  },
+  "full_s1": {
+   "audio_s": 8.922916666666667,
+   "pyin": {
+    "median_f0_hz": 113.2,
+    "pitch_range_st": 5.0,
+    "voiced_fraction": 0.627,
+    "jump_fraction": 0.0,
+    "speech_s": 8.48,
+    "words_per_s": 2.123
+   },
+   "harvest": {
+    "median_f0_hz": 113.5,
+    "pitch_range_st": 6.217,
+    "voiced_fraction": 0.754,
+    "jump_fraction": 0.0,
+    "speech_s": 8.48,
+    "words_per_s": 2.123
+   }
+  }
+ },
+ {
+  "speaker": "1188",
+  "j": 1,
+  "words": 45,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 5.3,
+    "voiced_fraction": 0.554,
+    "jump_fraction": 0.0,
+    "speech_s": 17.5,
+    "words_per_s": 2.571
+   },
+   "harvest": {
+    "median_f0_hz": 100.7,
+    "pitch_range_st": 6.468,
+    "voiced_fraction": 0.702,
+    "jump_fraction": 0.0017,
+    "speech_s": 17.5,
+    "words_per_s": 2.571
+   }
+  },
+  "off": {
+   "audio_s": 23.422916666666666,
+   "pyin": {
+    "median_f0_hz": 102.9,
+    "pitch_range_st": 4.6,
+    "voiced_fraction": 0.576,
+    "jump_fraction": 0.0,
+    "speech_s": 23.203,
+    "words_per_s": 1.939
+   },
+   "harvest": {
+    "median_f0_hz": 101.3,
+    "pitch_range_st": 11.835,
+    "voiced_fraction": 0.705,
+    "jump_fraction": 0.0006,
+    "speech_s": 23.203,
+    "words_per_s": 1.939
+   }
+  },
+  "off_s1": {
+   "audio_s": 23.422916666666666,
+   "pyin": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 4.6,
+    "voiced_fraction": 0.589,
+    "jump_fraction": 0.0,
+    "speech_s": 23.203,
+    "words_per_s": 1.939
+   },
+   "harvest": {
+    "median_f0_hz": 101.1,
+    "pitch_range_st": 11.892,
+    "voiced_fraction": 0.713,
+    "jump_fraction": 0.0019,
+    "speech_s": 23.203,
+    "words_per_s": 1.939
+   }
+  },
+  "default": {
+   "audio_s": 20.672916666666666,
+   "pyin": {
+    "median_f0_hz": 100.0,
+    "pitch_range_st": 4.9,
+    "voiced_fraction": 0.634,
+    "jump_fraction": 0.0,
+    "speech_s": 20.42,
+    "words_per_s": 2.204
+   },
+   "harvest": {
+    "median_f0_hz": 101.4,
+    "pitch_range_st": 7.603,
+    "voiced_fraction": 0.768,
+    "jump_fraction": 0.0,
+    "speech_s": 20.42,
+    "words_per_s": 2.204
+   }
+  },
+  "default_s1": {
+   "audio_s": 20.547916666666666,
+   "pyin": {
+    "median_f0_hz": 107.8,
+    "pitch_range_st": 4.9,
+    "voiced_fraction": 0.624,
+    "jump_fraction": 0.0,
+    "speech_s": 20.3,
+    "words_per_s": 2.217
+   },
+   "harvest": {
+    "median_f0_hz": 108.6,
+    "pitch_range_st": 5.921,
+    "voiced_fraction": 0.739,
+    "jump_fraction": 0.0,
+    "speech_s": 20.3,
+    "words_per_s": 2.217
+   }
+  },
+  "full": {
+   "audio_s": 20.097916666666666,
+   "pyin": {
+    "median_f0_hz": 100.6,
+    "pitch_range_st": 5.2,
+    "voiced_fraction": 0.649,
+    "jump_fraction": 0.0,
+    "speech_s": 19.858,
+    "words_per_s": 2.266
+   },
+   "harvest": {
+    "median_f0_hz": 101.4,
+    "pitch_range_st": 7.172,
+    "voiced_fraction": 0.767,
+    "jump_fraction": 0.0013,
+    "speech_s": 19.858,
+    "words_per_s": 2.266
+   }
+  },
+  "full_s1": {
+   "audio_s": 19.022916666666667,
+   "pyin": {
+    "median_f0_hz": 111.6,
+    "pitch_range_st": 5.1,
+    "voiced_fraction": 0.672,
+    "jump_fraction": 0.0,
+    "speech_s": 18.78,
+    "words_per_s": 2.396
+   },
+   "harvest": {
+    "median_f0_hz": 111.7,
+    "pitch_range_st": 6.182,
+    "voiced_fraction": 0.772,
+    "jump_fraction": 0.0,
+    "speech_s": 18.78,
+    "words_per_s": 2.396
+   }
+  }
+ },
+ {
+  "speaker": "1188",
+  "j": 2,
+  "words": 32,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 97.7,
+    "pitch_range_st": 3.9,
+    "voiced_fraction": 0.507,
+    "jump_fraction": 0.0,
+    "speech_s": 12.58,
+    "words_per_s": 2.544
+   },
+   "harvest": {
+    "median_f0_hz": 95.3,
+    "pitch_range_st": 7.943,
+    "voiced_fraction": 0.772,
+    "jump_fraction": 0.0,
+    "speech_s": 12.58,
+    "words_per_s": 2.544
+   }
+  },
+  "off": {
+   "audio_s": 16.497916666666665,
+   "pyin": {
+    "median_f0_hz": 104.1,
+    "pitch_range_st": 13.24,
+    "voiced_fraction": 0.587,
+    "jump_fraction": 0.0,
+    "speech_s": 16.1,
+    "words_per_s": 1.988
+   },
+   "harvest": {
+    "median_f0_hz": 103.5,
+    "pitch_range_st": 12.842,
+    "voiced_fraction": 0.736,
+    "jump_fraction": 0.0035,
+    "speech_s": 16.1,
+    "words_per_s": 1.988
+   }
+  },
+  "off_s1": {
+   "audio_s": 16.497916666666665,
+   "pyin": {
+    "median_f0_hz": 104.1,
+    "pitch_range_st": 12.3,
+    "voiced_fraction": 0.588,
+    "jump_fraction": 0.0,
+    "speech_s": 16.1,
+    "words_per_s": 1.988
+   },
+   "harvest": {
+    "median_f0_hz": 102.9,
+    "pitch_range_st": 12.345,
+    "voiced_fraction": 0.721,
+    "jump_fraction": 0.0018,
+    "speech_s": 16.1,
+    "words_per_s": 1.988
+   }
+  },
+  "default": {
+   "audio_s": 14.747916666666667,
+   "pyin": {
+    "median_f0_hz": 101.2,
+    "pitch_range_st": 5.9,
+    "voiced_fraction": 0.608,
+    "jump_fraction": 0.0,
+    "speech_s": 14.34,
+    "words_per_s": 2.232
+   },
+   "harvest": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 7.394,
+    "voiced_fraction": 0.73,
+    "jump_fraction": 0.001,
+    "speech_s": 14.34,
+    "words_per_s": 2.232
+   }
+  },
+  "default_s1": {
+   "audio_s": 14.172916666666667,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 4.7,
+    "voiced_fraction": 0.592,
+    "jump_fraction": 0.0,
+    "speech_s": 13.76,
+    "words_per_s": 2.326
+   },
+   "harvest": {
+    "median_f0_hz": 110.2,
+    "pitch_range_st": 6.926,
+    "voiced_fraction": 0.766,
+    "jump_fraction": 0.0,
+    "speech_s": 13.76,
+    "words_per_s": 2.326
+   }
+  },
+  "full": {
+   "audio_s": 14.147916666666667,
+   "pyin": {
+    "median_f0_hz": 100.6,
+    "pitch_range_st": 6.4,
+    "voiced_fraction": 0.619,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.329
+   },
+   "harvest": {
+    "median_f0_hz": 101.9,
+    "pitch_range_st": 7.883,
+    "voiced_fraction": 0.797,
+    "jump_fraction": 0.0019,
+    "speech_s": 13.74,
+    "words_per_s": 2.329
+   }
+  },
+  "full_s1": {
+   "audio_s": 13.297916666666667,
+   "pyin": {
+    "median_f0_hz": 112.9,
+    "pitch_range_st": 4.5,
+    "voiced_fraction": 0.649,
+    "jump_fraction": 0.0,
+    "speech_s": 12.88,
+    "words_per_s": 2.484
+   },
+   "harvest": {
+    "median_f0_hz": 113.0,
+    "pitch_range_st": 6.804,
+    "voiced_fraction": 0.798,
+    "jump_fraction": 0.003,
+    "speech_s": 12.88,
+    "words_per_s": 2.484
+   }
+  }
+ },
+ {
+  "speaker": "1188",
+  "j": 3,
+  "words": 32,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 97.2,
+    "pitch_range_st": 4.4,
+    "voiced_fraction": 0.502,
+    "jump_fraction": 0.0,
+    "speech_s": 10.64,
+    "words_per_s": 3.008
+   },
+   "harvest": {
+    "median_f0_hz": 97.5,
+    "pitch_range_st": 6.55,
+    "voiced_fraction": 0.696,
+    "jump_fraction": 0.0,
+    "speech_s": 10.64,
+    "words_per_s": 3.008
+   }
+  },
+  "off": {
+   "audio_s": 13.847916666666666,
+   "pyin": {
+    "median_f0_hz": 104.1,
+    "pitch_range_st": 4.6,
+    "voiced_fraction": 0.564,
+    "jump_fraction": 0.0,
+    "speech_s": 13.44,
+    "words_per_s": 2.381
+   },
+   "harvest": {
+    "median_f0_hz": 102.2,
+    "pitch_range_st": 13.774,
+    "voiced_fraction": 0.781,
+    "jump_fraction": 0.0039,
+    "speech_s": 13.44,
+    "words_per_s": 2.381
+   }
+  },
+  "off_s1": {
+   "audio_s": 13.847916666666666,
+   "pyin": {
+    "median_f0_hz": 104.1,
+    "pitch_range_st": 4.7,
+    "voiced_fraction": 0.573,
+    "jump_fraction": 0.0,
+    "speech_s": 13.44,
+    "words_per_s": 2.381
+   },
+   "harvest": {
+    "median_f0_hz": 101.9,
+    "pitch_range_st": 13.085,
+    "voiced_fraction": 0.749,
+    "jump_fraction": 0.0041,
+    "speech_s": 13.44,
+    "words_per_s": 2.381
+   }
+  },
+  "default": {
+   "audio_s": 12.472916666666666,
+   "pyin": {
+    "median_f0_hz": 102.3,
+    "pitch_range_st": 6.2,
+    "voiced_fraction": 0.631,
+    "jump_fraction": 0.0,
+    "speech_s": 12.06,
+    "words_per_s": 2.653
+   },
+   "harvest": {
+    "median_f0_hz": 102.0,
+    "pitch_range_st": 7.448,
+    "voiced_fraction": 0.739,
+    "jump_fraction": 0.0011,
+    "speech_s": 12.06,
+    "words_per_s": 2.653
+   }
+  },
+  "default_s1": {
+   "audio_s": 12.097916666666666,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 5.8,
+    "voiced_fraction": 0.612,
+    "jump_fraction": 0.0,
+    "speech_s": 11.68,
+    "words_per_s": 2.74
+   },
+   "harvest": {
+    "median_f0_hz": 110.1,
+    "pitch_range_st": 6.119,
+    "voiced_fraction": 0.728,
+    "jump_fraction": 0.0012,
+    "speech_s": 11.68,
+    "words_per_s": 2.74
+   }
+  },
+  "full": {
+   "audio_s": 11.872916666666667,
+   "pyin": {
+    "median_f0_hz": 101.2,
+    "pitch_range_st": 5.7,
+    "voiced_fraction": 0.638,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.792
+   },
+   "harvest": {
+    "median_f0_hz": 101.9,
+    "pitch_range_st": 7.782,
+    "voiced_fraction": 0.768,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.792
+   }
+  },
+  "full_s1": {
+   "audio_s": 11.397916666666667,
+   "pyin": {
+    "median_f0_hz": 111.6,
+    "pitch_range_st": 5.4,
+    "voiced_fraction": 0.653,
+    "jump_fraction": 0.0,
+    "speech_s": 10.98,
+    "words_per_s": 2.914
+   },
+   "harvest": {
+    "median_f0_hz": 111.3,
+    "pitch_range_st": 5.593,
+    "voiced_fraction": 0.746,
+    "jump_fraction": 0.0,
+    "speech_s": 10.98,
+    "words_per_s": 2.914
+   }
+  }
+ },
+ {
+  "speaker": "1188",
+  "j": 4,
+  "words": 29,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 97.2,
+    "pitch_range_st": 4.1,
+    "voiced_fraction": 0.471,
+    "jump_fraction": 0.0,
+    "speech_s": 8.56,
+    "words_per_s": 3.388
+   },
+   "harvest": {
+    "median_f0_hz": 96.0,
+    "pitch_range_st": 6.511,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0018,
+    "speech_s": 8.56,
+    "words_per_s": 3.388
+   }
+  },
+  "off": {
+   "audio_s": 11.997916666666667,
+   "pyin": {
+    "median_f0_hz": 101.2,
+    "pitch_range_st": 15.5,
+    "voiced_fraction": 0.647,
+    "jump_fraction": 0.0,
+    "speech_s": 11.62,
+    "words_per_s": 2.496
+   },
+   "harvest": {
+    "median_f0_hz": 100.8,
+    "pitch_range_st": 12.881,
+    "voiced_fraction": 0.751,
+    "jump_fraction": 0.0012,
+    "speech_s": 11.62,
+    "words_per_s": 2.496
+   }
+  },
+  "off_s1": {
+   "audio_s": 11.997916666666667,
+   "pyin": {
+    "median_f0_hz": 101.2,
+    "pitch_range_st": 15.58,
+    "voiced_fraction": 0.647,
+    "jump_fraction": 0.0,
+    "speech_s": 11.62,
+    "words_per_s": 2.496
+   },
+   "harvest": {
+    "median_f0_hz": 101.7,
+    "pitch_range_st": 12.816,
+    "voiced_fraction": 0.72,
+    "jump_fraction": 0.0,
+    "speech_s": 11.62,
+    "words_per_s": 2.496
+   }
+  },
+  "default": {
+   "audio_s": 10.372916666666667,
+   "pyin": {
+    "median_f0_hz": 100.0,
+    "pitch_range_st": 6.32,
+    "voiced_fraction": 0.62,
+    "jump_fraction": 0.0,
+    "speech_s": 9.98,
+    "words_per_s": 2.906
+   },
+   "harvest": {
+    "median_f0_hz": 102.8,
+    "pitch_range_st": 7.595,
+    "voiced_fraction": 0.755,
+    "jump_fraction": 0.0014,
+    "speech_s": 9.98,
+    "words_per_s": 2.906
+   }
+  },
+  "default_s1": {
+   "audio_s": 10.222916666666666,
+   "pyin": {
+    "median_f0_hz": 108.4,
+    "pitch_range_st": 6.0,
+    "voiced_fraction": 0.622,
+    "jump_fraction": 0.0,
+    "speech_s": 9.82,
+    "words_per_s": 2.953
+   },
+   "harvest": {
+    "median_f0_hz": 109.1,
+    "pitch_range_st": 7.574,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0028,
+    "speech_s": 9.82,
+    "words_per_s": 2.953
+   }
+  },
+  "full": {
+   "audio_s": 9.747916666666667,
+   "pyin": {
+    "median_f0_hz": 100.3,
+    "pitch_range_st": 6.9,
+    "voiced_fraction": 0.64,
+    "jump_fraction": 0.0,
+    "speech_s": 9.36,
+    "words_per_s": 3.098
+   },
+   "harvest": {
+    "median_f0_hz": 101.5,
+    "pitch_range_st": 8.111,
+    "voiced_fraction": 0.794,
+    "jump_fraction": 0.0,
+    "speech_s": 9.36,
+    "words_per_s": 3.098
+   }
+  },
+  "full_s1": {
+   "audio_s": 9.447916666666666,
+   "pyin": {
+    "median_f0_hz": 113.6,
+    "pitch_range_st": 6.02,
+    "voiced_fraction": 0.651,
+    "jump_fraction": 0.0,
+    "speech_s": 9.04,
+    "words_per_s": 3.208
+   },
+   "harvest": {
+    "median_f0_hz": 111.7,
+    "pitch_range_st": 7.0,
+    "voiced_fraction": 0.791,
+    "jump_fraction": 0.0014,
+    "speech_s": 9.04,
+    "words_per_s": 3.208
+   }
+  }
+ },
+ {
+  "speaker": "121",
+  "j": 0,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 165.3,
+    "pitch_range_st": 10.8,
+    "voiced_fraction": 0.598,
+    "jump_fraction": 0.0,
+    "speech_s": 5.06,
+    "words_per_s": 1.581
+   },
+   "harvest": {
+    "median_f0_hz": 162.8,
+    "pitch_range_st": 14.561,
+    "voiced_fraction": 0.759,
+    "jump_fraction": 0.0079,
+    "speech_s": 5.06,
+    "words_per_s": 1.581
+   }
+  },
+  "off": {
+   "audio_s": 4.397916666666666,
+   "pyin": {
+    "median_f0_hz": 183.9,
+    "pitch_range_st": 10.59,
+    "voiced_fraction": 0.755,
+    "jump_fraction": 0.0,
+    "speech_s": 3.86,
+    "words_per_s": 2.073
+   },
+   "harvest": {
+    "median_f0_hz": 176.2,
+    "pitch_range_st": 12.114,
+    "voiced_fraction": 0.899,
+    "jump_fraction": 0.0029,
+    "speech_s": 3.86,
+    "words_per_s": 2.073
+   }
+  },
+  "off_s1": {
+   "audio_s": 4.397916666666666,
+   "pyin": {
+    "median_f0_hz": 184.5,
+    "pitch_range_st": 10.6,
+    "voiced_fraction": 0.752,
+    "jump_fraction": 0.0,
+    "speech_s": 3.86,
+    "words_per_s": 2.073
+   },
+   "harvest": {
+    "median_f0_hz": 176.2,
+    "pitch_range_st": 12.187,
+    "voiced_fraction": 0.899,
+    "jump_fraction": 0.0029,
+    "speech_s": 3.86,
+    "words_per_s": 2.073
+   }
+  },
+  "default": {
+   "audio_s": 4.022916666666666,
+   "pyin": {
+    "median_f0_hz": 170.1,
+    "pitch_range_st": 7.3,
+    "voiced_fraction": 0.734,
+    "jump_fraction": 0.0,
+    "speech_s": 3.48,
+    "words_per_s": 2.299
+   },
+   "harvest": {
+    "median_f0_hz": 167.9,
+    "pitch_range_st": 7.503,
+    "voiced_fraction": 0.914,
+    "jump_fraction": 0.0,
+    "speech_s": 3.48,
+    "words_per_s": 2.299
+   }
+  },
+  "default_s1": {
+   "audio_s": 4.047916666666667,
+   "pyin": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 5.0,
+    "voiced_fraction": 0.725,
+    "jump_fraction": 0.0,
+    "speech_s": 3.52,
+    "words_per_s": 2.273
+   },
+   "harvest": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 6.72,
+    "voiced_fraction": 0.907,
+    "jump_fraction": 0.0,
+    "speech_s": 3.52,
+    "words_per_s": 2.273
+   }
+  },
+  "full": {
+   "audio_s": 3.8979166666666667,
+   "pyin": {
+    "median_f0_hz": 168.2,
+    "pitch_range_st": 5.75,
+    "voiced_fraction": 0.7,
+    "jump_fraction": 0.0,
+    "speech_s": 3.36,
+    "words_per_s": 2.381
+   },
+   "harvest": {
+    "median_f0_hz": 162.5,
+    "pitch_range_st": 7.529,
+    "voiced_fraction": 0.875,
+    "jump_fraction": 0.0035,
+    "speech_s": 3.36,
+    "words_per_s": 2.381
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.9229166666666666,
+   "pyin": {
+    "median_f0_hz": 176.1,
+    "pitch_range_st": 4.73,
+    "voiced_fraction": 0.761,
+    "jump_fraction": 0.0,
+    "speech_s": 3.38,
+    "words_per_s": 2.367
+   },
+   "harvest": {
+    "median_f0_hz": 176.3,
+    "pitch_range_st": 7.202,
+    "voiced_fraction": 0.873,
+    "jump_fraction": 0.0,
+    "speech_s": 3.38,
+    "words_per_s": 2.367
+   }
+  }
+ },
+ {
+  "speaker": "121",
+  "j": 1,
+  "words": 5,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 156.9,
+    "pitch_range_st": 6.98,
+    "voiced_fraction": 0.642,
+    "jump_fraction": 0.0,
+    "speech_s": 3.68,
+    "words_per_s": 1.359
+   },
+   "harvest": {
+    "median_f0_hz": 153.8,
+    "pitch_range_st": 7.482,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 3.68,
+    "words_per_s": 1.359
+   }
+  },
+  "off": {
+   "audio_s": 2.722916666666667,
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 9.51,
+    "voiced_fraction": 0.837,
+    "jump_fraction": 0.0,
+    "speech_s": 2.14,
+    "words_per_s": 2.336
+   },
+   "harvest": {
+    "median_f0_hz": 176.0,
+    "pitch_range_st": 10.585,
+    "voiced_fraction": 0.977,
+    "jump_fraction": 0.0097,
+    "speech_s": 2.14,
+    "words_per_s": 2.336
+   }
+  },
+  "off_s1": {
+   "audio_s": 2.722916666666667,
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 9.51,
+    "voiced_fraction": 0.837,
+    "jump_fraction": 0.0,
+    "speech_s": 2.14,
+    "words_per_s": 2.336
+   },
+   "harvest": {
+    "median_f0_hz": 178.6,
+    "pitch_range_st": 10.751,
+    "voiced_fraction": 0.958,
+    "jump_fraction": 0.0,
+    "speech_s": 2.14,
+    "words_per_s": 2.336
+   }
+  },
+  "default": {
+   "audio_s": 2.5729166666666665,
+   "pyin": {
+    "median_f0_hz": 164.3,
+    "pitch_range_st": 6.94,
+    "voiced_fraction": 0.881,
+    "jump_fraction": 0.0,
+    "speech_s": 2.0,
+    "words_per_s": 2.5
+   },
+   "harvest": {
+    "median_f0_hz": 163.5,
+    "pitch_range_st": 7.481,
+    "voiced_fraction": 0.965,
+    "jump_fraction": 0.0,
+    "speech_s": 2.0,
+    "words_per_s": 2.5
+   }
+  },
+  "default_s1": {
+   "audio_s": 2.7729166666666667,
+   "pyin": {
+    "median_f0_hz": 167.2,
+    "pitch_range_st": 4.56,
+    "voiced_fraction": 0.888,
+    "jump_fraction": 0.0,
+    "speech_s": 2.22,
+    "words_per_s": 2.252
+   },
+   "harvest": {
+    "median_f0_hz": 162.9,
+    "pitch_range_st": 5.995,
+    "voiced_fraction": 0.991,
+    "jump_fraction": 0.0,
+    "speech_s": 2.22,
+    "words_per_s": 2.252
+   }
+  },
+  "full": {
+   "audio_s": 2.5729166666666665,
+   "pyin": {
+    "median_f0_hz": 162.5,
+    "pitch_range_st": 5.0,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0,
+    "speech_s": 2.12,
+    "words_per_s": 2.358
+   },
+   "harvest": {
+    "median_f0_hz": 159.2,
+    "pitch_range_st": 6.578,
+    "voiced_fraction": 0.953,
+    "jump_fraction": 0.005,
+    "speech_s": 2.12,
+    "words_per_s": 2.358
+   }
+  },
+  "full_s1": {
+   "audio_s": 2.5729166666666665,
+   "pyin": {
+    "median_f0_hz": 162.5,
+    "pitch_range_st": 5.54,
+    "voiced_fraction": 0.906,
+    "jump_fraction": 0.0,
+    "speech_s": 2.02,
+    "words_per_s": 2.475
+   },
+   "harvest": {
+    "median_f0_hz": 161.2,
+    "pitch_range_st": 6.177,
+    "voiced_fraction": 0.926,
+    "jump_fraction": 0.0,
+    "speech_s": 2.02,
+    "words_per_s": 2.475
+   }
+  }
+ },
+ {
+  "speaker": "121",
+  "j": 2,
+  "words": 14,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 9.96,
+    "voiced_fraction": 0.628,
+    "jump_fraction": 0.0,
+    "speech_s": 5.8,
+    "words_per_s": 2.414
+   },
+   "harvest": {
+    "median_f0_hz": 165.2,
+    "pitch_range_st": 10.911,
+    "voiced_fraction": 0.821,
+    "jump_fraction": 0.0,
+    "speech_s": 5.8,
+    "words_per_s": 2.414
+   }
+  },
+  "off": {
+   "audio_s": 5.622916666666667,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 8.4,
+    "voiced_fraction": 0.692,
+    "jump_fraction": 0.0,
+    "speech_s": 5.06,
+    "words_per_s": 2.767
+   },
+   "harvest": {
+    "median_f0_hz": 162.9,
+    "pitch_range_st": 12.43,
+    "voiced_fraction": 0.97,
+    "jump_fraction": 0.0102,
+    "speech_s": 5.06,
+    "words_per_s": 2.767
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.622916666666667,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 8.4,
+    "voiced_fraction": 0.692,
+    "jump_fraction": 0.0,
+    "speech_s": 5.06,
+    "words_per_s": 2.767
+   },
+   "harvest": {
+    "median_f0_hz": 162.7,
+    "pitch_range_st": 14.511,
+    "voiced_fraction": 0.996,
+    "jump_fraction": 0.0139,
+    "speech_s": 5.06,
+    "words_per_s": 2.767
+   }
+  },
+  "default": {
+   "audio_s": 5.197916666666667,
+   "pyin": {
+    "median_f0_hz": 161.5,
+    "pitch_range_st": 6.89,
+    "voiced_fraction": 0.775,
+    "jump_fraction": 0.0,
+    "speech_s": 4.66,
+    "words_per_s": 3.004
+   },
+   "harvest": {
+    "median_f0_hz": 161.4,
+    "pitch_range_st": 8.273,
+    "voiced_fraction": 0.91,
+    "jump_fraction": 0.0,
+    "speech_s": 4.66,
+    "words_per_s": 3.004
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.597916666666666,
+   "pyin": {
+    "median_f0_hz": 176.1,
+    "pitch_range_st": 6.3,
+    "voiced_fraction": 0.75,
+    "jump_fraction": 0.0,
+    "speech_s": 5.04,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 172.7,
+    "pitch_range_st": 7.995,
+    "voiced_fraction": 0.915,
+    "jump_fraction": 0.0044,
+    "speech_s": 5.04,
+    "words_per_s": 2.778
+   }
+  },
+  "full": {
+   "audio_s": 5.097916666666666,
+   "pyin": {
+    "median_f0_hz": 150.7,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.732,
+    "jump_fraction": 0.0,
+    "speech_s": 4.66,
+    "words_per_s": 3.004
+   },
+   "harvest": {
+    "median_f0_hz": 154.1,
+    "pitch_range_st": 7.283,
+    "voiced_fraction": 0.904,
+    "jump_fraction": 0.0,
+    "speech_s": 4.66,
+    "words_per_s": 3.004
+   }
+  },
+  "full_s1": {
+   "audio_s": 5.472916666666666,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 5.2,
+    "voiced_fraction": 0.754,
+    "jump_fraction": 0.0,
+    "speech_s": 4.94,
+    "words_per_s": 2.834
+   },
+   "harvest": {
+    "median_f0_hz": 170.1,
+    "pitch_range_st": 6.429,
+    "voiced_fraction": 0.897,
+    "jump_fraction": 0.0,
+    "speech_s": 4.94,
+    "words_per_s": 2.834
+   }
+  }
+ },
+ {
+  "speaker": "121",
+  "j": 3,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 147.7,
+    "pitch_range_st": 12.94,
+    "voiced_fraction": 0.515,
+    "jump_fraction": 0.0,
+    "speech_s": 2.9,
+    "words_per_s": 2.759
+   },
+   "harvest": {
+    "median_f0_hz": 149.4,
+    "pitch_range_st": 12.676,
+    "voiced_fraction": 0.804,
+    "jump_fraction": 0.0,
+    "speech_s": 2.9,
+    "words_per_s": 2.759
+   }
+  },
+  "off": {
+   "audio_s": 3.497916666666667,
+   "pyin": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 9.64,
+    "voiced_fraction": 0.725,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.721
+   },
+   "harvest": {
+    "median_f0_hz": 165.1,
+    "pitch_range_st": 24.854,
+    "voiced_fraction": 0.973,
+    "jump_fraction": 0.007,
+    "speech_s": 2.94,
+    "words_per_s": 2.721
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.497916666666667,
+   "pyin": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 9.62,
+    "voiced_fraction": 0.729,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.721
+   },
+   "harvest": {
+    "median_f0_hz": 170.3,
+    "pitch_range_st": 17.591,
+    "voiced_fraction": 0.973,
+    "jump_fraction": 0.007,
+    "speech_s": 2.94,
+    "words_per_s": 2.721
+   }
+  },
+  "default": {
+   "audio_s": 3.1979166666666665,
+   "pyin": {
+    "median_f0_hz": 156.9,
+    "pitch_range_st": 8.55,
+    "voiced_fraction": 0.74,
+    "jump_fraction": 0.0,
+    "speech_s": 2.64,
+    "words_per_s": 3.03
+   },
+   "harvest": {
+    "median_f0_hz": 159.4,
+    "pitch_range_st": 9.008,
+    "voiced_fraction": 0.849,
+    "jump_fraction": 0.0,
+    "speech_s": 2.64,
+    "words_per_s": 3.03
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.2979166666666666,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 6.33,
+    "voiced_fraction": 0.715,
+    "jump_fraction": 0.0,
+    "speech_s": 2.76,
+    "words_per_s": 2.899
+   },
+   "harvest": {
+    "median_f0_hz": 169.6,
+    "pitch_range_st": 8.652,
+    "voiced_fraction": 0.928,
+    "jump_fraction": 0.0,
+    "speech_s": 2.76,
+    "words_per_s": 2.899
+   }
+  },
+  "full": {
+   "audio_s": 3.097916666666667,
+   "pyin": {
+    "median_f0_hz": 152.4,
+    "pitch_range_st": 7.0,
+    "voiced_fraction": 0.722,
+    "jump_fraction": 0.0,
+    "speech_s": 2.58,
+    "words_per_s": 3.101
+   },
+   "harvest": {
+    "median_f0_hz": 153.6,
+    "pitch_range_st": 8.752,
+    "voiced_fraction": 0.842,
+    "jump_fraction": 0.0047,
+    "speech_s": 2.58,
+    "words_per_s": 3.101
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.1979166666666665,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 6.18,
+    "voiced_fraction": 0.745,
+    "jump_fraction": 0.0,
+    "speech_s": 2.7,
+    "words_per_s": 2.963
+   },
+   "harvest": {
+    "median_f0_hz": 170.5,
+    "pitch_range_st": 7.581,
+    "voiced_fraction": 0.86,
+    "jump_fraction": 0.0,
+    "speech_s": 2.7,
+    "words_per_s": 2.963
+   }
+  }
+ },
+ {
+  "speaker": "121",
+  "j": 4,
+  "words": 7,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 168.7,
+    "pitch_range_st": 10.92,
+    "voiced_fraction": 0.571,
+    "jump_fraction": 0.0,
+    "speech_s": 3.14,
+    "words_per_s": 2.229
+   },
+   "harvest": {
+    "median_f0_hz": 170.4,
+    "pitch_range_st": 11.266,
+    "voiced_fraction": 0.676,
+    "jump_fraction": 0.0,
+    "speech_s": 3.14,
+    "words_per_s": 2.229
+   }
+  },
+  "off": {
+   "audio_s": 3.622916666666667,
+   "pyin": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 7.5,
+    "voiced_fraction": 0.684,
+    "jump_fraction": 0.0,
+    "speech_s": 3.12,
+    "words_per_s": 2.244
+   },
+   "harvest": {
+    "median_f0_hz": 175.0,
+    "pitch_range_st": 9.202,
+    "voiced_fraction": 0.914,
+    "jump_fraction": 0.0071,
+    "speech_s": 3.12,
+    "words_per_s": 2.244
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.622916666666667,
+   "pyin": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 7.48,
+    "voiced_fraction": 0.681,
+    "jump_fraction": 0.0,
+    "speech_s": 3.12,
+    "words_per_s": 2.244
+   },
+   "harvest": {
+    "median_f0_hz": 175.8,
+    "pitch_range_st": 8.667,
+    "voiced_fraction": 0.904,
+    "jump_fraction": 0.0071,
+    "speech_s": 3.12,
+    "words_per_s": 2.244
+   }
+  },
+  "default": {
+   "audio_s": 3.3979166666666667,
+   "pyin": {
+    "median_f0_hz": 158.7,
+    "pitch_range_st": 5.76,
+    "voiced_fraction": 0.67,
+    "jump_fraction": 0.0,
+    "speech_s": 2.9,
+    "words_per_s": 2.414
+   },
+   "harvest": {
+    "median_f0_hz": 157.0,
+    "pitch_range_st": 7.422,
+    "voiced_fraction": 0.88,
+    "jump_fraction": 0.004,
+    "speech_s": 2.9,
+    "words_per_s": 2.414
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.5229166666666667,
+   "pyin": {
+    "median_f0_hz": 177.2,
+    "pitch_range_st": 5.01,
+    "voiced_fraction": 0.627,
+    "jump_fraction": 0.0,
+    "speech_s": 3.02,
+    "words_per_s": 2.318
+   },
+   "harvest": {
+    "median_f0_hz": 172.9,
+    "pitch_range_st": 8.429,
+    "voiced_fraction": 0.865,
+    "jump_fraction": 0.0039,
+    "speech_s": 3.02,
+    "words_per_s": 2.318
+   }
+  },
+  "full": {
+   "audio_s": 3.372916666666667,
+   "pyin": {
+    "median_f0_hz": 153.3,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.656,
+    "jump_fraction": 0.0,
+    "speech_s": 2.9,
+    "words_per_s": 2.414
+   },
+   "harvest": {
+    "median_f0_hz": 150.1,
+    "pitch_range_st": 14.103,
+    "voiced_fraction": 0.818,
+    "jump_fraction": 0.0043,
+    "speech_s": 2.9,
+    "words_per_s": 2.414
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.4229166666666666,
+   "pyin": {
+    "median_f0_hz": 176.6,
+    "pitch_range_st": 5.21,
+    "voiced_fraction": 0.623,
+    "jump_fraction": 0.0,
+    "speech_s": 2.88,
+    "words_per_s": 2.431
+   },
+   "harvest": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 10.361,
+    "voiced_fraction": 0.907,
+    "jump_fraction": 0.0,
+    "speech_s": 2.88,
+    "words_per_s": 2.431
+   }
+  }
+ },
+ {
+  "speaker": "1221",
+  "j": 0,
+  "words": 48,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 190.4,
+    "pitch_range_st": 3.31,
+    "voiced_fraction": 0.61,
+    "jump_fraction": 0.0,
+    "speech_s": 16.715,
+    "words_per_s": 2.872
+   },
+   "harvest": {
+    "median_f0_hz": 183.7,
+    "pitch_range_st": 22.194,
+    "voiced_fraction": 0.863,
+    "jump_fraction": 0.0127,
+    "speech_s": 16.715,
+    "words_per_s": 2.872
+   }
+  },
+  "off": {
+   "audio_s": 16.597916666666666,
+   "pyin": {
+    "median_f0_hz": 189.9,
+    "pitch_range_st": 4.9,
+    "voiced_fraction": 0.46,
+    "jump_fraction": 0.0,
+    "speech_s": 16.36,
+    "words_per_s": 2.934
+   },
+   "harvest": {
+    "median_f0_hz": 175.6,
+    "pitch_range_st": 22.268,
+    "voiced_fraction": 0.98,
+    "jump_fraction": 0.0356,
+    "speech_s": 16.36,
+    "words_per_s": 2.934
+   }
+  },
+  "off_s1": {
+   "audio_s": 16.597916666666666,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 21.8,
+    "voiced_fraction": 0.475,
+    "jump_fraction": 0.0,
+    "speech_s": 16.36,
+    "words_per_s": 2.934
+   },
+   "harvest": {
+    "median_f0_hz": 175.4,
+    "pitch_range_st": 22.251,
+    "voiced_fraction": 0.973,
+    "jump_fraction": 0.0328,
+    "speech_s": 16.36,
+    "words_per_s": 2.934
+   }
+  },
+  "default": {
+   "audio_s": 17.522916666666667,
+   "pyin": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 4.3,
+    "voiced_fraction": 0.588,
+    "jump_fraction": 0.0,
+    "speech_s": 17.3,
+    "words_per_s": 2.775
+   },
+   "harvest": {
+    "median_f0_hz": 176.0,
+    "pitch_range_st": 21.885,
+    "voiced_fraction": 0.907,
+    "jump_fraction": 0.0264,
+    "speech_s": 17.3,
+    "words_per_s": 2.775
+   }
+  },
+  "default_s1": {
+   "audio_s": 16.947916666666668,
+   "pyin": {
+    "median_f0_hz": 192.1,
+    "pitch_range_st": 3.6,
+    "voiced_fraction": 0.574,
+    "jump_fraction": 0.0,
+    "speech_s": 16.72,
+    "words_per_s": 2.871
+   },
+   "harvest": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 22.729,
+    "voiced_fraction": 0.94,
+    "jump_fraction": 0.0372,
+    "speech_s": 16.72,
+    "words_per_s": 2.871
+   }
+  },
+  "full": {
+   "audio_s": 17.822916666666668,
+   "pyin": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 4.1,
+    "voiced_fraction": 0.596,
+    "jump_fraction": 0.0,
+    "speech_s": 17.6,
+    "words_per_s": 2.727
+   },
+   "harvest": {
+    "median_f0_hz": 181.4,
+    "pitch_range_st": 5.854,
+    "voiced_fraction": 0.769,
+    "jump_fraction": 0.003,
+    "speech_s": 17.6,
+    "words_per_s": 2.727
+   }
+  },
+  "full_s1": {
+   "audio_s": 17.097916666666666,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 3.3,
+    "voiced_fraction": 0.636,
+    "jump_fraction": 0.0,
+    "speech_s": 16.858,
+    "words_per_s": 2.847
+   },
+   "harvest": {
+    "median_f0_hz": 192.6,
+    "pitch_range_st": 4.766,
+    "voiced_fraction": 0.798,
+    "jump_fraction": 0.003,
+    "speech_s": 16.858,
+    "words_per_s": 2.847
+   }
+  }
+ },
+ {
+  "speaker": "1221",
+  "j": 1,
+  "words": 11,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 3.9,
+    "voiced_fraction": 0.389,
+    "jump_fraction": 0.0,
+    "speech_s": 4.825,
+    "words_per_s": 2.28
+   },
+   "harvest": {
+    "median_f0_hz": 182.2,
+    "pitch_range_st": 24.167,
+    "voiced_fraction": 0.867,
+    "jump_fraction": 0.0147,
+    "speech_s": 4.825,
+    "words_per_s": 2.28
+   }
+  },
+  "off": {
+   "audio_s": 5.597916666666666,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 18.0,
+    "voiced_fraction": 0.509,
+    "jump_fraction": 0.0,
+    "speech_s": 5.22,
+    "words_per_s": 2.107
+   },
+   "harvest": {
+    "median_f0_hz": 177.1,
+    "pitch_range_st": 23.748,
+    "voiced_fraction": 0.998,
+    "jump_fraction": 0.0537,
+    "speech_s": 5.22,
+    "words_per_s": 2.107
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.597916666666666,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 18.0,
+    "voiced_fraction": 0.505,
+    "jump_fraction": 0.0,
+    "speech_s": 5.22,
+    "words_per_s": 2.107
+   },
+   "harvest": {
+    "median_f0_hz": 175.5,
+    "pitch_range_st": 23.611,
+    "voiced_fraction": 0.992,
+    "jump_fraction": 0.0543,
+    "speech_s": 5.22,
+    "words_per_s": 2.107
+   }
+  },
+  "default": {
+   "audio_s": 5.472916666666666,
+   "pyin": {
+    "median_f0_hz": 186.6,
+    "pitch_range_st": 4.88,
+    "voiced_fraction": 0.517,
+    "jump_fraction": 0.0,
+    "speech_s": 5.08,
+    "words_per_s": 2.165
+   },
+   "harvest": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 22.476,
+    "voiced_fraction": 0.937,
+    "jump_fraction": 0.0275,
+    "speech_s": 5.08,
+    "words_per_s": 2.165
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.572916666666667,
+   "pyin": {
+    "median_f0_hz": 194.3,
+    "pitch_range_st": 3.5,
+    "voiced_fraction": 0.505,
+    "jump_fraction": 0.0,
+    "speech_s": 5.18,
+    "words_per_s": 2.124
+   },
+   "harvest": {
+    "median_f0_hz": 184.7,
+    "pitch_range_st": 22.784,
+    "voiced_fraction": 0.946,
+    "jump_fraction": 0.0452,
+    "speech_s": 5.18,
+    "words_per_s": 2.124
+   }
+  },
+  "full": {
+   "audio_s": 5.222916666666666,
+   "pyin": {
+    "median_f0_hz": 181.3,
+    "pitch_range_st": 4.86,
+    "voiced_fraction": 0.547,
+    "jump_fraction": 0.0,
+    "speech_s": 4.8,
+    "words_per_s": 2.292
+   },
+   "harvest": {
+    "median_f0_hz": 180.4,
+    "pitch_range_st": 6.723,
+    "voiced_fraction": 0.761,
+    "jump_fraction": 0.0028,
+    "speech_s": 4.8,
+    "words_per_s": 2.292
+   }
+  },
+  "full_s1": {
+   "audio_s": 5.172916666666667,
+   "pyin": {
+    "median_f0_hz": 196.6,
+    "pitch_range_st": 3.88,
+    "voiced_fraction": 0.602,
+    "jump_fraction": 0.0,
+    "speech_s": 4.76,
+    "words_per_s": 2.311
+   },
+   "harvest": {
+    "median_f0_hz": 197.4,
+    "pitch_range_st": 7.125,
+    "voiced_fraction": 0.811,
+    "jump_fraction": 0.0027,
+    "speech_s": 4.76,
+    "words_per_s": 2.311
+   }
+  }
+ },
+ {
+  "speaker": "1221",
+  "j": 2,
+  "words": 35,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 4.51,
+    "voiced_fraction": 0.524,
+    "jump_fraction": 0.0,
+    "speech_s": 13.72,
+    "words_per_s": 2.551
+   },
+   "harvest": {
+    "median_f0_hz": 187.3,
+    "pitch_range_st": 23.775,
+    "voiced_fraction": 0.915,
+    "jump_fraction": 0.0227,
+    "speech_s": 13.72,
+    "words_per_s": 2.551
+   }
+  },
+  "off": {
+   "audio_s": 14.122916666666667,
+   "pyin": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 21.78,
+    "voiced_fraction": 0.562,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.547
+   },
+   "harvest": {
+    "median_f0_hz": 175.2,
+    "pitch_range_st": 22.019,
+    "voiced_fraction": 0.983,
+    "jump_fraction": 0.0371,
+    "speech_s": 13.74,
+    "words_per_s": 2.547
+   }
+  },
+  "off_s1": {
+   "audio_s": 14.122916666666667,
+   "pyin": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 21.62,
+    "voiced_fraction": 0.581,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.547
+   },
+   "harvest": {
+    "median_f0_hz": 176.7,
+    "pitch_range_st": 22.163,
+    "voiced_fraction": 0.975,
+    "jump_fraction": 0.0323,
+    "speech_s": 13.74,
+    "words_per_s": 2.547
+   }
+  },
+  "default": {
+   "audio_s": 14.447916666666666,
+   "pyin": {
+    "median_f0_hz": 186.6,
+    "pitch_range_st": 3.7,
+    "voiced_fraction": 0.576,
+    "jump_fraction": 0.0,
+    "speech_s": 14.06,
+    "words_per_s": 2.489
+   },
+   "harvest": {
+    "median_f0_hz": 179.9,
+    "pitch_range_st": 22.291,
+    "voiced_fraction": 0.933,
+    "jump_fraction": 0.0231,
+    "speech_s": 14.06,
+    "words_per_s": 2.489
+   }
+  },
+  "default_s1": {
+   "audio_s": 14.047916666666667,
+   "pyin": {
+    "median_f0_hz": 194.3,
+    "pitch_range_st": 3.6,
+    "voiced_fraction": 0.593,
+    "jump_fraction": 0.0,
+    "speech_s": 13.64,
+    "words_per_s": 2.566
+   },
+   "harvest": {
+    "median_f0_hz": 186.4,
+    "pitch_range_st": 22.84,
+    "voiced_fraction": 0.936,
+    "jump_fraction": 0.0292,
+    "speech_s": 13.64,
+    "words_per_s": 2.566
+   }
+  },
+  "full": {
+   "audio_s": 14.597916666666666,
+   "pyin": {
+    "median_f0_hz": 185.5,
+    "pitch_range_st": 4.0,
+    "voiced_fraction": 0.586,
+    "jump_fraction": 0.0,
+    "speech_s": 14.2,
+    "words_per_s": 2.465
+   },
+   "harvest": {
+    "median_f0_hz": 185.2,
+    "pitch_range_st": 6.768,
+    "voiced_fraction": 0.813,
+    "jump_fraction": 0.0035,
+    "speech_s": 14.2,
+    "words_per_s": 2.465
+   }
+  },
+  "full_s1": {
+   "audio_s": 13.847916666666666,
+   "pyin": {
+    "median_f0_hz": 196.6,
+    "pitch_range_st": 3.3,
+    "voiced_fraction": 0.632,
+    "jump_fraction": 0.0,
+    "speech_s": 13.44,
+    "words_per_s": 2.604
+   },
+   "harvest": {
+    "median_f0_hz": 196.5,
+    "pitch_range_st": 4.785,
+    "voiced_fraction": 0.799,
+    "jump_fraction": 0.0038,
+    "speech_s": 13.44,
+    "words_per_s": 2.604
+   }
+  }
+ },
+ {
+  "speaker": "1221",
+  "j": 3,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 4.56,
+    "voiced_fraction": 0.615,
+    "jump_fraction": 0.0,
+    "speech_s": 6.9,
+    "words_per_s": 2.609
+   },
+   "harvest": {
+    "median_f0_hz": 189.9,
+    "pitch_range_st": 22.372,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0086,
+    "speech_s": 6.9,
+    "words_per_s": 2.609
+   }
+  },
+  "off": {
+   "audio_s": 8.372916666666667,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 4.0,
+    "voiced_fraction": 0.477,
+    "jump_fraction": 0.0,
+    "speech_s": 7.98,
+    "words_per_s": 2.256
+   },
+   "harvest": {
+    "median_f0_hz": 178.4,
+    "pitch_range_st": 22.252,
+    "voiced_fraction": 0.981,
+    "jump_fraction": 0.0257,
+    "speech_s": 7.98,
+    "words_per_s": 2.256
+   }
+  },
+  "off_s1": {
+   "audio_s": 8.372916666666667,
+   "pyin": {
+    "median_f0_hz": 194.3,
+    "pitch_range_st": 4.0,
+    "voiced_fraction": 0.469,
+    "jump_fraction": 0.0,
+    "speech_s": 7.98,
+    "words_per_s": 2.256
+   },
+   "harvest": {
+    "median_f0_hz": 178.1,
+    "pitch_range_st": 22.154,
+    "voiced_fraction": 0.96,
+    "jump_fraction": 0.0184,
+    "speech_s": 7.98,
+    "words_per_s": 2.256
+   }
+  },
+  "default": {
+   "audio_s": 8.097916666666666,
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 4.3,
+    "voiced_fraction": 0.633,
+    "jump_fraction": 0.0,
+    "speech_s": 7.7,
+    "words_per_s": 2.338
+   },
+   "harvest": {
+    "median_f0_hz": 177.4,
+    "pitch_range_st": 21.651,
+    "voiced_fraction": 0.969,
+    "jump_fraction": 0.0217,
+    "speech_s": 7.7,
+    "words_per_s": 2.338
+   }
+  },
+  "default_s1": {
+   "audio_s": 8.222916666666666,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 3.07,
+    "voiced_fraction": 0.593,
+    "jump_fraction": 0.0,
+    "speech_s": 7.82,
+    "words_per_s": 2.302
+   },
+   "harvest": {
+    "median_f0_hz": 185.9,
+    "pitch_range_st": 22.174,
+    "voiced_fraction": 0.935,
+    "jump_fraction": 0.0248,
+    "speech_s": 7.82,
+    "words_per_s": 2.302
+   }
+  },
+  "full": {
+   "audio_s": 7.872916666666667,
+   "pyin": {
+    "median_f0_hz": 181.3,
+    "pitch_range_st": 4.5,
+    "voiced_fraction": 0.614,
+    "jump_fraction": 0.0,
+    "speech_s": 7.46,
+    "words_per_s": 2.413
+   },
+   "harvest": {
+    "median_f0_hz": 180.2,
+    "pitch_range_st": 5.849,
+    "voiced_fraction": 0.803,
+    "jump_fraction": 0.0068,
+    "speech_s": 7.46,
+    "words_per_s": 2.413
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.772916666666666,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 3.2,
+    "voiced_fraction": 0.694,
+    "jump_fraction": 0.0,
+    "speech_s": 7.38,
+    "words_per_s": 2.439
+   },
+   "harvest": {
+    "median_f0_hz": 194.2,
+    "pitch_range_st": 5.268,
+    "voiced_fraction": 0.804,
+    "jump_fraction": 0.0,
+    "speech_s": 7.38,
+    "words_per_s": 2.439
+   }
+  }
+ },
+ {
+  "speaker": "1221",
+  "j": 4,
+  "words": 45,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 192.1,
+    "pitch_range_st": 4.6,
+    "voiced_fraction": 0.655,
+    "jump_fraction": 0.0,
+    "speech_s": 16.645,
+    "words_per_s": 2.704
+   },
+   "harvest": {
+    "median_f0_hz": 185.4,
+    "pitch_range_st": 23.037,
+    "voiced_fraction": 0.906,
+    "jump_fraction": 0.0087,
+    "speech_s": 16.645,
+    "words_per_s": 2.704
+   }
+  },
+  "off": {
+   "audio_s": 17.572916666666668,
+   "pyin": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 4.4,
+    "voiced_fraction": 0.526,
+    "jump_fraction": 0.0,
+    "speech_s": 17.353,
+    "words_per_s": 2.593
+   },
+   "harvest": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 22.233,
+    "voiced_fraction": 0.977,
+    "jump_fraction": 0.0379,
+    "speech_s": 17.353,
+    "words_per_s": 2.593
+   }
+  },
+  "off_s1": {
+   "audio_s": 17.572916666666668,
+   "pyin": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 4.4,
+    "voiced_fraction": 0.529,
+    "jump_fraction": 0.0,
+    "speech_s": 17.353,
+    "words_per_s": 2.593
+   },
+   "harvest": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 22.635,
+    "voiced_fraction": 0.976,
+    "jump_fraction": 0.0343,
+    "speech_s": 17.353,
+    "words_per_s": 2.593
+   }
+  },
+  "default": {
+   "audio_s": 17.847916666666666,
+   "pyin": {
+    "median_f0_hz": 185.5,
+    "pitch_range_st": 4.2,
+    "voiced_fraction": 0.608,
+    "jump_fraction": 0.0,
+    "speech_s": 17.62,
+    "words_per_s": 2.554
+   },
+   "harvest": {
+    "median_f0_hz": 177.8,
+    "pitch_range_st": 22.673,
+    "voiced_fraction": 0.961,
+    "jump_fraction": 0.0274,
+    "speech_s": 17.62,
+    "words_per_s": 2.554
+   }
+  },
+  "default_s1": {
+   "audio_s": 17.347916666666666,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 4.0,
+    "voiced_fraction": 0.64,
+    "jump_fraction": 0.0,
+    "speech_s": 17.12,
+    "words_per_s": 2.629
+   },
+   "harvest": {
+    "median_f0_hz": 185.5,
+    "pitch_range_st": 22.838,
+    "voiced_fraction": 0.973,
+    "jump_fraction": 0.0313,
+    "speech_s": 17.12,
+    "words_per_s": 2.629
+   }
+  },
+  "full": {
+   "audio_s": 18.122916666666665,
+   "pyin": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 4.3,
+    "voiced_fraction": 0.652,
+    "jump_fraction": 0.0,
+    "speech_s": 17.903,
+    "words_per_s": 2.514
+   },
+   "harvest": {
+    "median_f0_hz": 181.5,
+    "pitch_range_st": 6.101,
+    "voiced_fraction": 0.803,
+    "jump_fraction": 0.0028,
+    "speech_s": 17.903,
+    "words_per_s": 2.514
+   }
+  },
+  "full_s1": {
+   "audio_s": 17.072916666666668,
+   "pyin": {
+    "median_f0_hz": 194.3,
+    "pitch_range_st": 3.5,
+    "voiced_fraction": 0.701,
+    "jump_fraction": 0.0,
+    "speech_s": 16.833,
+    "words_per_s": 2.673
+   },
+   "harvest": {
+    "median_f0_hz": 193.5,
+    "pitch_range_st": 4.616,
+    "voiced_fraction": 0.814,
+    "jump_fraction": 0.0007,
+    "speech_s": 16.833,
+    "words_per_s": 2.673
+   }
+  }
+ },
+ {
+  "speaker": "1284",
+  "j": 0,
+  "words": 26,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 158.7,
+    "pitch_range_st": 6.15,
+    "voiced_fraction": 0.812,
+    "jump_fraction": 0.0,
+    "speech_s": 7.08,
+    "words_per_s": 3.672
+   },
+   "harvest": {
+    "median_f0_hz": 157.6,
+    "pitch_range_st": 6.388,
+    "voiced_fraction": 0.913,
+    "jump_fraction": 0.0016,
+    "speech_s": 7.08,
+    "words_per_s": 3.672
+   }
+  },
+  "off": {
+   "audio_s": 8.722916666666666,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.739,
+    "jump_fraction": 0.0,
+    "speech_s": 8.32,
+    "words_per_s": 3.125
+   },
+   "harvest": {
+    "median_f0_hz": 168.9,
+    "pitch_range_st": 7.717,
+    "voiced_fraction": 0.922,
+    "jump_fraction": 0.0066,
+    "speech_s": 8.32,
+    "words_per_s": 3.125
+   }
+  },
+  "off_s1": {
+   "audio_s": 8.722916666666666,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.738,
+    "jump_fraction": 0.0,
+    "speech_s": 8.32,
+    "words_per_s": 3.125
+   },
+   "harvest": {
+    "median_f0_hz": 170.1,
+    "pitch_range_st": 7.255,
+    "voiced_fraction": 0.927,
+    "jump_fraction": 0.0118,
+    "speech_s": 8.32,
+    "words_per_s": 3.125
+   }
+  },
+  "default": {
+   "audio_s": 8.872916666666667,
+   "pyin": {
+    "median_f0_hz": 153.3,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.718,
+    "jump_fraction": 0.0,
+    "speech_s": 8.44,
+    "words_per_s": 3.081
+   },
+   "harvest": {
+    "median_f0_hz": 153.2,
+    "pitch_range_st": 7.393,
+    "voiced_fraction": 0.867,
+    "jump_fraction": 0.0028,
+    "speech_s": 8.44,
+    "words_per_s": 3.081
+   }
+  },
+  "default_s1": {
+   "audio_s": 8.547916666666667,
+   "pyin": {
+    "median_f0_hz": 171.1,
+    "pitch_range_st": 6.2,
+    "voiced_fraction": 0.742,
+    "jump_fraction": 0.0,
+    "speech_s": 8.1,
+    "words_per_s": 3.21
+   },
+   "harvest": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 7.924,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0054,
+    "speech_s": 8.1,
+    "words_per_s": 3.21
+   }
+  },
+  "full": {
+   "audio_s": 8.922916666666667,
+   "pyin": {
+    "median_f0_hz": 149.0,
+    "pitch_range_st": 6.78,
+    "voiced_fraction": 0.719,
+    "jump_fraction": 0.0,
+    "speech_s": 8.52,
+    "words_per_s": 3.052
+   },
+   "harvest": {
+    "median_f0_hz": 146.1,
+    "pitch_range_st": 7.743,
+    "voiced_fraction": 0.858,
+    "jump_fraction": 0.0014,
+    "speech_s": 8.52,
+    "words_per_s": 3.052
+   }
+  },
+  "full_s1": {
+   "audio_s": 8.422916666666667,
+   "pyin": {
+    "median_f0_hz": 170.1,
+    "pitch_range_st": 6.0,
+    "voiced_fraction": 0.726,
+    "jump_fraction": 0.0,
+    "speech_s": 7.94,
+    "words_per_s": 3.275
+   },
+   "harvest": {
+    "median_f0_hz": 168.1,
+    "pitch_range_st": 7.076,
+    "voiced_fraction": 0.859,
+    "jump_fraction": 0.003,
+    "speech_s": 7.94,
+    "words_per_s": 3.275
+   }
+  }
+ },
+ {
+  "speaker": "1284",
+  "j": 1,
+  "words": 21,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.694,
+    "jump_fraction": 0.0,
+    "speech_s": 6.98,
+    "words_per_s": 3.009
+   },
+   "harvest": {
+    "median_f0_hz": 163.0,
+    "pitch_range_st": 6.414,
+    "voiced_fraction": 0.84,
+    "jump_fraction": 0.0,
+    "speech_s": 6.98,
+    "words_per_s": 3.009
+   }
+  },
+  "off": {
+   "audio_s": 7.897916666666666,
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 5.04,
+    "voiced_fraction": 0.69,
+    "jump_fraction": 0.0,
+    "speech_s": 7.48,
+    "words_per_s": 2.807
+   },
+   "harvest": {
+    "median_f0_hz": 168.3,
+    "pitch_range_st": 6.893,
+    "voiced_fraction": 0.929,
+    "jump_fraction": 0.0116,
+    "speech_s": 7.48,
+    "words_per_s": 2.807
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.897916666666666,
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 4.97,
+    "voiced_fraction": 0.686,
+    "jump_fraction": 0.0,
+    "speech_s": 7.48,
+    "words_per_s": 2.807
+   },
+   "harvest": {
+    "median_f0_hz": 169.1,
+    "pitch_range_st": 6.619,
+    "voiced_fraction": 0.909,
+    "jump_fraction": 0.0059,
+    "speech_s": 7.48,
+    "words_per_s": 2.807
+   }
+  },
+  "default": {
+   "audio_s": 8.322916666666666,
+   "pyin": {
+    "median_f0_hz": 152.4,
+    "pitch_range_st": 5.9,
+    "voiced_fraction": 0.633,
+    "jump_fraction": 0.0,
+    "speech_s": 7.94,
+    "words_per_s": 2.645
+   },
+   "harvest": {
+    "median_f0_hz": 150.4,
+    "pitch_range_st": 7.771,
+    "voiced_fraction": 0.825,
+    "jump_fraction": 0.0093,
+    "speech_s": 7.94,
+    "words_per_s": 2.645
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.947916666666667,
+   "pyin": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 4.9,
+    "voiced_fraction": 0.624,
+    "jump_fraction": 0.0,
+    "speech_s": 7.46,
+    "words_per_s": 2.815
+   },
+   "harvest": {
+    "median_f0_hz": 164.4,
+    "pitch_range_st": 7.65,
+    "voiced_fraction": 0.863,
+    "jump_fraction": 0.0126,
+    "speech_s": 7.46,
+    "words_per_s": 2.815
+   }
+  },
+  "full": {
+   "audio_s": 8.422916666666667,
+   "pyin": {
+    "median_f0_hz": 147.3,
+    "pitch_range_st": 6.23,
+    "voiced_fraction": 0.57,
+    "jump_fraction": 0.0,
+    "speech_s": 8.02,
+    "words_per_s": 2.618
+   },
+   "harvest": {
+    "median_f0_hz": 143.2,
+    "pitch_range_st": 8.661,
+    "voiced_fraction": 0.809,
+    "jump_fraction": 0.0016,
+    "speech_s": 8.02,
+    "words_per_s": 2.618
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.897916666666666,
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 5.12,
+    "voiced_fraction": 0.641,
+    "jump_fraction": 0.0,
+    "speech_s": 7.46,
+    "words_per_s": 2.815
+   },
+   "harvest": {
+    "median_f0_hz": 164.6,
+    "pitch_range_st": 6.981,
+    "voiced_fraction": 0.782,
+    "jump_fraction": 0.0017,
+    "speech_s": 7.46,
+    "words_per_s": 2.815
+   }
+  }
+ },
+ {
+  "speaker": "1284",
+  "j": 2,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 168.2,
+    "pitch_range_st": 5.53,
+    "voiced_fraction": 0.796,
+    "jump_fraction": 0.0,
+    "speech_s": 4.36,
+    "words_per_s": 4.128
+   },
+   "harvest": {
+    "median_f0_hz": 166.0,
+    "pitch_range_st": 6.338,
+    "voiced_fraction": 0.872,
+    "jump_fraction": 0.0,
+    "speech_s": 4.36,
+    "words_per_s": 4.128
+   }
+  },
+  "off": {
+   "audio_s": 6.297916666666667,
+   "pyin": {
+    "median_f0_hz": 180.3,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.679,
+    "jump_fraction": 0.0,
+    "speech_s": 5.82,
+    "words_per_s": 3.093
+   },
+   "harvest": {
+    "median_f0_hz": 171.9,
+    "pitch_range_st": 9.507,
+    "voiced_fraction": 0.947,
+    "jump_fraction": 0.0055,
+    "speech_s": 5.82,
+    "words_per_s": 3.093
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.297916666666667,
+   "pyin": {
+    "median_f0_hz": 180.3,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.678,
+    "jump_fraction": 0.0,
+    "speech_s": 5.82,
+    "words_per_s": 3.093
+   },
+   "harvest": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 9.832,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0128,
+    "speech_s": 5.82,
+    "words_per_s": 3.093
+   }
+  },
+  "default": {
+   "audio_s": 5.722916666666666,
+   "pyin": {
+    "median_f0_hz": 150.7,
+    "pitch_range_st": 6.5,
+    "voiced_fraction": 0.735,
+    "jump_fraction": 0.0,
+    "speech_s": 5.32,
+    "words_per_s": 3.383
+   },
+   "harvest": {
+    "median_f0_hz": 147.9,
+    "pitch_range_st": 7.176,
+    "voiced_fraction": 0.895,
+    "jump_fraction": 0.0042,
+    "speech_s": 5.32,
+    "words_per_s": 3.383
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.897916666666666,
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 6.3,
+    "voiced_fraction": 0.728,
+    "jump_fraction": 0.0,
+    "speech_s": 5.5,
+    "words_per_s": 3.273
+   },
+   "harvest": {
+    "median_f0_hz": 164.4,
+    "pitch_range_st": 7.66,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.006,
+    "speech_s": 5.5,
+    "words_per_s": 3.273
+   }
+  },
+  "full": {
+   "audio_s": 5.522916666666666,
+   "pyin": {
+    "median_f0_hz": 143.9,
+    "pitch_range_st": 6.66,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0,
+    "speech_s": 5.1,
+    "words_per_s": 3.529
+   },
+   "harvest": {
+    "median_f0_hz": 142.7,
+    "pitch_range_st": 7.176,
+    "voiced_fraction": 0.914,
+    "jump_fraction": 0.0,
+    "speech_s": 5.1,
+    "words_per_s": 3.529
+   }
+  },
+  "full_s1": {
+   "audio_s": 5.572916666666667,
+   "pyin": {
+    "median_f0_hz": 164.3,
+    "pitch_range_st": 6.7,
+    "voiced_fraction": 0.76,
+    "jump_fraction": 0.0,
+    "speech_s": 5.08,
+    "words_per_s": 3.543
+   },
+   "harvest": {
+    "median_f0_hz": 163.3,
+    "pitch_range_st": 6.699,
+    "voiced_fraction": 0.929,
+    "jump_fraction": 0.0021,
+    "speech_s": 5.08,
+    "words_per_s": 3.543
+   }
+  }
+ },
+ {
+  "speaker": "1284",
+  "j": 3,
+  "words": 14,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 155.1,
+    "pitch_range_st": 7.5,
+    "voiced_fraction": 0.678,
+    "jump_fraction": 0.0,
+    "speech_s": 4.28,
+    "words_per_s": 3.271
+   },
+   "harvest": {
+    "median_f0_hz": 154.3,
+    "pitch_range_st": 8.17,
+    "voiced_fraction": 0.8,
+    "jump_fraction": 0.0,
+    "speech_s": 4.28,
+    "words_per_s": 3.271
+   }
+  },
+  "off": {
+   "audio_s": 5.747916666666667,
+   "pyin": {
+    "median_f0_hz": 181.3,
+    "pitch_range_st": 6.62,
+    "voiced_fraction": 0.682,
+    "jump_fraction": 0.0,
+    "speech_s": 5.34,
+    "words_per_s": 2.622
+   },
+   "harvest": {
+    "median_f0_hz": 164.3,
+    "pitch_range_st": 21.815,
+    "voiced_fraction": 0.953,
+    "jump_fraction": 0.0198,
+    "speech_s": 5.34,
+    "words_per_s": 2.622
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.747916666666667,
+   "pyin": {
+    "median_f0_hz": 181.3,
+    "pitch_range_st": 6.5,
+    "voiced_fraction": 0.684,
+    "jump_fraction": 0.0,
+    "speech_s": 5.34,
+    "words_per_s": 2.622
+   },
+   "harvest": {
+    "median_f0_hz": 164.6,
+    "pitch_range_st": 21.618,
+    "voiced_fraction": 0.936,
+    "jump_fraction": 0.0141,
+    "speech_s": 5.34,
+    "words_per_s": 2.622
+   }
+  },
+  "default": {
+   "audio_s": 5.397916666666666,
+   "pyin": {
+    "median_f0_hz": 154.2,
+    "pitch_range_st": 5.97,
+    "voiced_fraction": 0.652,
+    "jump_fraction": 0.0,
+    "speech_s": 4.96,
+    "words_per_s": 2.823
+   },
+   "harvest": {
+    "median_f0_hz": 153.8,
+    "pitch_range_st": 7.008,
+    "voiced_fraction": 0.801,
+    "jump_fraction": 0.0026,
+    "speech_s": 4.96,
+    "words_per_s": 2.823
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.297916666666667,
+   "pyin": {
+    "median_f0_hz": 176.1,
+    "pitch_range_st": 5.3,
+    "voiced_fraction": 0.66,
+    "jump_fraction": 0.0,
+    "speech_s": 4.82,
+    "words_per_s": 2.905
+   },
+   "harvest": {
+    "median_f0_hz": 170.0,
+    "pitch_range_st": 7.314,
+    "voiced_fraction": 0.874,
+    "jump_fraction": 0.0072,
+    "speech_s": 4.82,
+    "words_per_s": 2.905
+   }
+  },
+  "full": {
+   "audio_s": 5.147916666666666,
+   "pyin": {
+    "median_f0_hz": 153.3,
+    "pitch_range_st": 6.46,
+    "voiced_fraction": 0.554,
+    "jump_fraction": 0.0,
+    "speech_s": 4.74,
+    "words_per_s": 2.954
+   },
+   "harvest": {
+    "median_f0_hz": 145.1,
+    "pitch_range_st": 8.219,
+    "voiced_fraction": 0.844,
+    "jump_fraction": 0.0,
+    "speech_s": 4.74,
+    "words_per_s": 2.954
+   }
+  },
+  "full_s1": {
+   "audio_s": 4.922916666666667,
+   "pyin": {
+    "median_f0_hz": 174.1,
+    "pitch_range_st": 5.74,
+    "voiced_fraction": 0.66,
+    "jump_fraction": 0.0,
+    "speech_s": 4.34,
+    "words_per_s": 3.226
+   },
+   "harvest": {
+    "median_f0_hz": 168.0,
+    "pitch_range_st": 8.293,
+    "voiced_fraction": 0.869,
+    "jump_fraction": 0.0,
+    "speech_s": 4.34,
+    "words_per_s": 3.226
+   }
+  }
+ },
+ {
+  "speaker": "1284",
+  "j": 4,
+  "words": 21,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 153.3,
+    "pitch_range_st": 3.9,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0,
+    "speech_s": 5.88,
+    "words_per_s": 3.571
+   },
+   "harvest": {
+    "median_f0_hz": 150.8,
+    "pitch_range_st": 4.374,
+    "voiced_fraction": 0.925,
+    "jump_fraction": 0.0,
+    "speech_s": 5.88,
+    "words_per_s": 3.571
+   }
+  },
+  "off": {
+   "audio_s": 7.647916666666666,
+   "pyin": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 5.9,
+    "voiced_fraction": 0.731,
+    "jump_fraction": 0.0,
+    "speech_s": 7.14,
+    "words_per_s": 2.941
+   },
+   "harvest": {
+    "median_f0_hz": 167.2,
+    "pitch_range_st": 7.651,
+    "voiced_fraction": 0.923,
+    "jump_fraction": 0.0061,
+    "speech_s": 7.14,
+    "words_per_s": 2.941
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.647916666666666,
+   "pyin": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 5.97,
+    "voiced_fraction": 0.733,
+    "jump_fraction": 0.0,
+    "speech_s": 7.14,
+    "words_per_s": 2.941
+   },
+   "harvest": {
+    "median_f0_hz": 167.5,
+    "pitch_range_st": 7.697,
+    "voiced_fraction": 0.908,
+    "jump_fraction": 0.0124,
+    "speech_s": 7.14,
+    "words_per_s": 2.941
+   }
+  },
+  "default": {
+   "audio_s": 7.447916666666667,
+   "pyin": {
+    "median_f0_hz": 155.1,
+    "pitch_range_st": 5.87,
+    "voiced_fraction": 0.701,
+    "jump_fraction": 0.0,
+    "speech_s": 7.04,
+    "words_per_s": 2.983
+   },
+   "harvest": {
+    "median_f0_hz": 149.0,
+    "pitch_range_st": 8.624,
+    "voiced_fraction": 0.906,
+    "jump_fraction": 0.0064,
+    "speech_s": 7.04,
+    "words_per_s": 2.983
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.222916666666666,
+   "pyin": {
+    "median_f0_hz": 165.3,
+    "pitch_range_st": 5.9,
+    "voiced_fraction": 0.69,
+    "jump_fraction": 0.0,
+    "speech_s": 6.74,
+    "words_per_s": 3.116
+   },
+   "harvest": {
+    "median_f0_hz": 160.9,
+    "pitch_range_st": 8.192,
+    "voiced_fraction": 0.917,
+    "jump_fraction": 0.0033,
+    "speech_s": 6.74,
+    "words_per_s": 3.116
+   }
+  },
+  "full": {
+   "audio_s": 7.272916666666666,
+   "pyin": {
+    "median_f0_hz": 149.0,
+    "pitch_range_st": 6.7,
+    "voiced_fraction": 0.698,
+    "jump_fraction": 0.0,
+    "speech_s": 6.88,
+    "words_per_s": 3.052
+   },
+   "harvest": {
+    "median_f0_hz": 143.5,
+    "pitch_range_st": 8.141,
+    "voiced_fraction": 0.864,
+    "jump_fraction": 0.0034,
+    "speech_s": 6.88,
+    "words_per_s": 3.052
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 164.8,
+    "pitch_range_st": 5.8,
+    "voiced_fraction": 0.716,
+    "jump_fraction": 0.0,
+    "speech_s": 6.44,
+    "words_per_s": 3.261
+   },
+   "harvest": {
+    "median_f0_hz": 162.0,
+    "pitch_range_st": 7.531,
+    "voiced_fraction": 0.878,
+    "jump_fraction": 0.0018,
+    "speech_s": 6.44,
+    "words_per_s": 3.261
+   }
+  }
+ },
+ {
+  "speaker": "1320",
+  "j": 0,
+  "words": 30,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 116.9,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.761,
+    "jump_fraction": 0.0,
+    "speech_s": 8.94,
+    "words_per_s": 3.356
+   },
+   "harvest": {
+    "median_f0_hz": 114.8,
+    "pitch_range_st": 8.665,
+    "voiced_fraction": 0.868,
+    "jump_fraction": 0.0026,
+    "speech_s": 8.94,
+    "words_per_s": 3.356
+   }
+  },
+  "off": {
+   "audio_s": 10.322916666666666,
+   "pyin": {
+    "median_f0_hz": 113.6,
+    "pitch_range_st": 7.43,
+    "voiced_fraction": 0.75,
+    "jump_fraction": 0.0,
+    "speech_s": 9.86,
+    "words_per_s": 3.043
+   },
+   "harvest": {
+    "median_f0_hz": 112.5,
+    "pitch_range_st": 8.589,
+    "voiced_fraction": 0.829,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.86,
+    "words_per_s": 3.043
+   }
+  },
+  "off_s1": {
+   "audio_s": 10.322916666666666,
+   "pyin": {
+    "median_f0_hz": 113.6,
+    "pitch_range_st": 7.78,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0,
+    "speech_s": 9.86,
+    "words_per_s": 3.043
+   },
+   "harvest": {
+    "median_f0_hz": 113.0,
+    "pitch_range_st": 9.211,
+    "voiced_fraction": 0.859,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.86,
+    "words_per_s": 3.043
+   }
+  },
+  "default": {
+   "audio_s": 10.722916666666666,
+   "pyin": {
+    "median_f0_hz": 110.3,
+    "pitch_range_st": 6.81,
+    "voiced_fraction": 0.716,
+    "jump_fraction": 0.0,
+    "speech_s": 10.32,
+    "words_per_s": 2.907
+   },
+   "harvest": {
+    "median_f0_hz": 108.8,
+    "pitch_range_st": 7.328,
+    "voiced_fraction": 0.812,
+    "jump_fraction": 0.0,
+    "speech_s": 10.32,
+    "words_per_s": 2.907
+   }
+  },
+  "default_s1": {
+   "audio_s": 10.347916666666666,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 6.24,
+    "voiced_fraction": 0.722,
+    "jump_fraction": 0.0,
+    "speech_s": 9.92,
+    "words_per_s": 3.024
+   },
+   "harvest": {
+    "median_f0_hz": 115.7,
+    "pitch_range_st": 7.256,
+    "voiced_fraction": 0.836,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.92,
+    "words_per_s": 3.024
+   }
+  },
+  "full": {
+   "audio_s": 10.897916666666667,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 5.95,
+    "voiced_fraction": 0.689,
+    "jump_fraction": 0.0,
+    "speech_s": 10.52,
+    "words_per_s": 2.852
+   },
+   "harvest": {
+    "median_f0_hz": 108.1,
+    "pitch_range_st": 7.013,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0012,
+    "speech_s": 10.52,
+    "words_per_s": 2.852
+   }
+  },
+  "full_s1": {
+   "audio_s": 10.097916666666666,
+   "pyin": {
+    "median_f0_hz": 119.6,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.711,
+    "jump_fraction": 0.0,
+    "speech_s": 9.64,
+    "words_per_s": 3.112
+   },
+   "harvest": {
+    "median_f0_hz": 117.2,
+    "pitch_range_st": 7.301,
+    "voiced_fraction": 0.81,
+    "jump_fraction": 0.0,
+    "speech_s": 9.64,
+    "words_per_s": 3.112
+   }
+  }
+ },
+ {
+  "speaker": "1320",
+  "j": 1,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 124.5,
+    "pitch_range_st": 11.7,
+    "voiced_fraction": 0.631,
+    "jump_fraction": 0.0,
+    "speech_s": 7.14,
+    "words_per_s": 2.521
+   },
+   "harvest": {
+    "median_f0_hz": 119.8,
+    "pitch_range_st": 12.47,
+    "voiced_fraction": 0.841,
+    "jump_fraction": 0.0034,
+    "speech_s": 7.14,
+    "words_per_s": 2.521
+   }
+  },
+  "off": {
+   "audio_s": 7.722916666666666,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 8.2,
+    "voiced_fraction": 0.783,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   },
+   "harvest": {
+    "median_f0_hz": 117.0,
+    "pitch_range_st": 10.705,
+    "voiced_fraction": 0.927,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.722916666666666,
+   "pyin": {
+    "median_f0_hz": 115.5,
+    "pitch_range_st": 8.2,
+    "voiced_fraction": 0.783,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   },
+   "harvest": {
+    "median_f0_hz": 115.7,
+    "pitch_range_st": 10.384,
+    "voiced_fraction": 0.905,
+    "jump_fraction": 0.0015,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   }
+  },
+  "default": {
+   "audio_s": 7.672916666666667,
+   "pyin": {
+    "median_f0_hz": 112.2,
+    "pitch_range_st": 7.3,
+    "voiced_fraction": 0.767,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   },
+   "harvest": {
+    "median_f0_hz": 111.9,
+    "pitch_range_st": 7.898,
+    "voiced_fraction": 0.87,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.473
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.597916666666666,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.753,
+    "jump_fraction": 0.0,
+    "speech_s": 7.16,
+    "words_per_s": 2.514
+   },
+   "harvest": {
+    "median_f0_hz": 114.8,
+    "pitch_range_st": 7.37,
+    "voiced_fraction": 0.851,
+    "jump_fraction": 0.0,
+    "speech_s": 7.16,
+    "words_per_s": 2.514
+   }
+  },
+  "full": {
+   "audio_s": 7.572916666666667,
+   "pyin": {
+    "median_f0_hz": 112.2,
+    "pitch_range_st": 6.12,
+    "voiced_fraction": 0.734,
+    "jump_fraction": 0.0,
+    "speech_s": 7.2,
+    "words_per_s": 2.5
+   },
+   "harvest": {
+    "median_f0_hz": 110.5,
+    "pitch_range_st": 7.073,
+    "voiced_fraction": 0.843,
+    "jump_fraction": 0.0,
+    "speech_s": 7.2,
+    "words_per_s": 2.5
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.222916666666666,
+   "pyin": {
+    "median_f0_hz": 118.9,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.739,
+    "jump_fraction": 0.0,
+    "speech_s": 6.82,
+    "words_per_s": 2.639
+   },
+   "harvest": {
+    "median_f0_hz": 117.4,
+    "pitch_range_st": 6.398,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0,
+    "speech_s": 6.82,
+    "words_per_s": 2.639
+   }
+  }
+ },
+ {
+  "speaker": "1320",
+  "j": 2,
+  "words": 26,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 125.6,
+    "pitch_range_st": 9.2,
+    "voiced_fraction": 0.686,
+    "jump_fraction": 0.0,
+    "speech_s": 9.78,
+    "words_per_s": 2.658
+   },
+   "harvest": {
+    "median_f0_hz": 123.4,
+    "pitch_range_st": 10.856,
+    "voiced_fraction": 0.829,
+    "jump_fraction": 0.0013,
+    "speech_s": 9.78,
+    "words_per_s": 2.658
+   }
+  },
+  "off": {
+   "audio_s": 10.747916666666667,
+   "pyin": {
+    "median_f0_hz": 114.2,
+    "pitch_range_st": 8.3,
+    "voiced_fraction": 0.769,
+    "jump_fraction": 0.0,
+    "speech_s": 10.28,
+    "words_per_s": 2.529
+   },
+   "harvest": {
+    "median_f0_hz": 112.3,
+    "pitch_range_st": 9.384,
+    "voiced_fraction": 0.893,
+    "jump_fraction": 0.0,
+    "speech_s": 10.28,
+    "words_per_s": 2.529
+   }
+  },
+  "off_s1": {
+   "audio_s": 10.747916666666667,
+   "pyin": {
+    "median_f0_hz": 114.2,
+    "pitch_range_st": 8.3,
+    "voiced_fraction": 0.765,
+    "jump_fraction": 0.0,
+    "speech_s": 10.28,
+    "words_per_s": 2.529
+   },
+   "harvest": {
+    "median_f0_hz": 112.3,
+    "pitch_range_st": 9.09,
+    "voiced_fraction": 0.854,
+    "jump_fraction": 0.0,
+    "speech_s": 10.28,
+    "words_per_s": 2.529
+   }
+  },
+  "default": {
+   "audio_s": 10.847916666666666,
+   "pyin": {
+    "median_f0_hz": 109.1,
+    "pitch_range_st": 7.94,
+    "voiced_fraction": 0.755,
+    "jump_fraction": 0.0,
+    "speech_s": 10.42,
+    "words_per_s": 2.495
+   },
+   "harvest": {
+    "median_f0_hz": 108.0,
+    "pitch_range_st": 8.052,
+    "voiced_fraction": 0.831,
+    "jump_fraction": 0.0012,
+    "speech_s": 10.42,
+    "words_per_s": 2.495
+   }
+  },
+  "default_s1": {
+   "audio_s": 10.497916666666667,
+   "pyin": {
+    "median_f0_hz": 117.6,
+    "pitch_range_st": 6.75,
+    "voiced_fraction": 0.751,
+    "jump_fraction": 0.0,
+    "speech_s": 10.06,
+    "words_per_s": 2.584
+   },
+   "harvest": {
+    "median_f0_hz": 115.6,
+    "pitch_range_st": 7.561,
+    "voiced_fraction": 0.858,
+    "jump_fraction": 0.0012,
+    "speech_s": 10.06,
+    "words_per_s": 2.584
+   }
+  },
+  "full": {
+   "audio_s": 10.547916666666667,
+   "pyin": {
+    "median_f0_hz": 109.1,
+    "pitch_range_st": 7.5,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 10.14,
+    "words_per_s": 2.564
+   },
+   "harvest": {
+    "median_f0_hz": 108.3,
+    "pitch_range_st": 8.11,
+    "voiced_fraction": 0.843,
+    "jump_fraction": 0.0,
+    "speech_s": 10.14,
+    "words_per_s": 2.564
+   }
+  },
+  "full_s1": {
+   "audio_s": 10.172916666666667,
+   "pyin": {
+    "median_f0_hz": 121.7,
+    "pitch_range_st": 6.27,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 9.74,
+    "words_per_s": 2.669
+   },
+   "harvest": {
+    "median_f0_hz": 119.9,
+    "pitch_range_st": 7.557,
+    "voiced_fraction": 0.859,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.74,
+    "words_per_s": 2.669
+   }
+  }
+ },
+ {
+  "speaker": "1320",
+  "j": 3,
+  "words": 15,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 130.4,
+    "pitch_range_st": 8.14,
+    "voiced_fraction": 0.631,
+    "jump_fraction": 0.0,
+    "speech_s": 5.96,
+    "words_per_s": 2.517
+   },
+   "harvest": {
+    "median_f0_hz": 124.1,
+    "pitch_range_st": 9.116,
+    "voiced_fraction": 0.771,
+    "jump_fraction": 0.0,
+    "speech_s": 5.96,
+    "words_per_s": 2.517
+   }
+  },
+  "off": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 116.9,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.747,
+    "jump_fraction": 0.0,
+    "speech_s": 6.56,
+    "words_per_s": 2.287
+   },
+   "harvest": {
+    "median_f0_hz": 115.0,
+    "pitch_range_st": 10.055,
+    "voiced_fraction": 0.884,
+    "jump_fraction": 0.0,
+    "speech_s": 6.56,
+    "words_per_s": 2.287
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 116.9,
+    "pitch_range_st": 7.59,
+    "voiced_fraction": 0.749,
+    "jump_fraction": 0.0,
+    "speech_s": 6.56,
+    "words_per_s": 2.287
+   },
+   "harvest": {
+    "median_f0_hz": 114.8,
+    "pitch_range_st": 10.19,
+    "voiced_fraction": 0.918,
+    "jump_fraction": 0.0017,
+    "speech_s": 6.56,
+    "words_per_s": 2.287
+   }
+  },
+  "default": {
+   "audio_s": 6.922916666666667,
+   "pyin": {
+    "median_f0_hz": 112.9,
+    "pitch_range_st": 7.6,
+    "voiced_fraction": 0.706,
+    "jump_fraction": 0.0,
+    "speech_s": 6.52,
+    "words_per_s": 2.301
+   },
+   "harvest": {
+    "median_f0_hz": 111.5,
+    "pitch_range_st": 8.904,
+    "voiced_fraction": 0.832,
+    "jump_fraction": 0.0,
+    "speech_s": 6.52,
+    "words_per_s": 2.301
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.047916666666667,
+   "pyin": {
+    "median_f0_hz": 121.7,
+    "pitch_range_st": 7.5,
+    "voiced_fraction": 0.681,
+    "jump_fraction": 0.0,
+    "speech_s": 6.66,
+    "words_per_s": 2.252
+   },
+   "harvest": {
+    "median_f0_hz": 119.6,
+    "pitch_range_st": 8.033,
+    "voiced_fraction": 0.781,
+    "jump_fraction": 0.0,
+    "speech_s": 6.66,
+    "words_per_s": 2.252
+   }
+  },
+  "full": {
+   "audio_s": 6.847916666666666,
+   "pyin": {
+    "median_f0_hz": 112.9,
+    "pitch_range_st": 7.2,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0,
+    "speech_s": 6.44,
+    "words_per_s": 2.329
+   },
+   "harvest": {
+    "median_f0_hz": 108.9,
+    "pitch_range_st": 8.249,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 6.44,
+    "words_per_s": 2.329
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.772916666666666,
+   "pyin": {
+    "median_f0_hz": 123.1,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.669,
+    "jump_fraction": 0.0,
+    "speech_s": 6.34,
+    "words_per_s": 2.366
+   },
+   "harvest": {
+    "median_f0_hz": 121.6,
+    "pitch_range_st": 8.079,
+    "voiced_fraction": 0.772,
+    "jump_fraction": 0.0,
+    "speech_s": 6.34,
+    "words_per_s": 2.366
+   }
+  }
+ },
+ {
+  "speaker": "1320",
+  "j": 4,
+  "words": 21,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 126.7,
+    "pitch_range_st": 7.81,
+    "voiced_fraction": 0.681,
+    "jump_fraction": 0.0,
+    "speech_s": 5.86,
+    "words_per_s": 3.584
+   },
+   "harvest": {
+    "median_f0_hz": 122.1,
+    "pitch_range_st": 9.92,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0,
+    "speech_s": 5.86,
+    "words_per_s": 3.584
+   }
+  },
+  "off": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 119.6,
+    "pitch_range_st": 8.16,
+    "voiced_fraction": 0.756,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   },
+   "harvest": {
+    "median_f0_hz": 118.7,
+    "pitch_range_st": 10.279,
+    "voiced_fraction": 0.837,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 119.6,
+    "pitch_range_st": 8.04,
+    "voiced_fraction": 0.757,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   },
+   "harvest": {
+    "median_f0_hz": 119.4,
+    "pitch_range_st": 10.081,
+    "voiced_fraction": 0.822,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   }
+  },
+  "default": {
+   "audio_s": 7.247916666666667,
+   "pyin": {
+    "median_f0_hz": 113.6,
+    "pitch_range_st": 7.25,
+    "voiced_fraction": 0.737,
+    "jump_fraction": 0.0,
+    "speech_s": 6.86,
+    "words_per_s": 3.061
+   },
+   "harvest": {
+    "median_f0_hz": 112.9,
+    "pitch_range_st": 7.997,
+    "voiced_fraction": 0.814,
+    "jump_fraction": 0.0,
+    "speech_s": 6.86,
+    "words_per_s": 3.061
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.122916666666667,
+   "pyin": {
+    "median_f0_hz": 118.9,
+    "pitch_range_st": 6.4,
+    "voiced_fraction": 0.718,
+    "jump_fraction": 0.0,
+    "speech_s": 6.7,
+    "words_per_s": 3.134
+   },
+   "harvest": {
+    "median_f0_hz": 118.5,
+    "pitch_range_st": 7.563,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0018,
+    "speech_s": 6.7,
+    "words_per_s": 3.134
+   }
+  },
+  "full": {
+   "audio_s": 7.072916666666667,
+   "pyin": {
+    "median_f0_hz": 112.2,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.758,
+    "jump_fraction": 0.0,
+    "speech_s": 6.68,
+    "words_per_s": 3.144
+   },
+   "harvest": {
+    "median_f0_hz": 111.9,
+    "pitch_range_st": 7.482,
+    "voiced_fraction": 0.8,
+    "jump_fraction": 0.0,
+    "speech_s": 6.68,
+    "words_per_s": 3.144
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.897916666666666,
+   "pyin": {
+    "median_f0_hz": 122.4,
+    "pitch_range_st": 5.5,
+    "voiced_fraction": 0.728,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   },
+   "harvest": {
+    "median_f0_hz": 121.2,
+    "pitch_range_st": 7.048,
+    "voiced_fraction": 0.797,
+    "jump_fraction": 0.0,
+    "speech_s": 6.5,
+    "words_per_s": 3.231
+   }
+  }
+ },
+ {
+  "speaker": "1580",
+  "j": 0,
+  "words": 34,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 220.6,
+    "pitch_range_st": 8.1,
+    "voiced_fraction": 0.674,
+    "jump_fraction": 0.0,
+    "speech_s": 9.6,
+    "words_per_s": 3.542
+   },
+   "harvest": {
+    "median_f0_hz": 221.2,
+    "pitch_range_st": 8.561,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.6,
+    "words_per_s": 3.542
+   }
+  },
+  "off": {
+   "audio_s": 11.997916666666667,
+   "pyin": {
+    "median_f0_hz": 212.5,
+    "pitch_range_st": 7.23,
+    "voiced_fraction": 0.495,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.967
+   },
+   "harvest": {
+    "median_f0_hz": 193.5,
+    "pitch_range_st": 25.989,
+    "voiced_fraction": 0.954,
+    "jump_fraction": 0.0231,
+    "speech_s": 11.46,
+    "words_per_s": 2.967
+   }
+  },
+  "off_s1": {
+   "audio_s": 11.997916666666667,
+   "pyin": {
+    "median_f0_hz": 211.9,
+    "pitch_range_st": 7.43,
+    "voiced_fraction": 0.504,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.967
+   },
+   "harvest": {
+    "median_f0_hz": 195.9,
+    "pitch_range_st": 23.569,
+    "voiced_fraction": 0.916,
+    "jump_fraction": 0.0135,
+    "speech_s": 11.46,
+    "words_per_s": 2.967
+   }
+  },
+  "default": {
+   "audio_s": 12.597916666666666,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 7.6,
+    "voiced_fraction": 0.604,
+    "jump_fraction": 0.0,
+    "speech_s": 12.08,
+    "words_per_s": 2.815
+   },
+   "harvest": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 8.718,
+    "voiced_fraction": 0.874,
+    "jump_fraction": 0.0039,
+    "speech_s": 12.08,
+    "words_per_s": 2.815
+   }
+  },
+  "default_s1": {
+   "audio_s": 12.272916666666667,
+   "pyin": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 7.1,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0,
+    "speech_s": 11.68,
+    "words_per_s": 2.911
+   },
+   "harvest": {
+    "median_f0_hz": 203.0,
+    "pitch_range_st": 8.537,
+    "voiced_fraction": 0.916,
+    "jump_fraction": 0.0104,
+    "speech_s": 11.68,
+    "words_per_s": 2.911
+   }
+  },
+  "full": {
+   "audio_s": 12.722916666666666,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 7.6,
+    "voiced_fraction": 0.608,
+    "jump_fraction": 0.0,
+    "speech_s": 12.3,
+    "words_per_s": 2.764
+   },
+   "harvest": {
+    "median_f0_hz": 187.0,
+    "pitch_range_st": 8.314,
+    "voiced_fraction": 0.865,
+    "jump_fraction": 0.0,
+    "speech_s": 12.3,
+    "words_per_s": 2.764
+   }
+  },
+  "full_s1": {
+   "audio_s": 12.347916666666666,
+   "pyin": {
+    "median_f0_hz": 203.5,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.697,
+    "jump_fraction": 0.0,
+    "speech_s": 11.82,
+    "words_per_s": 2.876
+   },
+   "harvest": {
+    "median_f0_hz": 202.9,
+    "pitch_range_st": 7.872,
+    "voiced_fraction": 0.868,
+    "jump_fraction": 0.002,
+    "speech_s": 11.82,
+    "words_per_s": 2.876
+   }
+  }
+ },
+ {
+  "speaker": "1580",
+  "j": 1,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 5.1,
+    "voiced_fraction": 0.669,
+    "jump_fraction": 0.0,
+    "speech_s": 5.28,
+    "words_per_s": 3.409
+   },
+   "harvest": {
+    "median_f0_hz": 195.2,
+    "pitch_range_st": 7.254,
+    "voiced_fraction": 0.845,
+    "jump_fraction": 0.0023,
+    "speech_s": 5.28,
+    "words_per_s": 3.409
+   }
+  },
+  "off": {
+   "audio_s": 7.047916666666667,
+   "pyin": {
+    "median_f0_hz": 215.6,
+    "pitch_range_st": 8.8,
+    "voiced_fraction": 0.499,
+    "jump_fraction": 0.0,
+    "speech_s": 6.56,
+    "words_per_s": 2.744
+   },
+   "harvest": {
+    "median_f0_hz": 202.1,
+    "pitch_range_st": 17.028,
+    "voiced_fraction": 0.925,
+    "jump_fraction": 0.0133,
+    "speech_s": 6.56,
+    "words_per_s": 2.744
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.047916666666667,
+   "pyin": {
+    "median_f0_hz": 216.8,
+    "pitch_range_st": 8.8,
+    "voiced_fraction": 0.49,
+    "jump_fraction": 0.0,
+    "speech_s": 6.56,
+    "words_per_s": 2.744
+   },
+   "harvest": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 23.699,
+    "voiced_fraction": 0.944,
+    "jump_fraction": 0.0212,
+    "speech_s": 6.56,
+    "words_per_s": 2.744
+   }
+  },
+  "default": {
+   "audio_s": 6.972916666666666,
+   "pyin": {
+    "median_f0_hz": 189.9,
+    "pitch_range_st": 7.0,
+    "voiced_fraction": 0.697,
+    "jump_fraction": 0.0,
+    "speech_s": 6.46,
+    "words_per_s": 2.786
+   },
+   "harvest": {
+    "median_f0_hz": 190.2,
+    "pitch_range_st": 7.276,
+    "voiced_fraction": 0.878,
+    "jump_fraction": 0.0036,
+    "speech_s": 6.46,
+    "words_per_s": 2.786
+   }
+  },
+  "default_s1": {
+   "audio_s": 6.972916666666666,
+   "pyin": {
+    "median_f0_hz": 201.2,
+    "pitch_range_st": 5.7,
+    "voiced_fraction": 0.699,
+    "jump_fraction": 0.0,
+    "speech_s": 6.44,
+    "words_per_s": 2.795
+   },
+   "harvest": {
+    "median_f0_hz": 202.0,
+    "pitch_range_st": 7.206,
+    "voiced_fraction": 0.912,
+    "jump_fraction": 0.0103,
+    "speech_s": 6.44,
+    "words_per_s": 2.795
+   }
+  },
+  "full": {
+   "audio_s": 6.947916666666667,
+   "pyin": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 6.25,
+    "voiced_fraction": 0.718,
+    "jump_fraction": 0.0,
+    "speech_s": 6.48,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 182.5,
+    "pitch_range_st": 7.056,
+    "voiced_fraction": 0.861,
+    "jump_fraction": 0.0018,
+    "speech_s": 6.48,
+    "words_per_s": 2.778
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.822916666666667,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 4.82,
+    "voiced_fraction": 0.727,
+    "jump_fraction": 0.0,
+    "speech_s": 6.3,
+    "words_per_s": 2.857
+   },
+   "harvest": {
+    "median_f0_hz": 199.6,
+    "pitch_range_st": 5.75,
+    "voiced_fraction": 0.908,
+    "jump_fraction": 0.0,
+    "speech_s": 6.3,
+    "words_per_s": 2.857
+   }
+  }
+ },
+ {
+  "speaker": "1580",
+  "j": 2,
+  "words": 14,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 216.2,
+    "pitch_range_st": 5.7,
+    "voiced_fraction": 0.527,
+    "jump_fraction": 0.0,
+    "speech_s": 5.68,
+    "words_per_s": 2.465
+   },
+   "harvest": {
+    "median_f0_hz": 204.8,
+    "pitch_range_st": 8.882,
+    "voiced_fraction": 0.856,
+    "jump_fraction": 0.0084,
+    "speech_s": 5.68,
+    "words_per_s": 2.465
+   }
+  },
+  "off": {
+   "audio_s": 6.322916666666667,
+   "pyin": {
+    "median_f0_hz": 204.7,
+    "pitch_range_st": 7.8,
+    "voiced_fraction": 0.535,
+    "jump_fraction": 0.0,
+    "speech_s": 5.78,
+    "words_per_s": 2.422
+   },
+   "harvest": {
+    "median_f0_hz": 201.3,
+    "pitch_range_st": 9.465,
+    "voiced_fraction": 0.898,
+    "jump_fraction": 0.0079,
+    "speech_s": 5.78,
+    "words_per_s": 2.422
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.322916666666667,
+   "pyin": {
+    "median_f0_hz": 204.7,
+    "pitch_range_st": 7.8,
+    "voiced_fraction": 0.539,
+    "jump_fraction": 0.0,
+    "speech_s": 5.78,
+    "words_per_s": 2.422
+   },
+   "harvest": {
+    "median_f0_hz": 205.5,
+    "pitch_range_st": 9.394,
+    "voiced_fraction": 0.883,
+    "jump_fraction": 0.004,
+    "speech_s": 5.78,
+    "words_per_s": 2.422
+   }
+  },
+  "default": {
+   "audio_s": 6.597916666666666,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 6.44,
+    "voiced_fraction": 0.588,
+    "jump_fraction": 0.0,
+    "speech_s": 6.06,
+    "words_per_s": 2.31
+   },
+   "harvest": {
+    "median_f0_hz": 186.8,
+    "pitch_range_st": 7.802,
+    "voiced_fraction": 0.883,
+    "jump_fraction": 0.0095,
+    "speech_s": 6.06,
+    "words_per_s": 2.31
+   }
+  },
+  "default_s1": {
+   "audio_s": 6.497916666666667,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.616,
+    "jump_fraction": 0.0,
+    "speech_s": 5.92,
+    "words_per_s": 2.365
+   },
+   "harvest": {
+    "median_f0_hz": 200.2,
+    "pitch_range_st": 7.798,
+    "voiced_fraction": 0.895,
+    "jump_fraction": 0.0038,
+    "speech_s": 5.92,
+    "words_per_s": 2.365
+   }
+  },
+  "full": {
+   "audio_s": 6.647916666666666,
+   "pyin": {
+    "median_f0_hz": 186.6,
+    "pitch_range_st": 5.76,
+    "voiced_fraction": 0.624,
+    "jump_fraction": 0.0,
+    "speech_s": 6.16,
+    "words_per_s": 2.273
+   },
+   "harvest": {
+    "median_f0_hz": 184.8,
+    "pitch_range_st": 7.344,
+    "voiced_fraction": 0.82,
+    "jump_fraction": 0.0,
+    "speech_s": 6.16,
+    "words_per_s": 2.273
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.522916666666666,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 5.8,
+    "voiced_fraction": 0.638,
+    "jump_fraction": 0.0,
+    "speech_s": 5.96,
+    "words_per_s": 2.349
+   },
+   "harvest": {
+    "median_f0_hz": 199.9,
+    "pitch_range_st": 6.167,
+    "voiced_fraction": 0.821,
+    "jump_fraction": 0.0063,
+    "speech_s": 5.96,
+    "words_per_s": 2.349
+   }
+  }
+ },
+ {
+  "speaker": "1580",
+  "j": 3,
+  "words": 14,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 4.03,
+    "voiced_fraction": 0.278,
+    "jump_fraction": 0.0,
+    "speech_s": 3.88,
+    "words_per_s": 3.608
+   },
+   "harvest": {
+    "median_f0_hz": 204.9,
+    "pitch_range_st": 9.811,
+    "voiced_fraction": 0.799,
+    "jump_fraction": 0.0,
+    "speech_s": 3.88,
+    "words_per_s": 3.608
+   }
+  },
+  "off": {
+   "audio_s": 5.172916666666667,
+   "pyin": {
+    "median_f0_hz": 205.9,
+    "pitch_range_st": 9.1,
+    "voiced_fraction": 0.459,
+    "jump_fraction": 0.0,
+    "speech_s": 4.7,
+    "words_per_s": 2.979
+   },
+   "harvest": {
+    "median_f0_hz": 193.9,
+    "pitch_range_st": 26.752,
+    "voiced_fraction": 0.9,
+    "jump_fraction": 0.0145,
+    "speech_s": 4.7,
+    "words_per_s": 2.979
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.172916666666667,
+   "pyin": {
+    "median_f0_hz": 276.4,
+    "pitch_range_st": 10.1,
+    "voiced_fraction": 0.278,
+    "jump_fraction": 0.0,
+    "speech_s": 4.7,
+    "words_per_s": 2.979
+   },
+   "harvest": {
+    "median_f0_hz": 191.9,
+    "pitch_range_st": 26.965,
+    "voiced_fraction": 0.902,
+    "jump_fraction": 0.0193,
+    "speech_s": 4.7,
+    "words_per_s": 2.979
+   }
+  },
+  "default": {
+   "audio_s": 5.372916666666667,
+   "pyin": {
+    "median_f0_hz": 192.6,
+    "pitch_range_st": 6.37,
+    "voiced_fraction": 0.542,
+    "jump_fraction": 0.0,
+    "speech_s": 4.86,
+    "words_per_s": 2.881
+   },
+   "harvest": {
+    "median_f0_hz": 189.3,
+    "pitch_range_st": 11.139,
+    "voiced_fraction": 0.893,
+    "jump_fraction": 0.0047,
+    "speech_s": 4.86,
+    "words_per_s": 2.881
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.347916666666666,
+   "pyin": {
+    "median_f0_hz": 205.9,
+    "pitch_range_st": 4.73,
+    "voiced_fraction": 0.573,
+    "jump_fraction": 0.0,
+    "speech_s": 4.84,
+    "words_per_s": 2.893
+   },
+   "harvest": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 6.925,
+    "voiced_fraction": 0.827,
+    "jump_fraction": 0.0102,
+    "speech_s": 4.84,
+    "words_per_s": 2.893
+   }
+  },
+  "full": {
+   "audio_s": 5.297916666666667,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 5.4,
+    "voiced_fraction": 0.559,
+    "jump_fraction": 0.0,
+    "speech_s": 4.86,
+    "words_per_s": 2.881
+   },
+   "harvest": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 7.97,
+    "voiced_fraction": 0.821,
+    "jump_fraction": 0.0051,
+    "speech_s": 4.86,
+    "words_per_s": 2.881
+   }
+  },
+  "full_s1": {
+   "audio_s": 5.147916666666666,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 4.3,
+    "voiced_fraction": 0.674,
+    "jump_fraction": 0.0,
+    "speech_s": 4.62,
+    "words_per_s": 3.03
+   },
+   "harvest": {
+    "median_f0_hz": 199.3,
+    "pitch_range_st": 5.375,
+    "voiced_fraction": 0.81,
+    "jump_fraction": 0.0027,
+    "speech_s": 4.62,
+    "words_per_s": 3.03
+   }
+  }
+ },
+ {
+  "speaker": "1580",
+  "j": 4,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 271.6,
+    "pitch_range_st": 14.44,
+    "voiced_fraction": 0.807,
+    "jump_fraction": 0.0,
+    "speech_s": 2.06,
+    "words_per_s": 3.883
+   },
+   "harvest": {
+    "median_f0_hz": 249.1,
+    "pitch_range_st": 13.939,
+    "voiced_fraction": 0.894,
+    "jump_fraction": 0.0,
+    "speech_s": 2.06,
+    "words_per_s": 3.883
+   }
+  },
+  "off": {
+   "audio_s": 2.972916666666667,
+   "pyin": {
+    "median_f0_hz": 227.1,
+    "pitch_range_st": 9.34,
+    "voiced_fraction": 0.641,
+    "jump_fraction": 0.0,
+    "speech_s": 2.44,
+    "words_per_s": 3.279
+   },
+   "harvest": {
+    "median_f0_hz": 216.8,
+    "pitch_range_st": 10.552,
+    "voiced_fraction": 0.947,
+    "jump_fraction": 0.0132,
+    "speech_s": 2.44,
+    "words_per_s": 3.279
+   }
+  },
+  "off_s1": {
+   "audio_s": 2.972916666666667,
+   "pyin": {
+    "median_f0_hz": 228.4,
+    "pitch_range_st": 9.42,
+    "voiced_fraction": 0.649,
+    "jump_fraction": 0.0,
+    "speech_s": 2.44,
+    "words_per_s": 3.279
+   },
+   "harvest": {
+    "median_f0_hz": 210.9,
+    "pitch_range_st": 10.884,
+    "voiced_fraction": 0.939,
+    "jump_fraction": 0.0088,
+    "speech_s": 2.44,
+    "words_per_s": 3.279
+   }
+  },
+  "default": {
+   "audio_s": 3.0479166666666666,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 5.26,
+    "voiced_fraction": 0.777,
+    "jump_fraction": 0.0,
+    "speech_s": 2.5,
+    "words_per_s": 3.2
+   },
+   "harvest": {
+    "median_f0_hz": 186.4,
+    "pitch_range_st": 7.315,
+    "voiced_fraction": 0.984,
+    "jump_fraction": 0.0041,
+    "speech_s": 2.5,
+    "words_per_s": 3.2
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.1479166666666667,
+   "pyin": {
+    "median_f0_hz": 196.6,
+    "pitch_range_st": 4.42,
+    "voiced_fraction": 0.801,
+    "jump_fraction": 0.0,
+    "speech_s": 2.6,
+    "words_per_s": 3.077
+   },
+   "harvest": {
+    "median_f0_hz": 195.7,
+    "pitch_range_st": 5.282,
+    "voiced_fraction": 0.931,
+    "jump_fraction": 0.0,
+    "speech_s": 2.6,
+    "words_per_s": 3.077
+   }
+  },
+  "full": {
+   "audio_s": 3.0479166666666666,
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 3.8,
+    "voiced_fraction": 0.785,
+    "jump_fraction": 0.0,
+    "speech_s": 2.6,
+    "words_per_s": 3.077
+   },
+   "harvest": {
+    "median_f0_hz": 181.0,
+    "pitch_range_st": 6.162,
+    "voiced_fraction": 0.95,
+    "jump_fraction": 0.0041,
+    "speech_s": 2.6,
+    "words_per_s": 3.077
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.0729166666666665,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 3.98,
+    "voiced_fraction": 0.844,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 3.125
+   },
+   "harvest": {
+    "median_f0_hz": 196.1,
+    "pitch_range_st": 4.668,
+    "voiced_fraction": 0.961,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 3.125
+   }
+  }
+ },
+ {
+  "speaker": "1995",
+  "j": 0,
+  "words": 27,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 168.2,
+    "pitch_range_st": 8.94,
+    "voiced_fraction": 0.758,
+    "jump_fraction": 0.0,
+    "speech_s": 9.58,
+    "words_per_s": 2.818
+   },
+   "harvest": {
+    "median_f0_hz": 157.2,
+    "pitch_range_st": 11.296,
+    "voiced_fraction": 0.948,
+    "jump_fraction": 0.0,
+    "speech_s": 9.58,
+    "words_per_s": 2.818
+   }
+  },
+  "off": {
+   "audio_s": 9.647916666666667,
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 8.8,
+    "voiced_fraction": 0.821,
+    "jump_fraction": 0.0,
+    "speech_s": 9.12,
+    "words_per_s": 2.961
+   },
+   "harvest": {
+    "median_f0_hz": 165.3,
+    "pitch_range_st": 9.45,
+    "voiced_fraction": 0.972,
+    "jump_fraction": 0.0011,
+    "speech_s": 9.12,
+    "words_per_s": 2.961
+   }
+  },
+  "off_s1": {
+   "audio_s": 9.647916666666667,
+   "pyin": {
+    "median_f0_hz": 173.6,
+    "pitch_range_st": 8.77,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0,
+    "speech_s": 9.12,
+    "words_per_s": 2.961
+   },
+   "harvest": {
+    "median_f0_hz": 165.4,
+    "pitch_range_st": 9.462,
+    "voiced_fraction": 0.972,
+    "jump_fraction": 0.0011,
+    "speech_s": 9.12,
+    "words_per_s": 2.961
+   }
+  },
+  "default": {
+   "audio_s": 10.472916666666666,
+   "pyin": {
+    "median_f0_hz": 158.7,
+    "pitch_range_st": 7.42,
+    "voiced_fraction": 0.791,
+    "jump_fraction": 0.0,
+    "speech_s": 9.96,
+    "words_per_s": 2.711
+   },
+   "harvest": {
+    "median_f0_hz": 156.7,
+    "pitch_range_st": 7.689,
+    "voiced_fraction": 0.919,
+    "jump_fraction": 0.0033,
+    "speech_s": 9.96,
+    "words_per_s": 2.711
+   }
+  },
+  "default_s1": {
+   "audio_s": 10.022916666666667,
+   "pyin": {
+    "median_f0_hz": 171.1,
+    "pitch_range_st": 7.0,
+    "voiced_fraction": 0.796,
+    "jump_fraction": 0.0,
+    "speech_s": 9.5,
+    "words_per_s": 2.842
+   },
+   "harvest": {
+    "median_f0_hz": 169.7,
+    "pitch_range_st": 7.54,
+    "voiced_fraction": 0.937,
+    "jump_fraction": 0.0011,
+    "speech_s": 9.5,
+    "words_per_s": 2.842
+   }
+  },
+  "full": {
+   "audio_s": 10.872916666666667,
+   "pyin": {
+    "median_f0_hz": 152.4,
+    "pitch_range_st": 7.29,
+    "voiced_fraction": 0.766,
+    "jump_fraction": 0.0,
+    "speech_s": 10.46,
+    "words_per_s": 2.581
+   },
+   "harvest": {
+    "median_f0_hz": 152.8,
+    "pitch_range_st": 7.396,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0011,
+    "speech_s": 10.46,
+    "words_per_s": 2.581
+   }
+  },
+  "full_s1": {
+   "audio_s": 10.172916666666667,
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 5.92,
+    "voiced_fraction": 0.736,
+    "jump_fraction": 0.0,
+    "speech_s": 9.76,
+    "words_per_s": 2.766
+   },
+   "harvest": {
+    "median_f0_hz": 168.8,
+    "pitch_range_st": 7.536,
+    "voiced_fraction": 0.881,
+    "jump_fraction": 0.0012,
+    "speech_s": 9.76,
+    "words_per_s": 2.766
+   }
+  }
+ },
+ {
+  "speaker": "1995",
+  "j": 1,
+  "words": 12,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 9.93,
+    "voiced_fraction": 0.83,
+    "jump_fraction": 0.0,
+    "speech_s": 3.94,
+    "words_per_s": 3.046
+   },
+   "harvest": {
+    "median_f0_hz": 159.0,
+    "pitch_range_st": 10.984,
+    "voiced_fraction": 0.939,
+    "jump_fraction": 0.0,
+    "speech_s": 3.94,
+    "words_per_s": 3.046
+   }
+  },
+  "off": {
+   "audio_s": 5.097916666666666,
+   "pyin": {
+    "median_f0_hz": 179.2,
+    "pitch_range_st": 10.34,
+    "voiced_fraction": 0.905,
+    "jump_fraction": 0.0,
+    "speech_s": 4.6,
+    "words_per_s": 2.609
+   },
+   "harvest": {
+    "median_f0_hz": 168.4,
+    "pitch_range_st": 10.524,
+    "voiced_fraction": 0.976,
+    "jump_fraction": 0.0,
+    "speech_s": 4.6,
+    "words_per_s": 2.609
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.097916666666666,
+   "pyin": {
+    "median_f0_hz": 178.7,
+    "pitch_range_st": 10.31,
+    "voiced_fraction": 0.911,
+    "jump_fraction": 0.0,
+    "speech_s": 4.6,
+    "words_per_s": 2.609
+   },
+   "harvest": {
+    "median_f0_hz": 168.5,
+    "pitch_range_st": 10.515,
+    "voiced_fraction": 0.987,
+    "jump_fraction": 0.0,
+    "speech_s": 4.6,
+    "words_per_s": 2.609
+   }
+  },
+  "default": {
+   "audio_s": 5.372916666666667,
+   "pyin": {
+    "median_f0_hz": 161.5,
+    "pitch_range_st": 8.34,
+    "voiced_fraction": 0.849,
+    "jump_fraction": 0.0,
+    "speech_s": 4.9,
+    "words_per_s": 2.449
+   },
+   "harvest": {
+    "median_f0_hz": 157.0,
+    "pitch_range_st": 8.64,
+    "voiced_fraction": 0.974,
+    "jump_fraction": 0.0,
+    "speech_s": 4.9,
+    "words_per_s": 2.449
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.122916666666667,
+   "pyin": {
+    "median_f0_hz": 168.2,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.844,
+    "jump_fraction": 0.0,
+    "speech_s": 4.62,
+    "words_per_s": 2.597
+   },
+   "harvest": {
+    "median_f0_hz": 166.1,
+    "pitch_range_st": 7.49,
+    "voiced_fraction": 0.946,
+    "jump_fraction": 0.0,
+    "speech_s": 4.62,
+    "words_per_s": 2.597
+   }
+  },
+  "full": {
+   "audio_s": 5.297916666666667,
+   "pyin": {
+    "median_f0_hz": 158.7,
+    "pitch_range_st": 7.61,
+    "voiced_fraction": 0.754,
+    "jump_fraction": 0.0,
+    "speech_s": 4.9,
+    "words_per_s": 2.449
+   },
+   "harvest": {
+    "median_f0_hz": 152.5,
+    "pitch_range_st": 7.565,
+    "voiced_fraction": 0.91,
+    "jump_fraction": 0.0,
+    "speech_s": 4.9,
+    "words_per_s": 2.449
+   }
+  },
+  "full_s1": {
+   "audio_s": 4.897916666666666,
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.801,
+    "jump_fraction": 0.0,
+    "speech_s": 4.46,
+    "words_per_s": 2.691
+   },
+   "harvest": {
+    "median_f0_hz": 162.2,
+    "pitch_range_st": 7.834,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.0049,
+    "speech_s": 4.46,
+    "words_per_s": 2.691
+   }
+  }
+ },
+ {
+  "speaker": "1995",
+  "j": 2,
+  "words": 6,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 152.4,
+    "pitch_range_st": 8.1,
+    "voiced_fraction": 0.844,
+    "jump_fraction": 0.0,
+    "speech_s": 2.68,
+    "words_per_s": 2.239
+   },
+   "harvest": {
+    "median_f0_hz": 150.1,
+    "pitch_range_st": 8.856,
+    "voiced_fraction": 0.981,
+    "jump_fraction": 0.0,
+    "speech_s": 2.68,
+    "words_per_s": 2.239
+   }
+  },
+  "off": {
+   "audio_s": 3.4229166666666666,
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 8.7,
+    "voiced_fraction": 0.898,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.041
+   },
+   "harvest": {
+    "median_f0_hz": 172.2,
+    "pitch_range_st": 9.687,
+    "voiced_fraction": 1.0,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.041
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.4229166666666666,
+   "pyin": {
+    "median_f0_hz": 181.8,
+    "pitch_range_st": 8.7,
+    "voiced_fraction": 0.895,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.041
+   },
+   "harvest": {
+    "median_f0_hz": 172.3,
+    "pitch_range_st": 9.698,
+    "voiced_fraction": 1.0,
+    "jump_fraction": 0.0,
+    "speech_s": 2.94,
+    "words_per_s": 2.041
+   }
+  },
+  "default": {
+   "audio_s": 3.5479166666666666,
+   "pyin": {
+    "median_f0_hz": 163.4,
+    "pitch_range_st": 7.26,
+    "voiced_fraction": 0.869,
+    "jump_fraction": 0.0,
+    "speech_s": 3.04,
+    "words_per_s": 1.974
+   },
+   "harvest": {
+    "median_f0_hz": 160.1,
+    "pitch_range_st": 7.726,
+    "voiced_fraction": 0.97,
+    "jump_fraction": 0.0,
+    "speech_s": 3.04,
+    "words_per_s": 1.974
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.5729166666666665,
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 6.5,
+    "voiced_fraction": 0.863,
+    "jump_fraction": 0.0,
+    "speech_s": 3.06,
+    "words_per_s": 1.961
+   },
+   "harvest": {
+    "median_f0_hz": 166.1,
+    "pitch_range_st": 7.223,
+    "voiced_fraction": 1.0,
+    "jump_fraction": 0.0,
+    "speech_s": 3.06,
+    "words_per_s": 1.961
+   }
+  },
+  "full": {
+   "audio_s": 3.5229166666666667,
+   "pyin": {
+    "median_f0_hz": 166.2,
+    "pitch_range_st": 6.6,
+    "voiced_fraction": 0.776,
+    "jump_fraction": 0.0,
+    "speech_s": 3.12,
+    "words_per_s": 1.923
+   },
+   "harvest": {
+    "median_f0_hz": 162.9,
+    "pitch_range_st": 6.909,
+    "voiced_fraction": 0.965,
+    "jump_fraction": 0.0033,
+    "speech_s": 3.12,
+    "words_per_s": 1.923
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.4229166666666666,
+   "pyin": {
+    "median_f0_hz": 173.1,
+    "pitch_range_st": 5.8,
+    "voiced_fraction": 0.793,
+    "jump_fraction": 0.0,
+    "speech_s": 2.98,
+    "words_per_s": 2.013
+   },
+   "harvest": {
+    "median_f0_hz": 172.3,
+    "pitch_range_st": 6.856,
+    "voiced_fraction": 0.957,
+    "jump_fraction": 0.0,
+    "speech_s": 2.98,
+    "words_per_s": 2.013
+   }
+  }
+ },
+ {
+  "speaker": "1995",
+  "j": 3,
+  "words": 6,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 156.9,
+    "pitch_range_st": 8.79,
+    "voiced_fraction": 0.91,
+    "jump_fraction": 0.0,
+    "speech_s": 2.32,
+    "words_per_s": 2.586
+   },
+   "harvest": {
+    "median_f0_hz": 156.6,
+    "pitch_range_st": 9.215,
+    "voiced_fraction": 0.974,
+    "jump_fraction": 0.0,
+    "speech_s": 2.32,
+    "words_per_s": 2.586
+   }
+  },
+  "off": {
+   "audio_s": 3.097916666666667,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 9.84,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   },
+   "harvest": {
+    "median_f0_hz": 183.0,
+    "pitch_range_st": 10.757,
+    "voiced_fraction": 0.992,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.097916666666667,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 9.84,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   },
+   "harvest": {
+    "median_f0_hz": 183.2,
+    "pitch_range_st": 10.787,
+    "voiced_fraction": 0.992,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   }
+  },
+  "default": {
+   "audio_s": 3.0479166666666666,
+   "pyin": {
+    "median_f0_hz": 164.3,
+    "pitch_range_st": 7.34,
+    "voiced_fraction": 0.903,
+    "jump_fraction": 0.0,
+    "speech_s": 2.58,
+    "words_per_s": 2.326
+   },
+   "harvest": {
+    "median_f0_hz": 163.5,
+    "pitch_range_st": 7.36,
+    "voiced_fraction": 0.965,
+    "jump_fraction": 0.0,
+    "speech_s": 2.58,
+    "words_per_s": 2.326
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.122916666666667,
+   "pyin": {
+    "median_f0_hz": 171.1,
+    "pitch_range_st": 7.01,
+    "voiced_fraction": 0.928,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   },
+   "harvest": {
+    "median_f0_hz": 170.2,
+    "pitch_range_st": 7.245,
+    "voiced_fraction": 0.989,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 2.29
+   }
+  },
+  "full": {
+   "audio_s": 2.9229166666666666,
+   "pyin": {
+    "median_f0_hz": 162.5,
+    "pitch_range_st": 7.2,
+    "voiced_fraction": 0.837,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 2.344
+   },
+   "harvest": {
+    "median_f0_hz": 163.4,
+    "pitch_range_st": 7.542,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 2.344
+   }
+  },
+  "full_s1": {
+   "audio_s": 2.872916666666667,
+   "pyin": {
+    "median_f0_hz": 167.2,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.902,
+    "jump_fraction": 0.0,
+    "speech_s": 2.44,
+    "words_per_s": 2.459
+   },
+   "harvest": {
+    "median_f0_hz": 165.3,
+    "pitch_range_st": 6.515,
+    "voiced_fraction": 0.988,
+    "jump_fraction": 0.0041,
+    "speech_s": 2.44,
+    "words_per_s": 2.459
+   }
+  }
+ },
+ {
+  "speaker": "1995",
+  "j": 4,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 210.7,
+    "pitch_range_st": 17.3,
+    "voiced_fraction": 0.669,
+    "jump_fraction": 0.0,
+    "speech_s": 4.34,
+    "words_per_s": 1.843
+   },
+   "harvest": {
+    "median_f0_hz": 185.8,
+    "pitch_range_st": 19.68,
+    "voiced_fraction": 0.887,
+    "jump_fraction": 0.008,
+    "speech_s": 4.34,
+    "words_per_s": 1.843
+   }
+  },
+  "off": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 8.5,
+    "voiced_fraction": 0.893,
+    "jump_fraction": 0.0,
+    "speech_s": 3.64,
+    "words_per_s": 2.198
+   },
+   "harvest": {
+    "median_f0_hz": 171.4,
+    "pitch_range_st": 8.783,
+    "voiced_fraction": 0.986,
+    "jump_fraction": 0.0,
+    "speech_s": 3.64,
+    "words_per_s": 2.198
+   }
+  },
+  "off_s1": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 8.5,
+    "voiced_fraction": 0.888,
+    "jump_fraction": 0.0,
+    "speech_s": 3.64,
+    "words_per_s": 2.198
+   },
+   "harvest": {
+    "median_f0_hz": 171.4,
+    "pitch_range_st": 8.858,
+    "voiced_fraction": 0.981,
+    "jump_fraction": 0.0,
+    "speech_s": 3.64,
+    "words_per_s": 2.198
+   }
+  },
+  "default": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 161.5,
+    "pitch_range_st": 7.75,
+    "voiced_fraction": 0.856,
+    "jump_fraction": 0.0,
+    "speech_s": 3.68,
+    "words_per_s": 2.174
+   },
+   "harvest": {
+    "median_f0_hz": 160.8,
+    "pitch_range_st": 7.775,
+    "voiced_fraction": 0.97,
+    "jump_fraction": 0.0,
+    "speech_s": 3.68,
+    "words_per_s": 2.174
+   }
+  },
+  "default_s1": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 171.1,
+    "pitch_range_st": 6.9,
+    "voiced_fraction": 0.845,
+    "jump_fraction": 0.0,
+    "speech_s": 3.66,
+    "words_per_s": 2.186
+   },
+   "harvest": {
+    "median_f0_hz": 170.4,
+    "pitch_range_st": 7.904,
+    "voiced_fraction": 0.984,
+    "jump_fraction": 0.0,
+    "speech_s": 3.66,
+    "words_per_s": 2.186
+   }
+  },
+  "full": {
+   "audio_s": 4.047916666666667,
+   "pyin": {
+    "median_f0_hz": 156.0,
+    "pitch_range_st": 7.5,
+    "voiced_fraction": 0.823,
+    "jump_fraction": 0.0,
+    "speech_s": 3.66,
+    "words_per_s": 2.186
+   },
+   "harvest": {
+    "median_f0_hz": 155.8,
+    "pitch_range_st": 8.035,
+    "voiced_fraction": 0.951,
+    "jump_fraction": 0.0,
+    "speech_s": 3.66,
+    "words_per_s": 2.186
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.6979166666666665,
+   "pyin": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 5.9,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 2.454
+   },
+   "harvest": {
+    "median_f0_hz": 170.2,
+    "pitch_range_st": 6.5,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 2.454
+   }
+  }
+ },
+ {
+  "speaker": "2094",
+  "j": 0,
+  "words": 21,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 174.1,
+    "pitch_range_st": 25.5,
+    "voiced_fraction": 0.715,
+    "jump_fraction": 0.0,
+    "speech_s": 8.02,
+    "words_per_s": 2.618
+   },
+   "harvest": {
+    "median_f0_hz": 183.2,
+    "pitch_range_st": 22.026,
+    "voiced_fraction": 0.726,
+    "jump_fraction": 0.0035,
+    "speech_s": 8.02,
+    "words_per_s": 2.618
+   }
+  },
+  "off": {
+   "audio_s": 9.047916666666667,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.601,
+    "jump_fraction": 0.0,
+    "speech_s": 8.66,
+    "words_per_s": 2.425
+   },
+   "harvest": {
+    "median_f0_hz": 179.6,
+    "pitch_range_st": 22.439,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0139,
+    "speech_s": 8.66,
+    "words_per_s": 2.425
+   }
+  },
+  "off_s1": {
+   "audio_s": 9.047916666666667,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.601,
+    "jump_fraction": 0.0,
+    "speech_s": 8.66,
+    "words_per_s": 2.425
+   },
+   "harvest": {
+    "median_f0_hz": 179.5,
+    "pitch_range_st": 22.494,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0159,
+    "speech_s": 8.66,
+    "words_per_s": 2.425
+   }
+  },
+  "default": {
+   "audio_s": 7.572916666666667,
+   "pyin": {
+    "median_f0_hz": 179.2,
+    "pitch_range_st": 5.2,
+    "voiced_fraction": 0.685,
+    "jump_fraction": 0.0,
+    "speech_s": 7.16,
+    "words_per_s": 2.933
+   },
+   "harvest": {
+    "median_f0_hz": 175.8,
+    "pitch_range_st": 21.871,
+    "voiced_fraction": 0.895,
+    "jump_fraction": 0.0032,
+    "speech_s": 7.16,
+    "words_per_s": 2.933
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.797916666666667,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 4.82,
+    "voiced_fraction": 0.675,
+    "jump_fraction": 0.0,
+    "speech_s": 7.38,
+    "words_per_s": 2.846
+   },
+   "harvest": {
+    "median_f0_hz": 188.9,
+    "pitch_range_st": 22.608,
+    "voiced_fraction": 0.912,
+    "jump_fraction": 0.0195,
+    "speech_s": 7.38,
+    "words_per_s": 2.846
+   }
+  },
+  "full": {
+   "audio_s": 6.972916666666666,
+   "pyin": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 5.2,
+    "voiced_fraction": 0.695,
+    "jump_fraction": 0.0,
+    "speech_s": 6.58,
+    "words_per_s": 3.191
+   },
+   "harvest": {
+    "median_f0_hz": 173.6,
+    "pitch_range_st": 6.278,
+    "voiced_fraction": 0.813,
+    "jump_fraction": 0.0038,
+    "speech_s": 6.58,
+    "words_per_s": 3.191
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.047916666666667,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 4.82,
+    "voiced_fraction": 0.722,
+    "jump_fraction": 0.0,
+    "speech_s": 6.62,
+    "words_per_s": 3.172
+   },
+   "harvest": {
+    "median_f0_hz": 192.0,
+    "pitch_range_st": 5.705,
+    "voiced_fraction": 0.842,
+    "jump_fraction": 0.0,
+    "speech_s": 6.62,
+    "words_per_s": 3.172
+   }
+  }
+ },
+ {
+  "speaker": "2094",
+  "j": 1,
+  "words": 42,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 190.4,
+    "pitch_range_st": 25.9,
+    "voiced_fraction": 0.752,
+    "jump_fraction": 0.0,
+    "speech_s": 15.34,
+    "words_per_s": 2.738
+   },
+   "harvest": {
+    "median_f0_hz": 193.1,
+    "pitch_range_st": 6.806,
+    "voiced_fraction": 0.779,
+    "jump_fraction": 0.0034,
+    "speech_s": 15.34,
+    "words_per_s": 2.738
+   }
+  },
+  "off": {
+   "audio_s": 16.947916666666668,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.607,
+    "jump_fraction": 0.0,
+    "speech_s": 16.54,
+    "words_per_s": 2.539
+   },
+   "harvest": {
+    "median_f0_hz": 179.8,
+    "pitch_range_st": 22.826,
+    "voiced_fraction": 0.926,
+    "jump_fraction": 0.0171,
+    "speech_s": 16.54,
+    "words_per_s": 2.539
+   }
+  },
+  "off_s1": {
+   "audio_s": 16.947916666666668,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.607,
+    "jump_fraction": 0.0,
+    "speech_s": 16.54,
+    "words_per_s": 2.539
+   },
+   "harvest": {
+    "median_f0_hz": 179.5,
+    "pitch_range_st": 22.786,
+    "voiced_fraction": 0.932,
+    "jump_fraction": 0.017,
+    "speech_s": 16.54,
+    "words_per_s": 2.539
+   }
+  },
+  "default": {
+   "audio_s": 15.047916666666667,
+   "pyin": {
+    "median_f0_hz": 178.2,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.679,
+    "jump_fraction": 0.0,
+    "speech_s": 14.62,
+    "words_per_s": 2.873
+   },
+   "harvest": {
+    "median_f0_hz": 172.2,
+    "pitch_range_st": 21.991,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.0068,
+    "speech_s": 14.62,
+    "words_per_s": 2.873
+   }
+  },
+  "default_s1": {
+   "audio_s": 14.722916666666666,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 5.3,
+    "voiced_fraction": 0.678,
+    "jump_fraction": 0.0,
+    "speech_s": 14.28,
+    "words_per_s": 2.941
+   },
+   "harvest": {
+    "median_f0_hz": 182.5,
+    "pitch_range_st": 23.276,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0146,
+    "speech_s": 14.28,
+    "words_per_s": 2.941
+   }
+  },
+  "full": {
+   "audio_s": 14.372916666666667,
+   "pyin": {
+    "median_f0_hz": 170.1,
+    "pitch_range_st": 5.94,
+    "voiced_fraction": 0.699,
+    "jump_fraction": 0.0,
+    "speech_s": 14.12,
+    "words_per_s": 2.975
+   },
+   "harvest": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 7.091,
+    "voiced_fraction": 0.853,
+    "jump_fraction": 0.0017,
+    "speech_s": 14.12,
+    "words_per_s": 2.975
+   }
+  },
+  "full_s1": {
+   "audio_s": 13.872916666666667,
+   "pyin": {
+    "median_f0_hz": 185.5,
+    "pitch_range_st": 5.6,
+    "voiced_fraction": 0.706,
+    "jump_fraction": 0.0,
+    "speech_s": 13.58,
+    "words_per_s": 3.093
+   },
+   "harvest": {
+    "median_f0_hz": 183.7,
+    "pitch_range_st": 6.68,
+    "voiced_fraction": 0.847,
+    "jump_fraction": 0.0,
+    "speech_s": 13.58,
+    "words_per_s": 3.093
+   }
+  }
+ },
+ {
+  "speaker": "2094",
+  "j": 2,
+  "words": 33,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 25.6,
+    "voiced_fraction": 0.711,
+    "jump_fraction": 0.0,
+    "speech_s": 14.66,
+    "words_per_s": 2.251
+   },
+   "harvest": {
+    "median_f0_hz": 188.9,
+    "pitch_range_st": 7.373,
+    "voiced_fraction": 0.624,
+    "jump_fraction": 0.0,
+    "speech_s": 14.66,
+    "words_per_s": 2.251
+   }
+  },
+  "off": {
+   "audio_s": 14.122916666666667,
+   "pyin": {
+    "median_f0_hz": 201.2,
+    "pitch_range_st": 6.3,
+    "voiced_fraction": 0.631,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.402
+   },
+   "harvest": {
+    "median_f0_hz": 181.7,
+    "pitch_range_st": 23.347,
+    "voiced_fraction": 0.958,
+    "jump_fraction": 0.0245,
+    "speech_s": 13.74,
+    "words_per_s": 2.402
+   }
+  },
+  "off_s1": {
+   "audio_s": 14.122916666666667,
+   "pyin": {
+    "median_f0_hz": 201.2,
+    "pitch_range_st": 6.3,
+    "voiced_fraction": 0.632,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.402
+   },
+   "harvest": {
+    "median_f0_hz": 181.6,
+    "pitch_range_st": 23.3,
+    "voiced_fraction": 0.96,
+    "jump_fraction": 0.0267,
+    "speech_s": 13.74,
+    "words_per_s": 2.402
+   }
+  },
+  "default": {
+   "audio_s": 12.597916666666666,
+   "pyin": {
+    "median_f0_hz": 181.3,
+    "pitch_range_st": 5.41,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0,
+    "speech_s": 12.18,
+    "words_per_s": 2.709
+   },
+   "harvest": {
+    "median_f0_hz": 173.9,
+    "pitch_range_st": 21.63,
+    "voiced_fraction": 0.889,
+    "jump_fraction": 0.0159,
+    "speech_s": 12.18,
+    "words_per_s": 2.709
+   }
+  },
+  "default_s1": {
+   "audio_s": 12.247916666666667,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 5.1,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0,
+    "speech_s": 11.84,
+    "words_per_s": 2.787
+   },
+   "harvest": {
+    "median_f0_hz": 184.0,
+    "pitch_range_st": 22.75,
+    "voiced_fraction": 0.899,
+    "jump_fraction": 0.0134,
+    "speech_s": 11.84,
+    "words_per_s": 2.787
+   }
+  },
+  "full": {
+   "audio_s": 12.047916666666667,
+   "pyin": {
+    "median_f0_hz": 174.1,
+    "pitch_range_st": 5.2,
+    "voiced_fraction": 0.685,
+    "jump_fraction": 0.0,
+    "speech_s": 11.62,
+    "words_per_s": 2.84
+   },
+   "harvest": {
+    "median_f0_hz": 171.1,
+    "pitch_range_st": 7.051,
+    "voiced_fraction": 0.83,
+    "jump_fraction": 0.0011,
+    "speech_s": 11.62,
+    "words_per_s": 2.84
+   }
+  },
+  "full_s1": {
+   "audio_s": 11.347916666666666,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 4.46,
+    "voiced_fraction": 0.718,
+    "jump_fraction": 0.0,
+    "speech_s": 10.92,
+    "words_per_s": 3.022
+   },
+   "harvest": {
+    "median_f0_hz": 189.1,
+    "pitch_range_st": 5.501,
+    "voiced_fraction": 0.828,
+    "jump_fraction": 0.0057,
+    "speech_s": 10.92,
+    "words_per_s": 3.022
+   }
+  }
+ },
+ {
+  "speaker": "2094",
+  "j": 3,
+  "words": 7,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 192.1,
+    "pitch_range_st": 26.2,
+    "voiced_fraction": 0.774,
+    "jump_fraction": 0.0,
+    "speech_s": 2.64,
+    "words_per_s": 2.652
+   },
+   "harvest": {
+    "median_f0_hz": 209.8,
+    "pitch_range_st": 4.302,
+    "voiced_fraction": 0.611,
+    "jump_fraction": 0.0063,
+    "speech_s": 2.64,
+    "words_per_s": 2.652
+   }
+  },
+  "off": {
+   "audio_s": 2.9229166666666666,
+   "pyin": {
+    "median_f0_hz": 203.5,
+    "pitch_range_st": 7.3,
+    "voiced_fraction": 0.763,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 2.734
+   },
+   "harvest": {
+    "median_f0_hz": 195.1,
+    "pitch_range_st": 23.547,
+    "voiced_fraction": 0.895,
+    "jump_fraction": 0.0088,
+    "speech_s": 2.56,
+    "words_per_s": 2.734
+   }
+  },
+  "off_s1": {
+   "audio_s": 2.9229166666666666,
+   "pyin": {
+    "median_f0_hz": 203.5,
+    "pitch_range_st": 7.3,
+    "voiced_fraction": 0.763,
+    "jump_fraction": 0.0,
+    "speech_s": 2.56,
+    "words_per_s": 2.734
+   },
+   "harvest": {
+    "median_f0_hz": 193.1,
+    "pitch_range_st": 24.221,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0209,
+    "speech_s": 2.56,
+    "words_per_s": 2.734
+   }
+  },
+  "default": {
+   "audio_s": 2.8229166666666665,
+   "pyin": {
+    "median_f0_hz": 180.3,
+    "pitch_range_st": 5.86,
+    "voiced_fraction": 0.812,
+    "jump_fraction": 0.0,
+    "speech_s": 2.44,
+    "words_per_s": 2.869
+   },
+   "harvest": {
+    "median_f0_hz": 176.3,
+    "pitch_range_st": 7.455,
+    "voiced_fraction": 0.878,
+    "jump_fraction": 0.0,
+    "speech_s": 2.44,
+    "words_per_s": 2.869
+   }
+  },
+  "default_s1": {
+   "audio_s": 2.997916666666667,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 4.51,
+    "voiced_fraction": 0.805,
+    "jump_fraction": 0.0,
+    "speech_s": 2.6,
+    "words_per_s": 2.692
+   },
+   "harvest": {
+    "median_f0_hz": 185.1,
+    "pitch_range_st": 20.581,
+    "voiced_fraction": 0.962,
+    "jump_fraction": 0.008,
+    "speech_s": 2.6,
+    "words_per_s": 2.692
+   }
+  },
+  "full": {
+   "audio_s": 2.7979166666666666,
+   "pyin": {
+    "median_f0_hz": 175.1,
+    "pitch_range_st": 4.9,
+    "voiced_fraction": 0.793,
+    "jump_fraction": 0.0,
+    "speech_s": 2.4,
+    "words_per_s": 2.917
+   },
+   "harvest": {
+    "median_f0_hz": 170.9,
+    "pitch_range_st": 7.541,
+    "voiced_fraction": 0.88,
+    "jump_fraction": 0.0,
+    "speech_s": 2.4,
+    "words_per_s": 2.917
+   }
+  },
+  "full_s1": {
+   "audio_s": 2.8979166666666667,
+   "pyin": {
+    "median_f0_hz": 189.9,
+    "pitch_range_st": 4.12,
+    "voiced_fraction": 0.831,
+    "jump_fraction": 0.0,
+    "speech_s": 2.48,
+    "words_per_s": 2.823
+   },
+   "harvest": {
+    "median_f0_hz": 188.9,
+    "pitch_range_st": 4.885,
+    "voiced_fraction": 0.932,
+    "jump_fraction": 0.0,
+    "speech_s": 2.48,
+    "words_per_s": 2.823
+   }
+  }
+ },
+ {
+  "speaker": "2094",
+  "j": 4,
+  "words": 20,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 51.2,
+    "pitch_range_st": 25.3,
+    "voiced_fraction": 0.688,
+    "jump_fraction": 0.0,
+    "speech_s": 9.09,
+    "words_per_s": 2.2
+   },
+   "harvest": {
+    "median_f0_hz": 192.1,
+    "pitch_range_st": 7.087,
+    "voiced_fraction": 0.607,
+    "jump_fraction": 0.0019,
+    "speech_s": 9.09,
+    "words_per_s": 2.2
+   }
+  },
+  "off": {
+   "audio_s": 10.422916666666667,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 6.06,
+    "voiced_fraction": 0.58,
+    "jump_fraction": 0.0,
+    "speech_s": 10.04,
+    "words_per_s": 1.992
+   },
+   "harvest": {
+    "median_f0_hz": 172.0,
+    "pitch_range_st": 23.251,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0169,
+    "speech_s": 10.04,
+    "words_per_s": 1.992
+   }
+  },
+  "off_s1": {
+   "audio_s": 10.422916666666667,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 6.08,
+    "voiced_fraction": 0.58,
+    "jump_fraction": 0.0,
+    "speech_s": 10.04,
+    "words_per_s": 1.992
+   },
+   "harvest": {
+    "median_f0_hz": 173.2,
+    "pitch_range_st": 23.205,
+    "voiced_fraction": 0.941,
+    "jump_fraction": 0.0224,
+    "speech_s": 10.04,
+    "words_per_s": 1.992
+   }
+  },
+  "default": {
+   "audio_s": 8.947916666666666,
+   "pyin": {
+    "median_f0_hz": 177.2,
+    "pitch_range_st": 6.3,
+    "voiced_fraction": 0.659,
+    "jump_fraction": 0.0,
+    "speech_s": 8.5,
+    "words_per_s": 2.353
+   },
+   "harvest": {
+    "median_f0_hz": 170.5,
+    "pitch_range_st": 22.396,
+    "voiced_fraction": 0.852,
+    "jump_fraction": 0.007,
+    "speech_s": 8.5,
+    "words_per_s": 2.353
+   }
+  },
+  "default_s1": {
+   "audio_s": 8.772916666666667,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 5.17,
+    "voiced_fraction": 0.663,
+    "jump_fraction": 0.0,
+    "speech_s": 8.34,
+    "words_per_s": 2.398
+   },
+   "harvest": {
+    "median_f0_hz": 186.4,
+    "pitch_range_st": 22.282,
+    "voiced_fraction": 0.891,
+    "jump_fraction": 0.0096,
+    "speech_s": 8.34,
+    "words_per_s": 2.398
+   }
+  },
+  "full": {
+   "audio_s": 8.422916666666667,
+   "pyin": {
+    "median_f0_hz": 169.2,
+    "pitch_range_st": 6.27,
+    "voiced_fraction": 0.668,
+    "jump_fraction": 0.0,
+    "speech_s": 7.98,
+    "words_per_s": 2.506
+   },
+   "harvest": {
+    "median_f0_hz": 167.2,
+    "pitch_range_st": 7.944,
+    "voiced_fraction": 0.83,
+    "jump_fraction": 0.0061,
+    "speech_s": 7.98,
+    "words_per_s": 2.506
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.897916666666666,
+   "pyin": {
+    "median_f0_hz": 188.8,
+    "pitch_range_st": 4.7,
+    "voiced_fraction": 0.696,
+    "jump_fraction": 0.0,
+    "speech_s": 7.46,
+    "words_per_s": 2.681
+   },
+   "harvest": {
+    "median_f0_hz": 188.6,
+    "pitch_range_st": 5.503,
+    "voiced_fraction": 0.811,
+    "jump_fraction": 0.0,
+    "speech_s": 7.46,
+    "words_per_s": 2.681
+   }
+  }
+ },
+ {
+  "speaker": "2300",
+  "j": 0,
+  "words": 33,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 14.6,
+    "voiced_fraction": 0.664,
+    "jump_fraction": 0.0,
+    "speech_s": 13.7,
+    "words_per_s": 2.409
+   },
+   "harvest": {
+    "median_f0_hz": 125.8,
+    "pitch_range_st": 15.817,
+    "voiced_fraction": 0.838,
+    "jump_fraction": 0.0,
+    "speech_s": 13.7,
+    "words_per_s": 2.409
+   }
+  },
+  "off": {
+   "audio_s": 12.397916666666667,
+   "pyin": {
+    "median_f0_hz": 118.9,
+    "pitch_range_st": 12.8,
+    "voiced_fraction": 0.627,
+    "jump_fraction": 0.0,
+    "speech_s": 11.98,
+    "words_per_s": 2.755
+   },
+   "harvest": {
+    "median_f0_hz": 115.7,
+    "pitch_range_st": 13.572,
+    "voiced_fraction": 0.832,
+    "jump_fraction": 0.001,
+    "speech_s": 11.98,
+    "words_per_s": 2.755
+   }
+  },
+  "off_s1": {
+   "audio_s": 12.397916666666667,
+   "pyin": {
+    "median_f0_hz": 118.9,
+    "pitch_range_st": 12.79,
+    "voiced_fraction": 0.636,
+    "jump_fraction": 0.0,
+    "speech_s": 11.98,
+    "words_per_s": 2.755
+   },
+   "harvest": {
+    "median_f0_hz": 116.7,
+    "pitch_range_st": 13.373,
+    "voiced_fraction": 0.822,
+    "jump_fraction": 0.001,
+    "speech_s": 11.98,
+    "words_per_s": 2.755
+   }
+  },
+  "default": {
+   "audio_s": 12.297916666666667,
+   "pyin": {
+    "median_f0_hz": 111.0,
+    "pitch_range_st": 10.6,
+    "voiced_fraction": 0.734,
+    "jump_fraction": 0.0,
+    "speech_s": 11.88,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 108.6,
+    "pitch_range_st": 11.555,
+    "voiced_fraction": 0.83,
+    "jump_fraction": 0.0031,
+    "speech_s": 11.88,
+    "words_per_s": 2.778
+   }
+  },
+  "default_s1": {
+   "audio_s": 11.922916666666667,
+   "pyin": {
+    "median_f0_hz": 120.3,
+    "pitch_range_st": 10.29,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.88
+   },
+   "harvest": {
+    "median_f0_hz": 118.0,
+    "pitch_range_st": 11.342,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0,
+    "speech_s": 11.46,
+    "words_per_s": 2.88
+   }
+  },
+  "full": {
+   "audio_s": 12.747916666666667,
+   "pyin": {
+    "median_f0_hz": 107.8,
+    "pitch_range_st": 9.9,
+    "voiced_fraction": 0.755,
+    "jump_fraction": 0.0,
+    "speech_s": 12.34,
+    "words_per_s": 2.674
+   },
+   "harvest": {
+    "median_f0_hz": 108.5,
+    "pitch_range_st": 10.084,
+    "voiced_fraction": 0.853,
+    "jump_fraction": 0.0,
+    "speech_s": 12.34,
+    "words_per_s": 2.674
+   }
+  },
+  "full_s1": {
+   "audio_s": 11.597916666666666,
+   "pyin": {
+    "median_f0_hz": 118.9,
+    "pitch_range_st": 8.6,
+    "voiced_fraction": 0.781,
+    "jump_fraction": 0.0,
+    "speech_s": 11.16,
+    "words_per_s": 2.957
+   },
+   "harvest": {
+    "median_f0_hz": 117.1,
+    "pitch_range_st": 9.606,
+    "voiced_fraction": 0.883,
+    "jump_fraction": 0.001,
+    "speech_s": 11.16,
+    "words_per_s": 2.957
+   }
+  }
+ },
+ {
+  "speaker": "2300",
+  "j": 1,
+  "words": 36,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 128.6,
+    "pitch_range_st": 14.95,
+    "voiced_fraction": 0.703,
+    "jump_fraction": 0.0,
+    "speech_s": 12.16,
+    "words_per_s": 2.961
+   },
+   "harvest": {
+    "median_f0_hz": 127.6,
+    "pitch_range_st": 15.458,
+    "voiced_fraction": 0.869,
+    "jump_fraction": 0.0,
+    "speech_s": 12.16,
+    "words_per_s": 2.961
+   }
+  },
+  "off": {
+   "audio_s": 11.047916666666667,
+   "pyin": {
+    "median_f0_hz": 114.9,
+    "pitch_range_st": 13.2,
+    "voiced_fraction": 0.629,
+    "jump_fraction": 0.0,
+    "speech_s": 10.64,
+    "words_per_s": 3.383
+   },
+   "harvest": {
+    "median_f0_hz": 115.4,
+    "pitch_range_st": 13.098,
+    "voiced_fraction": 0.843,
+    "jump_fraction": 0.0023,
+    "speech_s": 10.64,
+    "words_per_s": 3.383
+   }
+  },
+  "off_s1": {
+   "audio_s": 11.047916666666667,
+   "pyin": {
+    "median_f0_hz": 114.9,
+    "pitch_range_st": 13.2,
+    "voiced_fraction": 0.628,
+    "jump_fraction": 0.0,
+    "speech_s": 10.64,
+    "words_per_s": 3.383
+   },
+   "harvest": {
+    "median_f0_hz": 116.4,
+    "pitch_range_st": 13.087,
+    "voiced_fraction": 0.838,
+    "jump_fraction": 0.0034,
+    "speech_s": 10.64,
+    "words_per_s": 3.383
+   }
+  },
+  "default": {
+   "audio_s": 10.947916666666666,
+   "pyin": {
+    "median_f0_hz": 111.0,
+    "pitch_range_st": 9.4,
+    "voiced_fraction": 0.693,
+    "jump_fraction": 0.0,
+    "speech_s": 10.54,
+    "words_per_s": 3.416
+   },
+   "harvest": {
+    "median_f0_hz": 111.8,
+    "pitch_range_st": 10.209,
+    "voiced_fraction": 0.841,
+    "jump_fraction": 0.0,
+    "speech_s": 10.54,
+    "words_per_s": 3.416
+   }
+  },
+  "default_s1": {
+   "audio_s": 10.847916666666666,
+   "pyin": {
+    "median_f0_hz": 120.0,
+    "pitch_range_st": 9.3,
+    "voiced_fraction": 0.733,
+    "jump_fraction": 0.0,
+    "speech_s": 10.42,
+    "words_per_s": 3.455
+   },
+   "harvest": {
+    "median_f0_hz": 118.5,
+    "pitch_range_st": 9.809,
+    "voiced_fraction": 0.852,
+    "jump_fraction": 0.0,
+    "speech_s": 10.42,
+    "words_per_s": 3.455
+   }
+  },
+  "full": {
+   "audio_s": 11.247916666666667,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 8.7,
+    "voiced_fraction": 0.734,
+    "jump_fraction": 0.0,
+    "speech_s": 10.82,
+    "words_per_s": 3.327
+   },
+   "harvest": {
+    "median_f0_hz": 108.9,
+    "pitch_range_st": 9.391,
+    "voiced_fraction": 0.843,
+    "jump_fraction": 0.0,
+    "speech_s": 10.82,
+    "words_per_s": 3.327
+   }
+  },
+  "full_s1": {
+   "audio_s": 10.622916666666667,
+   "pyin": {
+    "median_f0_hz": 120.3,
+    "pitch_range_st": 8.2,
+    "voiced_fraction": 0.761,
+    "jump_fraction": 0.0,
+    "speech_s": 10.16,
+    "words_per_s": 3.543
+   },
+   "harvest": {
+    "median_f0_hz": 118.8,
+    "pitch_range_st": 9.312,
+    "voiced_fraction": 0.857,
+    "jump_fraction": 0.0012,
+    "speech_s": 10.16,
+    "words_per_s": 3.543
+   }
+  }
+ },
+ {
+  "speaker": "2300",
+  "j": 2,
+  "words": 38,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 139.8,
+    "pitch_range_st": 14.74,
+    "voiced_fraction": 0.687,
+    "jump_fraction": 0.0,
+    "speech_s": 15.7,
+    "words_per_s": 2.42
+   },
+   "harvest": {
+    "median_f0_hz": 137.6,
+    "pitch_range_st": 15.683,
+    "voiced_fraction": 0.837,
+    "jump_fraction": 0.0,
+    "speech_s": 15.7,
+    "words_per_s": 2.42
+   }
+  },
+  "off": {
+   "audio_s": 14.297916666666667,
+   "pyin": {
+    "median_f0_hz": 115.5,
+    "pitch_range_st": 10.9,
+    "voiced_fraction": 0.598,
+    "jump_fraction": 0.0,
+    "speech_s": 14.06,
+    "words_per_s": 2.703
+   },
+   "harvest": {
+    "median_f0_hz": 117.5,
+    "pitch_range_st": 11.934,
+    "voiced_fraction": 0.808,
+    "jump_fraction": 0.0036,
+    "speech_s": 14.06,
+    "words_per_s": 2.703
+   }
+  },
+  "off_s1": {
+   "audio_s": 14.297916666666667,
+   "pyin": {
+    "median_f0_hz": 115.5,
+    "pitch_range_st": 10.93,
+    "voiced_fraction": 0.596,
+    "jump_fraction": 0.0,
+    "speech_s": 14.06,
+    "words_per_s": 2.703
+   },
+   "harvest": {
+    "median_f0_hz": 117.6,
+    "pitch_range_st": 12.065,
+    "voiced_fraction": 0.818,
+    "jump_fraction": 0.0,
+    "speech_s": 14.06,
+    "words_per_s": 2.703
+   }
+  },
+  "default": {
+   "audio_s": 14.122916666666667,
+   "pyin": {
+    "median_f0_hz": 111.0,
+    "pitch_range_st": 9.6,
+    "voiced_fraction": 0.712,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.766
+   },
+   "harvest": {
+    "median_f0_hz": 110.3,
+    "pitch_range_st": 9.73,
+    "voiced_fraction": 0.832,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.766
+   }
+  },
+  "default_s1": {
+   "audio_s": 14.197916666666666,
+   "pyin": {
+    "median_f0_hz": 118.2,
+    "pitch_range_st": 8.7,
+    "voiced_fraction": 0.692,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.766
+   },
+   "harvest": {
+    "median_f0_hz": 117.7,
+    "pitch_range_st": 9.627,
+    "voiced_fraction": 0.853,
+    "jump_fraction": 0.0,
+    "speech_s": 13.74,
+    "words_per_s": 2.766
+   }
+  },
+  "full": {
+   "audio_s": 14.922916666666667,
+   "pyin": {
+    "median_f0_hz": 109.1,
+    "pitch_range_st": 9.3,
+    "voiced_fraction": 0.745,
+    "jump_fraction": 0.0,
+    "speech_s": 14.48,
+    "words_per_s": 2.624
+   },
+   "harvest": {
+    "median_f0_hz": 109.4,
+    "pitch_range_st": 9.834,
+    "voiced_fraction": 0.87,
+    "jump_fraction": 0.0008,
+    "speech_s": 14.48,
+    "words_per_s": 2.624
+   }
+  },
+  "full_s1": {
+   "audio_s": 14.147916666666667,
+   "pyin": {
+    "median_f0_hz": 117.6,
+    "pitch_range_st": 8.17,
+    "voiced_fraction": 0.755,
+    "jump_fraction": 0.0,
+    "speech_s": 13.68,
+    "words_per_s": 2.778
+   },
+   "harvest": {
+    "median_f0_hz": 116.4,
+    "pitch_range_st": 9.008,
+    "voiced_fraction": 0.856,
+    "jump_fraction": 0.0,
+    "speech_s": 13.68,
+    "words_per_s": 2.778
+   }
+  }
+ },
+ {
+  "speaker": "2300",
+  "j": 3,
+  "words": 44,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 127.5,
+    "pitch_range_st": 15.4,
+    "voiced_fraction": 0.685,
+    "jump_fraction": 0.0,
+    "speech_s": 18.82,
+    "words_per_s": 2.338
+   },
+   "harvest": {
+    "median_f0_hz": 129.5,
+    "pitch_range_st": 16.172,
+    "voiced_fraction": 0.888,
+    "jump_fraction": 0.0024,
+    "speech_s": 18.82,
+    "words_per_s": 2.338
+   }
+  },
+  "off": {
+   "audio_s": 17.997916666666665,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 12.84,
+    "voiced_fraction": 0.612,
+    "jump_fraction": 0.0,
+    "speech_s": 17.74,
+    "words_per_s": 2.48
+   },
+   "harvest": {
+    "median_f0_hz": 115.0,
+    "pitch_range_st": 13.075,
+    "voiced_fraction": 0.815,
+    "jump_fraction": 0.0014,
+    "speech_s": 17.74,
+    "words_per_s": 2.48
+   }
+  },
+  "off_s1": {
+   "audio_s": 17.997916666666665,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 12.9,
+    "voiced_fraction": 0.615,
+    "jump_fraction": 0.0,
+    "speech_s": 17.74,
+    "words_per_s": 2.48
+   },
+   "harvest": {
+    "median_f0_hz": 117.0,
+    "pitch_range_st": 12.999,
+    "voiced_fraction": 0.807,
+    "jump_fraction": 0.0,
+    "speech_s": 17.74,
+    "words_per_s": 2.48
+   }
+  },
+  "default": {
+   "audio_s": 17.897916666666667,
+   "pyin": {
+    "median_f0_hz": 111.0,
+    "pitch_range_st": 10.0,
+    "voiced_fraction": 0.665,
+    "jump_fraction": 0.0,
+    "speech_s": 17.658,
+    "words_per_s": 2.492
+   },
+   "harvest": {
+    "median_f0_hz": 112.0,
+    "pitch_range_st": 10.503,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0,
+    "speech_s": 17.658,
+    "words_per_s": 2.492
+   }
+  },
+  "default_s1": {
+   "audio_s": 17.847916666666666,
+   "pyin": {
+    "median_f0_hz": 121.7,
+    "pitch_range_st": 10.2,
+    "voiced_fraction": 0.687,
+    "jump_fraction": 0.0,
+    "speech_s": 17.6,
+    "words_per_s": 2.5
+   },
+   "harvest": {
+    "median_f0_hz": 118.6,
+    "pitch_range_st": 10.628,
+    "voiced_fraction": 0.834,
+    "jump_fraction": 0.0,
+    "speech_s": 17.6,
+    "words_per_s": 2.5
+   }
+  },
+  "full": {
+   "audio_s": 18.222916666666666,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 9.5,
+    "voiced_fraction": 0.69,
+    "jump_fraction": 0.0,
+    "speech_s": 17.98,
+    "words_per_s": 2.447
+   },
+   "harvest": {
+    "median_f0_hz": 109.3,
+    "pitch_range_st": 9.843,
+    "voiced_fraction": 0.824,
+    "jump_fraction": 0.0,
+    "speech_s": 17.98,
+    "words_per_s": 2.447
+   }
+  },
+  "full_s1": {
+   "audio_s": 17.747916666666665,
+   "pyin": {
+    "median_f0_hz": 123.8,
+    "pitch_range_st": 8.68,
+    "voiced_fraction": 0.701,
+    "jump_fraction": 0.0,
+    "speech_s": 17.44,
+    "words_per_s": 2.523
+   },
+   "harvest": {
+    "median_f0_hz": 120.5,
+    "pitch_range_st": 9.633,
+    "voiced_fraction": 0.826,
+    "jump_fraction": 0.0028,
+    "speech_s": 17.44,
+    "words_per_s": 2.523
+   }
+  }
+ },
+ {
+  "speaker": "2300",
+  "j": 4,
+  "words": 21,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 132.7,
+    "pitch_range_st": 11.4,
+    "voiced_fraction": 0.656,
+    "jump_fraction": 0.0,
+    "speech_s": 6.1,
+    "words_per_s": 3.443
+   },
+   "harvest": {
+    "median_f0_hz": 132.1,
+    "pitch_range_st": 13.707,
+    "voiced_fraction": 0.871,
+    "jump_fraction": 0.0038,
+    "speech_s": 6.1,
+    "words_per_s": 3.443
+   }
+  },
+  "off": {
+   "audio_s": 5.797916666666667,
+   "pyin": {
+    "median_f0_hz": 131.2,
+    "pitch_range_st": 13.5,
+    "voiced_fraction": 0.629,
+    "jump_fraction": 0.0,
+    "speech_s": 5.36,
+    "words_per_s": 3.918
+   },
+   "harvest": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 13.638,
+    "voiced_fraction": 0.849,
+    "jump_fraction": 0.0,
+    "speech_s": 5.36,
+    "words_per_s": 3.918
+   }
+  },
+  "off_s1": {
+   "audio_s": 5.797916666666667,
+   "pyin": {
+    "median_f0_hz": 134.6,
+    "pitch_range_st": 13.5,
+    "voiced_fraction": 0.618,
+    "jump_fraction": 0.0,
+    "speech_s": 5.36,
+    "words_per_s": 3.918
+   },
+   "harvest": {
+    "median_f0_hz": 126.9,
+    "pitch_range_st": 13.537,
+    "voiced_fraction": 0.849,
+    "jump_fraction": 0.0,
+    "speech_s": 5.36,
+    "words_per_s": 3.918
+   }
+  },
+  "default": {
+   "audio_s": 6.072916666666667,
+   "pyin": {
+    "median_f0_hz": 116.2,
+    "pitch_range_st": 10.54,
+    "voiced_fraction": 0.685,
+    "jump_fraction": 0.0,
+    "speech_s": 5.64,
+    "words_per_s": 3.723
+   },
+   "harvest": {
+    "median_f0_hz": 117.0,
+    "pitch_range_st": 11.151,
+    "voiced_fraction": 0.816,
+    "jump_fraction": 0.0045,
+    "speech_s": 5.64,
+    "words_per_s": 3.723
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.847916666666666,
+   "pyin": {
+    "median_f0_hz": 132.0,
+    "pitch_range_st": 10.92,
+    "voiced_fraction": 0.724,
+    "jump_fraction": 0.0,
+    "speech_s": 5.42,
+    "words_per_s": 3.875
+   },
+   "harvest": {
+    "median_f0_hz": 124.0,
+    "pitch_range_st": 11.486,
+    "voiced_fraction": 0.86,
+    "jump_fraction": 0.0,
+    "speech_s": 5.42,
+    "words_per_s": 3.875
+   }
+  },
+  "full": {
+   "audio_s": 6.122916666666667,
+   "pyin": {
+    "median_f0_hz": 114.2,
+    "pitch_range_st": 9.1,
+    "voiced_fraction": 0.716,
+    "jump_fraction": 0.0,
+    "speech_s": 5.7,
+    "words_per_s": 3.684
+   },
+   "harvest": {
+    "median_f0_hz": 112.7,
+    "pitch_range_st": 9.349,
+    "voiced_fraction": 0.856,
+    "jump_fraction": 0.0,
+    "speech_s": 5.7,
+    "words_per_s": 3.684
+   }
+  },
+  "full_s1": {
+   "audio_s": 5.872916666666667,
+   "pyin": {
+    "median_f0_hz": 128.2,
+    "pitch_range_st": 9.0,
+    "voiced_fraction": 0.717,
+    "jump_fraction": 0.0,
+    "speech_s": 5.4,
+    "words_per_s": 3.889
+   },
+   "harvest": {
+    "median_f0_hz": 123.7,
+    "pitch_range_st": 10.182,
+    "voiced_fraction": 0.871,
+    "jump_fraction": 0.0,
+    "speech_s": 5.4,
+    "words_per_s": 3.889
+   }
+  }
+ },
+ {
+  "speaker": "237",
+  "j": 0,
+  "words": 37,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 9.9,
+    "voiced_fraction": 0.747,
+    "jump_fraction": 0.0,
+    "speech_s": 11.26,
+    "words_per_s": 3.286
+   },
+   "harvest": {
+    "median_f0_hz": 182.4,
+    "pitch_range_st": 10.952,
+    "voiced_fraction": 0.897,
+    "jump_fraction": 0.007,
+    "speech_s": 11.26,
+    "words_per_s": 3.286
+   }
+  },
+  "off": {
+   "audio_s": 11.672916666666667,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 9.2,
+    "voiced_fraction": 0.671,
+    "jump_fraction": 0.0,
+    "speech_s": 11.08,
+    "words_per_s": 3.339
+   },
+   "harvest": {
+    "median_f0_hz": 192.4,
+    "pitch_range_st": 11.349,
+    "voiced_fraction": 0.913,
+    "jump_fraction": 0.0081,
+    "speech_s": 11.08,
+    "words_per_s": 3.339
+   }
+  },
+  "off_s1": {
+   "audio_s": 11.672916666666667,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 9.1,
+    "voiced_fraction": 0.687,
+    "jump_fraction": 0.0,
+    "speech_s": 11.08,
+    "words_per_s": 3.339
+   },
+   "harvest": {
+    "median_f0_hz": 189.2,
+    "pitch_range_st": 16.069,
+    "voiced_fraction": 0.922,
+    "jump_fraction": 0.009,
+    "speech_s": 11.08,
+    "words_per_s": 3.339
+   }
+  },
+  "default": {
+   "audio_s": 11.972916666666666,
+   "pyin": {
+    "median_f0_hz": 183.4,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.725,
+    "jump_fraction": 0.0,
+    "speech_s": 11.44,
+    "words_per_s": 3.234
+   },
+   "harvest": {
+    "median_f0_hz": 180.7,
+    "pitch_range_st": 10.391,
+    "voiced_fraction": 0.906,
+    "jump_fraction": 0.0049,
+    "speech_s": 11.44,
+    "words_per_s": 3.234
+   }
+  },
+  "default_s1": {
+   "audio_s": 12.147916666666667,
+   "pyin": {
+    "median_f0_hz": 196.6,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.729,
+    "jump_fraction": 0.0,
+    "speech_s": 11.58,
+    "words_per_s": 3.195
+   },
+   "harvest": {
+    "median_f0_hz": 191.2,
+    "pitch_range_st": 9.557,
+    "voiced_fraction": 0.917,
+    "jump_fraction": 0.0105,
+    "speech_s": 11.58,
+    "words_per_s": 3.195
+   }
+  },
+  "full": {
+   "audio_s": 12.147916666666667,
+   "pyin": {
+    "median_f0_hz": 177.2,
+    "pitch_range_st": 7.2,
+    "voiced_fraction": 0.714,
+    "jump_fraction": 0.0,
+    "speech_s": 11.72,
+    "words_per_s": 3.157
+   },
+   "harvest": {
+    "median_f0_hz": 176.2,
+    "pitch_range_st": 8.858,
+    "voiced_fraction": 0.857,
+    "jump_fraction": 0.0051,
+    "speech_s": 11.72,
+    "words_per_s": 3.157
+   }
+  },
+  "full_s1": {
+   "audio_s": 12.322916666666666,
+   "pyin": {
+    "median_f0_hz": 195.4,
+    "pitch_range_st": 6.7,
+    "voiced_fraction": 0.732,
+    "jump_fraction": 0.0,
+    "speech_s": 11.74,
+    "words_per_s": 3.152
+   },
+   "harvest": {
+    "median_f0_hz": 192.5,
+    "pitch_range_st": 7.905,
+    "voiced_fraction": 0.908,
+    "jump_fraction": 0.0048,
+    "speech_s": 11.74,
+    "words_per_s": 3.152
+   }
+  }
+ },
+ {
+  "speaker": "237",
+  "j": 1,
+  "words": 30,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 223.8,
+    "pitch_range_st": 11.2,
+    "voiced_fraction": 0.731,
+    "jump_fraction": 0.0,
+    "speech_s": 8.14,
+    "words_per_s": 3.686
+   },
+   "harvest": {
+    "median_f0_hz": 216.6,
+    "pitch_range_st": 28.193,
+    "voiced_fraction": 0.953,
+    "jump_fraction": 0.0247,
+    "speech_s": 8.14,
+    "words_per_s": 3.686
+   }
+  },
+  "off": {
+   "audio_s": 8.697916666666666,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 9.4,
+    "voiced_fraction": 0.745,
+    "jump_fraction": 0.0,
+    "speech_s": 8.2,
+    "words_per_s": 3.659
+   },
+   "harvest": {
+    "median_f0_hz": 197.1,
+    "pitch_range_st": 9.921,
+    "voiced_fraction": 0.921,
+    "jump_fraction": 0.004,
+    "speech_s": 8.2,
+    "words_per_s": 3.659
+   }
+  },
+  "off_s1": {
+   "audio_s": 8.697916666666666,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 9.4,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 8.2,
+    "words_per_s": 3.659
+   },
+   "harvest": {
+    "median_f0_hz": 197.9,
+    "pitch_range_st": 9.87,
+    "voiced_fraction": 0.918,
+    "jump_fraction": 0.0027,
+    "speech_s": 8.2,
+    "words_per_s": 3.659
+   }
+  },
+  "default": {
+   "audio_s": 8.572916666666666,
+   "pyin": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 8.2,
+    "voiced_fraction": 0.75,
+    "jump_fraction": 0.0,
+    "speech_s": 8.12,
+    "words_per_s": 3.695
+   },
+   "harvest": {
+    "median_f0_hz": 187.7,
+    "pitch_range_st": 9.056,
+    "voiced_fraction": 0.918,
+    "jump_fraction": 0.0027,
+    "speech_s": 8.12,
+    "words_per_s": 3.695
+   }
+  },
+  "default_s1": {
+   "audio_s": 8.897916666666667,
+   "pyin": {
+    "median_f0_hz": 201.2,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.774,
+    "jump_fraction": 0.0,
+    "speech_s": 8.4,
+    "words_per_s": 3.571
+   },
+   "harvest": {
+    "median_f0_hz": 202.5,
+    "pitch_range_st": 9.102,
+    "voiced_fraction": 0.917,
+    "jump_fraction": 0.0013,
+    "speech_s": 8.4,
+    "words_per_s": 3.571
+   }
+  },
+  "full": {
+   "audio_s": 8.497916666666667,
+   "pyin": {
+    "median_f0_hz": 186.6,
+    "pitch_range_st": 8.17,
+    "voiced_fraction": 0.781,
+    "jump_fraction": 0.0,
+    "speech_s": 7.98,
+    "words_per_s": 3.759
+   },
+   "harvest": {
+    "median_f0_hz": 180.6,
+    "pitch_range_st": 8.618,
+    "voiced_fraction": 0.907,
+    "jump_fraction": 0.0028,
+    "speech_s": 7.98,
+    "words_per_s": 3.759
+   }
+  },
+  "full_s1": {
+   "audio_s": 8.822916666666666,
+   "pyin": {
+    "median_f0_hz": 201.2,
+    "pitch_range_st": 6.46,
+    "voiced_fraction": 0.794,
+    "jump_fraction": 0.0,
+    "speech_s": 8.34,
+    "words_per_s": 3.597
+   },
+   "harvest": {
+    "median_f0_hz": 199.5,
+    "pitch_range_st": 7.531,
+    "voiced_fraction": 0.926,
+    "jump_fraction": 0.0,
+    "speech_s": 8.34,
+    "words_per_s": 3.597
+   }
+  }
+ },
+ {
+  "speaker": "237",
+  "j": 2,
+  "words": 24,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 10.25,
+    "voiced_fraction": 0.714,
+    "jump_fraction": 0.0,
+    "speech_s": 6.52,
+    "words_per_s": 3.681
+   },
+   "harvest": {
+    "median_f0_hz": 193.9,
+    "pitch_range_st": 11.407,
+    "voiced_fraction": 0.891,
+    "jump_fraction": 0.0035,
+    "speech_s": 6.52,
+    "words_per_s": 3.681
+   }
+  },
+  "off": {
+   "audio_s": 7.247916666666667,
+   "pyin": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 9.69,
+    "voiced_fraction": 0.697,
+    "jump_fraction": 0.0,
+    "speech_s": 6.7,
+    "words_per_s": 3.582
+   },
+   "harvest": {
+    "median_f0_hz": 188.7,
+    "pitch_range_st": 10.998,
+    "voiced_fraction": 0.914,
+    "jump_fraction": 0.005,
+    "speech_s": 6.7,
+    "words_per_s": 3.582
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.247916666666667,
+   "pyin": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 9.57,
+    "voiced_fraction": 0.706,
+    "jump_fraction": 0.0,
+    "speech_s": 6.7,
+    "words_per_s": 3.582
+   },
+   "harvest": {
+    "median_f0_hz": 190.5,
+    "pitch_range_st": 11.708,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0066,
+    "speech_s": 6.7,
+    "words_per_s": 3.582
+   }
+  },
+  "default": {
+   "audio_s": 7.297916666666667,
+   "pyin": {
+    "median_f0_hz": 180.3,
+    "pitch_range_st": 8.2,
+    "voiced_fraction": 0.725,
+    "jump_fraction": 0.0,
+    "speech_s": 6.78,
+    "words_per_s": 3.54
+   },
+   "harvest": {
+    "median_f0_hz": 177.8,
+    "pitch_range_st": 8.752,
+    "voiced_fraction": 0.876,
+    "jump_fraction": 0.0,
+    "speech_s": 6.78,
+    "words_per_s": 3.54
+   }
+  },
+  "default_s1": {
+   "audio_s": 7.497916666666667,
+   "pyin": {
+    "median_f0_hz": 193.2,
+    "pitch_range_st": 8.17,
+    "voiced_fraction": 0.737,
+    "jump_fraction": 0.0,
+    "speech_s": 6.96,
+    "words_per_s": 3.448
+   },
+   "harvest": {
+    "median_f0_hz": 191.0,
+    "pitch_range_st": 10.213,
+    "voiced_fraction": 0.908,
+    "jump_fraction": 0.0016,
+    "speech_s": 6.96,
+    "words_per_s": 3.448
+   }
+  },
+  "full": {
+   "audio_s": 7.322916666666667,
+   "pyin": {
+    "median_f0_hz": 177.2,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.713,
+    "jump_fraction": 0.0,
+    "speech_s": 6.88,
+    "words_per_s": 3.488
+   },
+   "harvest": {
+    "median_f0_hz": 174.4,
+    "pitch_range_st": 8.831,
+    "voiced_fraction": 0.887,
+    "jump_fraction": 0.0,
+    "speech_s": 6.88,
+    "words_per_s": 3.488
+   }
+  },
+  "full_s1": {
+   "audio_s": 7.397916666666666,
+   "pyin": {
+    "median_f0_hz": 190.4,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.756,
+    "jump_fraction": 0.0,
+    "speech_s": 6.84,
+    "words_per_s": 3.509
+   },
+   "harvest": {
+    "median_f0_hz": 187.8,
+    "pitch_range_st": 9.082,
+    "voiced_fraction": 0.924,
+    "jump_fraction": 0.0064,
+    "speech_s": 6.84,
+    "words_per_s": 3.509
+   }
+  }
+ },
+ {
+  "speaker": "237",
+  "j": 3,
+  "words": 10,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 231.1,
+    "pitch_range_st": 10.44,
+    "voiced_fraction": 0.706,
+    "jump_fraction": 0.0,
+    "speech_s": 2.92,
+    "words_per_s": 3.425
+   },
+   "harvest": {
+    "median_f0_hz": 214.2,
+    "pitch_range_st": 26.792,
+    "voiced_fraction": 0.884,
+    "jump_fraction": 0.0119,
+    "speech_s": 2.92,
+    "words_per_s": 3.425
+   }
+  },
+  "off": {
+   "audio_s": 3.622916666666667,
+   "pyin": {
+    "median_f0_hz": 184.5,
+    "pitch_range_st": 10.81,
+    "voiced_fraction": 0.707,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 3.226
+   },
+   "harvest": {
+    "median_f0_hz": 184.8,
+    "pitch_range_st": 10.279,
+    "voiced_fraction": 0.945,
+    "jump_fraction": 0.0035,
+    "speech_s": 3.1,
+    "words_per_s": 3.226
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.622916666666667,
+   "pyin": {
+    "median_f0_hz": 184.5,
+    "pitch_range_st": 10.82,
+    "voiced_fraction": 0.707,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 3.226
+   },
+   "harvest": {
+    "median_f0_hz": 185.1,
+    "pitch_range_st": 10.855,
+    "voiced_fraction": 0.945,
+    "jump_fraction": 0.0,
+    "speech_s": 3.1,
+    "words_per_s": 3.226
+   }
+  },
+  "default": {
+   "audio_s": 3.622916666666667,
+   "pyin": {
+    "median_f0_hz": 177.2,
+    "pitch_range_st": 8.1,
+    "voiced_fraction": 0.751,
+    "jump_fraction": 0.0,
+    "speech_s": 3.12,
+    "words_per_s": 3.205
+   },
+   "harvest": {
+    "median_f0_hz": 173.2,
+    "pitch_range_st": 9.385,
+    "voiced_fraction": 0.927,
+    "jump_fraction": 0.0,
+    "speech_s": 3.12,
+    "words_per_s": 3.205
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.8229166666666665,
+   "pyin": {
+    "median_f0_hz": 197.7,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.758,
+    "jump_fraction": 0.0,
+    "speech_s": 3.3,
+    "words_per_s": 3.03
+   },
+   "harvest": {
+    "median_f0_hz": 196.3,
+    "pitch_range_st": 9.358,
+    "voiced_fraction": 0.852,
+    "jump_fraction": 0.0,
+    "speech_s": 3.3,
+    "words_per_s": 3.03
+   }
+  },
+  "full": {
+   "audio_s": 3.472916666666667,
+   "pyin": {
+    "median_f0_hz": 176.1,
+    "pitch_range_st": 7.61,
+    "voiced_fraction": 0.764,
+    "jump_fraction": 0.0,
+    "speech_s": 3.0,
+    "words_per_s": 3.333
+   },
+   "harvest": {
+    "median_f0_hz": 174.2,
+    "pitch_range_st": 9.183,
+    "voiced_fraction": 0.944,
+    "jump_fraction": 0.0036,
+    "speech_s": 3.0,
+    "words_per_s": 3.333
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.6979166666666665,
+   "pyin": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 6.4,
+    "voiced_fraction": 0.748,
+    "jump_fraction": 0.0,
+    "speech_s": 3.2,
+    "words_per_s": 3.125
+   },
+   "harvest": {
+    "median_f0_hz": 199.1,
+    "pitch_range_st": 6.897,
+    "voiced_fraction": 0.935,
+    "jump_fraction": 0.0034,
+    "speech_s": 3.2,
+    "words_per_s": 3.125
+   }
+  }
+ },
+ {
+  "speaker": "237",
+  "j": 4,
+  "words": 18,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 182.3,
+    "pitch_range_st": 12.94,
+    "voiced_fraction": 0.649,
+    "jump_fraction": 0.0,
+    "speech_s": 6.26,
+    "words_per_s": 2.875
+   },
+   "harvest": {
+    "median_f0_hz": 169.3,
+    "pitch_range_st": 26.66,
+    "voiced_fraction": 0.941,
+    "jump_fraction": 0.012,
+    "speech_s": 6.26,
+    "words_per_s": 2.875
+   }
+  },
+  "off": {
+   "audio_s": 6.347916666666666,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 7.94,
+    "voiced_fraction": 0.71,
+    "jump_fraction": 0.0,
+    "speech_s": 5.86,
+    "words_per_s": 3.072
+   },
+   "harvest": {
+    "median_f0_hz": 189.3,
+    "pitch_range_st": 9.843,
+    "voiced_fraction": 0.901,
+    "jump_fraction": 0.0038,
+    "speech_s": 5.86,
+    "words_per_s": 3.072
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.347916666666666,
+   "pyin": {
+    "median_f0_hz": 198.8,
+    "pitch_range_st": 7.94,
+    "voiced_fraction": 0.71,
+    "jump_fraction": 0.0,
+    "speech_s": 5.86,
+    "words_per_s": 3.072
+   },
+   "harvest": {
+    "median_f0_hz": 190.5,
+    "pitch_range_st": 9.989,
+    "voiced_fraction": 0.927,
+    "jump_fraction": 0.0056,
+    "speech_s": 5.86,
+    "words_per_s": 3.072
+   }
+  },
+  "default": {
+   "audio_s": 6.497916666666667,
+   "pyin": {
+    "median_f0_hz": 189.9,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.733,
+    "jump_fraction": 0.0,
+    "speech_s": 6.02,
+    "words_per_s": 2.99
+   },
+   "harvest": {
+    "median_f0_hz": 186.2,
+    "pitch_range_st": 8.899,
+    "voiced_fraction": 0.92,
+    "jump_fraction": 0.0018,
+    "speech_s": 6.02,
+    "words_per_s": 2.99
+   }
+  },
+  "default_s1": {
+   "audio_s": 6.872916666666667,
+   "pyin": {
+    "median_f0_hz": 200.0,
+    "pitch_range_st": 6.82,
+    "voiced_fraction": 0.743,
+    "jump_fraction": 0.0,
+    "speech_s": 6.38,
+    "words_per_s": 2.821
+   },
+   "harvest": {
+    "median_f0_hz": 194.1,
+    "pitch_range_st": 8.327,
+    "voiced_fraction": 0.887,
+    "jump_fraction": 0.0,
+    "speech_s": 6.38,
+    "words_per_s": 2.821
+   }
+  },
+  "full": {
+   "audio_s": 6.447916666666667,
+   "pyin": {
+    "median_f0_hz": 180.3,
+    "pitch_range_st": 7.2,
+    "voiced_fraction": 0.74,
+    "jump_fraction": 0.0,
+    "speech_s": 6.04,
+    "words_per_s": 2.98
+   },
+   "harvest": {
+    "median_f0_hz": 178.9,
+    "pitch_range_st": 7.835,
+    "voiced_fraction": 0.886,
+    "jump_fraction": 0.0,
+    "speech_s": 6.04,
+    "words_per_s": 2.98
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.822916666666667,
+   "pyin": {
+    "median_f0_hz": 202.3,
+    "pitch_range_st": 6.8,
+    "voiced_fraction": 0.791,
+    "jump_fraction": 0.0,
+    "speech_s": 6.32,
+    "words_per_s": 2.848
+   },
+   "harvest": {
+    "median_f0_hz": 199.1,
+    "pitch_range_st": 7.595,
+    "voiced_fraction": 0.874,
+    "jump_fraction": 0.0037,
+    "speech_s": 6.32,
+    "words_per_s": 2.848
+   }
+  }
+ },
+ {
+  "speaker": "260",
+  "j": 0,
+  "words": 5,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 132.7,
+    "pitch_range_st": 7.54,
+    "voiced_fraction": 0.452,
+    "jump_fraction": 0.0,
+    "speech_s": 2.18,
+    "words_per_s": 2.294
+   },
+   "harvest": {
+    "median_f0_hz": 132.7,
+    "pitch_range_st": 14.911,
+    "voiced_fraction": 0.694,
+    "jump_fraction": 0.0068,
+    "speech_s": 2.18,
+    "words_per_s": 2.294
+   }
+  },
+  "off": {
+   "audio_s": 3.7979166666666666,
+   "pyin": {
+    "median_f0_hz": 139.4,
+    "pitch_range_st": 8.11,
+    "voiced_fraction": 0.398,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 1.534
+   },
+   "harvest": {
+    "median_f0_hz": 127.2,
+    "pitch_range_st": 8.432,
+    "voiced_fraction": 0.835,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 1.534
+   }
+  },
+  "off_s1": {
+   "audio_s": 3.7979166666666666,
+   "pyin": {
+    "median_f0_hz": 139.0,
+    "pitch_range_st": 8.08,
+    "voiced_fraction": 0.407,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 1.534
+   },
+   "harvest": {
+    "median_f0_hz": 129.4,
+    "pitch_range_st": 8.36,
+    "voiced_fraction": 0.795,
+    "jump_fraction": 0.0,
+    "speech_s": 3.26,
+    "words_per_s": 1.534
+   }
+  },
+  "default": {
+   "audio_s": 3.2979166666666666,
+   "pyin": {
+    "median_f0_hz": 122.1,
+    "pitch_range_st": 6.2,
+    "voiced_fraction": 0.551,
+    "jump_fraction": 0.0,
+    "speech_s": 2.86,
+    "words_per_s": 1.748
+   },
+   "harvest": {
+    "median_f0_hz": 119.3,
+    "pitch_range_st": 7.265,
+    "voiced_fraction": 0.763,
+    "jump_fraction": 0.0,
+    "speech_s": 2.86,
+    "words_per_s": 1.748
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.3229166666666665,
+   "pyin": {
+    "median_f0_hz": 139.8,
+    "pitch_range_st": 5.4,
+    "voiced_fraction": 0.554,
+    "jump_fraction": 0.0,
+    "speech_s": 2.84,
+    "words_per_s": 1.761
+   },
+   "harvest": {
+    "median_f0_hz": 133.7,
+    "pitch_range_st": 5.796,
+    "voiced_fraction": 0.663,
+    "jump_fraction": 0.0,
+    "speech_s": 2.84,
+    "words_per_s": 1.761
+   }
+  },
+  "full": {
+   "audio_s": 3.0479166666666666,
+   "pyin": {
+    "median_f0_hz": 118.6,
+    "pitch_range_st": 5.5,
+    "voiced_fraction": 0.624,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 1.908
+   },
+   "harvest": {
+    "median_f0_hz": 113.6,
+    "pitch_range_st": 8.526,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0,
+    "speech_s": 2.62,
+    "words_per_s": 1.908
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.0229166666666667,
+   "pyin": {
+    "median_f0_hz": 139.0,
+    "pitch_range_st": 4.78,
+    "voiced_fraction": 0.639,
+    "jump_fraction": 0.0,
+    "speech_s": 2.54,
+    "words_per_s": 1.969
+   },
+   "harvest": {
+    "median_f0_hz": 135.9,
+    "pitch_range_st": 6.753,
+    "voiced_fraction": 0.875,
+    "jump_fraction": 0.0046,
+    "speech_s": 2.54,
+    "words_per_s": 1.969
+   }
+  }
+ },
+ {
+  "speaker": "260",
+  "j": 1,
+  "words": 29,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 136.6,
+    "pitch_range_st": 9.0,
+    "voiced_fraction": 0.537,
+    "jump_fraction": 0.0,
+    "speech_s": 9.2,
+    "words_per_s": 3.152
+   },
+   "harvest": {
+    "median_f0_hz": 129.9,
+    "pitch_range_st": 11.14,
+    "voiced_fraction": 0.811,
+    "jump_fraction": 0.0,
+    "speech_s": 9.2,
+    "words_per_s": 3.152
+   }
+  },
+  "off": {
+   "audio_s": 10.672916666666667,
+   "pyin": {
+    "median_f0_hz": 128.2,
+    "pitch_range_st": 15.92,
+    "voiced_fraction": 0.419,
+    "jump_fraction": 0.0,
+    "speech_s": 10.14,
+    "words_per_s": 2.86
+   },
+   "harvest": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 9.397,
+    "voiced_fraction": 0.774,
+    "jump_fraction": 0.0026,
+    "speech_s": 10.14,
+    "words_per_s": 2.86
+   }
+  },
+  "off_s1": {
+   "audio_s": 10.672916666666667,
+   "pyin": {
+    "median_f0_hz": 128.2,
+    "pitch_range_st": 15.6,
+    "voiced_fraction": 0.434,
+    "jump_fraction": 0.0,
+    "speech_s": 10.14,
+    "words_per_s": 2.86
+   },
+   "harvest": {
+    "median_f0_hz": 126.1,
+    "pitch_range_st": 8.096,
+    "voiced_fraction": 0.779,
+    "jump_fraction": 0.0026,
+    "speech_s": 10.14,
+    "words_per_s": 2.86
+   }
+  },
+  "default": {
+   "audio_s": 9.547916666666667,
+   "pyin": {
+    "median_f0_hz": 111.3,
+    "pitch_range_st": 7.3,
+    "voiced_fraction": 0.593,
+    "jump_fraction": 0.0,
+    "speech_s": 9.06,
+    "words_per_s": 3.201
+   },
+   "harvest": {
+    "median_f0_hz": 112.0,
+    "pitch_range_st": 8.143,
+    "voiced_fraction": 0.806,
+    "jump_fraction": 0.0014,
+    "speech_s": 9.06,
+    "words_per_s": 3.201
+   }
+  },
+  "default_s1": {
+   "audio_s": 9.272916666666667,
+   "pyin": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 6.9,
+    "voiced_fraction": 0.566,
+    "jump_fraction": 0.0,
+    "speech_s": 8.74,
+    "words_per_s": 3.318
+   },
+   "harvest": {
+    "median_f0_hz": 125.4,
+    "pitch_range_st": 8.33,
+    "voiced_fraction": 0.878,
+    "jump_fraction": 0.0,
+    "speech_s": 8.74,
+    "words_per_s": 3.318
+   }
+  },
+  "full": {
+   "audio_s": 9.397916666666667,
+   "pyin": {
+    "median_f0_hz": 109.7,
+    "pitch_range_st": 6.54,
+    "voiced_fraction": 0.653,
+    "jump_fraction": 0.0,
+    "speech_s": 8.98,
+    "words_per_s": 3.229
+   },
+   "harvest": {
+    "median_f0_hz": 108.6,
+    "pitch_range_st": 7.423,
+    "voiced_fraction": 0.842,
+    "jump_fraction": 0.0,
+    "speech_s": 8.98,
+    "words_per_s": 3.229
+   }
+  },
+  "full_s1": {
+   "audio_s": 8.797916666666667,
+   "pyin": {
+    "median_f0_hz": 127.5,
+    "pitch_range_st": 5.72,
+    "voiced_fraction": 0.681,
+    "jump_fraction": 0.0,
+    "speech_s": 8.34,
+    "words_per_s": 3.477
+   },
+   "harvest": {
+    "median_f0_hz": 126.5,
+    "pitch_range_st": 7.602,
+    "voiced_fraction": 0.863,
+    "jump_fraction": 0.0028,
+    "speech_s": 8.34,
+    "words_per_s": 3.477
+   }
+  }
+ },
+ {
+  "speaker": "260",
+  "j": 2,
+  "words": 17,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 136.6,
+    "pitch_range_st": 13.91,
+    "voiced_fraction": 0.295,
+    "jump_fraction": 0.0,
+    "speech_s": 6.44,
+    "words_per_s": 2.64
+   },
+   "harvest": {
+    "median_f0_hz": 122.3,
+    "pitch_range_st": 15.459,
+    "voiced_fraction": 0.843,
+    "jump_fraction": 0.0038,
+    "speech_s": 6.44,
+    "words_per_s": 2.64
+   }
+  },
+  "off": {
+   "audio_s": 7.847916666666666,
+   "pyin": {
+    "median_f0_hz": 128.2,
+    "pitch_range_st": 7.7,
+    "voiced_fraction": 0.399,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.335
+   },
+   "harvest": {
+    "median_f0_hz": 121.5,
+    "pitch_range_st": 11.545,
+    "voiced_fraction": 0.761,
+    "jump_fraction": 0.0018,
+    "speech_s": 7.28,
+    "words_per_s": 2.335
+   }
+  },
+  "off_s1": {
+   "audio_s": 7.847916666666666,
+   "pyin": {
+    "median_f0_hz": 128.2,
+    "pitch_range_st": 7.6,
+    "voiced_fraction": 0.399,
+    "jump_fraction": 0.0,
+    "speech_s": 7.28,
+    "words_per_s": 2.335
+   },
+   "harvest": {
+    "median_f0_hz": 119.8,
+    "pitch_range_st": 13.195,
+    "voiced_fraction": 0.746,
+    "jump_fraction": 0.0038,
+    "speech_s": 7.28,
+    "words_per_s": 2.335
+   }
+  },
+  "default": {
+   "audio_s": 6.672916666666667,
+   "pyin": {
+    "median_f0_hz": 109.1,
+    "pitch_range_st": 8.57,
+    "voiced_fraction": 0.62,
+    "jump_fraction": 0.0,
+    "speech_s": 6.18,
+    "words_per_s": 2.751
+   },
+   "harvest": {
+    "median_f0_hz": 110.2,
+    "pitch_range_st": 9.169,
+    "voiced_fraction": 0.745,
+    "jump_fraction": 0.0,
+    "speech_s": 6.18,
+    "words_per_s": 2.751
+   }
+  },
+  "default_s1": {
+   "audio_s": 6.697916666666667,
+   "pyin": {
+    "median_f0_hz": 121.3,
+    "pitch_range_st": 7.23,
+    "voiced_fraction": 0.613,
+    "jump_fraction": 0.0,
+    "speech_s": 6.16,
+    "words_per_s": 2.76
+   },
+   "harvest": {
+    "median_f0_hz": 121.5,
+    "pitch_range_st": 8.182,
+    "voiced_fraction": 0.796,
+    "jump_fraction": 0.0021,
+    "speech_s": 6.16,
+    "words_per_s": 2.76
+   }
+  },
+  "full": {
+   "audio_s": 6.372916666666667,
+   "pyin": {
+    "median_f0_hz": 104.1,
+    "pitch_range_st": 8.1,
+    "voiced_fraction": 0.666,
+    "jump_fraction": 0.0,
+    "speech_s": 5.94,
+    "words_per_s": 2.862
+   },
+   "harvest": {
+    "median_f0_hz": 104.5,
+    "pitch_range_st": 9.191,
+    "voiced_fraction": 0.871,
+    "jump_fraction": 0.002,
+    "speech_s": 5.94,
+    "words_per_s": 2.862
+   }
+  },
+  "full_s1": {
+   "audio_s": 6.122916666666667,
+   "pyin": {
+    "median_f0_hz": 121.7,
+    "pitch_range_st": 6.1,
+    "voiced_fraction": 0.658,
+    "jump_fraction": 0.0,
+    "speech_s": 5.7,
+    "words_per_s": 2.982
+   },
+   "harvest": {
+    "median_f0_hz": 121.2,
+    "pitch_range_st": 6.847,
+    "voiced_fraction": 0.842,
+    "jump_fraction": 0.0,
+    "speech_s": 5.7,
+    "words_per_s": 2.982
+   }
+  }
+ },
+ {
+  "speaker": "260",
+  "j": 3,
+  "words": 8,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 179.2,
+    "pitch_range_st": 10.62,
+    "voiced_fraction": 0.589,
+    "jump_fraction": 0.0,
+    "speech_s": 2.52,
+    "words_per_s": 3.175
+   },
+   "harvest": {
+    "median_f0_hz": 155.8,
+    "pitch_range_st": 11.055,
+    "voiced_fraction": 0.949,
+    "jump_fraction": 0.0,
+    "speech_s": 2.52,
+    "words_per_s": 3.175
+   }
+  },
+  "off": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 8.9,
+    "voiced_fraction": 0.487,
+    "jump_fraction": 0.0,
+    "speech_s": 3.58,
+    "words_per_s": 2.235
+   },
+   "harvest": {
+    "median_f0_hz": 124.9,
+    "pitch_range_st": 8.552,
+    "voiced_fraction": 0.88,
+    "jump_fraction": 0.0,
+    "speech_s": 3.58,
+    "words_per_s": 2.235
+   }
+  },
+  "off_s1": {
+   "audio_s": 4.122916666666667,
+   "pyin": {
+    "median_f0_hz": 126.4,
+    "pitch_range_st": 8.87,
+    "voiced_fraction": 0.485,
+    "jump_fraction": 0.0,
+    "speech_s": 3.58,
+    "words_per_s": 2.235
+   },
+   "harvest": {
+    "median_f0_hz": 125.5,
+    "pitch_range_st": 8.523,
+    "voiced_fraction": 0.866,
+    "jump_fraction": 0.0,
+    "speech_s": 3.58,
+    "words_per_s": 2.235
+   }
+  },
+  "default": {
+   "audio_s": 3.1729166666666666,
+   "pyin": {
+    "median_f0_hz": 115.5,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.777,
+    "jump_fraction": 0.0,
+    "speech_s": 2.68,
+    "words_per_s": 2.985
+   },
+   "harvest": {
+    "median_f0_hz": 114.9,
+    "pitch_range_st": 7.392,
+    "voiced_fraction": 0.959,
+    "jump_fraction": 0.0,
+    "speech_s": 2.68,
+    "words_per_s": 2.985
+   }
+  },
+  "default_s1": {
+   "audio_s": 3.2729166666666667,
+   "pyin": {
+    "median_f0_hz": 124.9,
+    "pitch_range_st": 6.09,
+    "voiced_fraction": 0.724,
+    "jump_fraction": 0.0,
+    "speech_s": 2.78,
+    "words_per_s": 2.878
+   },
+   "harvest": {
+    "median_f0_hz": 124.0,
+    "pitch_range_st": 6.361,
+    "voiced_fraction": 0.957,
+    "jump_fraction": 0.0,
+    "speech_s": 2.78,
+    "words_per_s": 2.878
+   }
+  },
+  "full": {
+   "audio_s": 3.0479166666666666,
+   "pyin": {
+    "median_f0_hz": 111.0,
+    "pitch_range_st": 6.7,
+    "voiced_fraction": 0.796,
+    "jump_fraction": 0.0,
+    "speech_s": 2.64,
+    "words_per_s": 3.03
+   },
+   "harvest": {
+    "median_f0_hz": 110.9,
+    "pitch_range_st": 7.112,
+    "voiced_fraction": 0.966,
+    "jump_fraction": 0.0,
+    "speech_s": 2.64,
+    "words_per_s": 3.03
+   }
+  },
+  "full_s1": {
+   "audio_s": 3.122916666666667,
+   "pyin": {
+    "median_f0_hz": 123.1,
+    "pitch_range_st": 5.7,
+    "voiced_fraction": 0.884,
+    "jump_fraction": 0.0,
+    "speech_s": 2.66,
+    "words_per_s": 3.008
+   },
+   "harvest": {
+    "median_f0_hz": 121.9,
+    "pitch_range_st": 7.085,
+    "voiced_fraction": 0.918,
+    "jump_fraction": 0.0,
+    "speech_s": 2.66,
+    "words_per_s": 3.008
+   }
+  }
+ },
+ {
+  "speaker": "260",
+  "j": 4,
+  "words": 16,
+  "real": {
+   "pyin": {
+    "median_f0_hz": 172.1,
+    "pitch_range_st": 7.73,
+    "voiced_fraction": 0.193,
+    "jump_fraction": 0.0,
+    "speech_s": 4.14,
+    "words_per_s": 3.865
+   },
+   "harvest": {
+    "median_f0_hz": 136.9,
+    "pitch_range_st": 17.391,
+    "voiced_fraction": 0.735,
+    "jump_fraction": 0.0102,
+    "speech_s": 4.14,
+    "words_per_s": 3.865
+   }
+  },
+  "off": {
+   "audio_s": 6.247916666666667,
+   "pyin": {
+    "median_f0_hz": 124.9,
+    "pitch_range_st": 20.33,
+    "voiced_fraction": 0.362,
+    "jump_fraction": 0.0,
+    "speech_s": 5.74,
+    "words_per_s": 2.787
+   },
+   "harvest": {
+    "median_f0_hz": 119.6,
+    "pitch_range_st": 11.057,
+    "voiced_fraction": 0.803,
+    "jump_fraction": 0.0045,
+    "speech_s": 5.74,
+    "words_per_s": 2.787
+   }
+  },
+  "off_s1": {
+   "audio_s": 6.247916666666667,
+   "pyin": {
+    "median_f0_hz": 125.3,
+    "pitch_range_st": 20.25,
+    "voiced_fraction": 0.358,
+    "jump_fraction": 0.0,
+    "speech_s": 5.74,
+    "words_per_s": 2.787
+   },
+   "harvest": {
+    "median_f0_hz": 122.8,
+    "pitch_range_st": 9.636,
+    "voiced_fraction": 0.809,
+    "jump_fraction": 0.0044,
+    "speech_s": 5.74,
+    "words_per_s": 2.787
+   }
+  },
+  "default": {
+   "audio_s": 5.147916666666666,
+   "pyin": {
+    "median_f0_hz": 116.9,
+    "pitch_range_st": 19.14,
+    "voiced_fraction": 0.484,
+    "jump_fraction": 0.0,
+    "speech_s": 4.68,
+    "words_per_s": 3.419
+   },
+   "harvest": {
+    "median_f0_hz": 120.3,
+    "pitch_range_st": 10.323,
+    "voiced_fraction": 0.874,
+    "jump_fraction": 0.0,
+    "speech_s": 4.68,
+    "words_per_s": 3.419
+   }
+  },
+  "default_s1": {
+   "audio_s": 5.222916666666666,
+   "pyin": {
+    "median_f0_hz": 124.5,
+    "pitch_range_st": 7.4,
+    "voiced_fraction": 0.514,
+    "jump_fraction": 0.0,
+    "speech_s": 4.76,
+    "words_per_s": 3.361
+   },
+   "harvest": {
+    "median_f0_hz": 125.7,
+    "pitch_range_st": 7.515,
+    "voiced_fraction": 0.857,
+    "jump_fraction": 0.0025,
+    "speech_s": 4.76,
+    "words_per_s": 3.361
+   }
+  },
+  "full": {
+   "audio_s": 4.872916666666667,
+   "pyin": {
+    "median_f0_hz": 106.6,
+    "pitch_range_st": 7.91,
+    "voiced_fraction": 0.579,
+    "jump_fraction": 0.0,
+    "speech_s": 4.48,
+    "words_per_s": 3.571
+   },
+   "harvest": {
+    "median_f0_hz": 107.3,
+    "pitch_range_st": 9.189,
+    "voiced_fraction": 0.822,
+    "jump_fraction": 0.0,
+    "speech_s": 4.48,
+    "words_per_s": 3.571
+   }
+  },
+  "full_s1": {
+   "audio_s": 4.772916666666666,
+   "pyin": {
+    "median_f0_hz": 126.0,
+    "pitch_range_st": 6.88,
+    "voiced_fraction": 0.671,
+    "jump_fraction": 0.0,
+    "speech_s": 4.34,
+    "words_per_s": 3.687
+   },
+   "harvest": {
+    "median_f0_hz": 124.0,
+    "pitch_range_st": 8.146,
+    "voiced_fraction": 0.855,
+    "jump_fraction": 0.0027,
+    "speech_s": 4.34,
+    "words_per_s": 3.687
+   }
+  }
+ }
+]
